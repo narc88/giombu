@@ -1,4 +1,5 @@
-
+var users = require('./users');
+var errors = require('./errors');
 
 module.exports = function(app){
 
@@ -7,7 +8,10 @@ module.exports = function(app){
 	  res.render('index', { title: 'Express' });
 	});
 
+	users(app);
 
+	// error handlers
+	errors(app);
 
 
 

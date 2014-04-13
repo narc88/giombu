@@ -1,0 +1,58 @@
+div(class="body_interior")
+	.header_franchise
+		a(href="/")
+			img(src="/img/logo_giombu.png")
+		.login
+			if typeof user === "undefined"
+				img(src='/img/icon_suscribir.png')
+				a(href='#subscription', role='button', data-toggle='modal') Suscríbete
+				img(src='/img/icon_crear_cuenta.png')
+				a(href="/users/register") Registrate
+				img(src='/img/icon_login_person.png')
+				a(href='#myModal', role='button', data-toggle='modal') Accede						
+			else
+				if  typeof user.username === "undefined"
+					img(src='/img/icon_suscribir.png')
+					a(href='#subscription', role='button', data-toggle='modal') Suscríbete
+					span |
+					img(src='/img/icon_crear_cuenta.png')
+					a(href="/users/register") Registrate
+					span |
+					img(src='/img/icon_login_person.png')
+					a(href='#myModal', role='button', data-toggle='modal') Accede
+				else
+					img(src='/img/icon_suscribir.png')
+					a(href='#subscription', role='button', data-toggle='modal') Suscríbete
+					span |
+					img(src='/img/icon_login_person.png')
+					a(href="/users/dashboard" ) #{user.name}
+					span |
+					img(src='/img/icon_logout.png')
+					a(href="/users/logout") Salir
+					//.selected_franchise
+					//	a(href="/intranet/deals/list/#{user.selected_franchise}") #{user.selected_franchise}
+			if(typeof messagge === "undefined")
+				p
+			else
+				p #{messagge}
+	.franchise_select
+		.accordion.accordion2
+			.accordion-group.accordion_home
+				.accordion-heading.heading_home
+					-if(typeof user !== "undefined")
+						-if(typeof user.selected_franchise === "undefined")
+							a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") Cambiar de cuidad 
+								icon.icon-chevron-down						
+						-else
+							a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") #{user.selected_franchise.name} 
+								icon.icon-chevron-down
+					-else
+						a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") Cambiar de cuidad 
+							icon.icon-chevron-down
+				#collapseOne(class='accordion-body collapse off')
+					.accordion-inner.inner_home
+	.menu 
+		li.menu_current
+			a(href='/deals/home') Ofertas de hoy
+		li 
+			a(href='/deals/travel') Descuentos en viajes

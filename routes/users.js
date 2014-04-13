@@ -1,12 +1,16 @@
 var UserModel = require('../models/user').UserModel;
-var users = require('../helpers/util');
-var users = require('../helpers/util');
+var ImageModel = require('../models/image').ImageModel;
+
+var util = require('../helpers/util');
+var encrypter = require('../helpers/encryption');
 module.exports = function(app){
 	
 
 	app.get('/users', function(req, res){
-
-		res.send("respond with a resource");
+		UserModel.find().exec( function(err, users){
+			if (err) throw err;
+			res.render('users/list', {title: 'Lista de usuarios', users:users});
+		});
 	});
 
 	app.get('/users/create', function(req, res){
@@ -19,9 +23,9 @@ module.exports = function(app){
 		user_new.name = req.body.name
 		user_new.lname = req.body.lname
 		user_new.email = req.body.email
-		user_new.password = Encrypter.encrypt(req.body.password);
+		user_new.password = encrypter.encrypt(req.body.password);
 		user_new.gender = req.body.gender
-		user_new.birthday = Util.date_mongo(req.body.birthday, "00:00")
+		user_new.birthday = util.date_mongo(req.body.birthday, "00:00")
 		user_new.phone = req.body.phone
 		user_new.mobile = req.body.mobile
 		user_new.address = req.body.address
@@ -54,5 +58,40 @@ module.exports = function(app){
 				}
 			});
 		}
+	});
+
+	app.get('/users/edit/:id', function(req, res){
+		UserModel.findById( req.params.id , function(err, user){
+			res.render('users/welcome', {title: 'Cargar Oferta', user:user})
+		});
+			
+	});
+
+	app.post('/users/update', function(req, res){
+		var user_new = new UserModel();
+		UserModel.findById( req.session.user._id , function(err, user){
+			user_new = user;
+			user_new.username = req.body.username
+			user_new.name = req.body.name
+			user_new.lname = req.body.lname
+			user_new.email = req.body.email
+			user_new.phone = req.body.phone
+			user_new.mobile = req.body.mobile
+			user_new.address = req.body.address
+			user_new.country = req.body.country
+			user_new.city = req.body.city
+			user_new.state = req.body.state
+			user_new.zip = req.body.zip
+			console.log(user_new);
+			user_new.save(function(err){
+				if(!err){
+					res.redirect('/users/'+user_new._id);
+				} else {
+					console.log("Error: - " + err);
+				}
+				res.render('users/welcome');
+			});
+		});
+		res.render('users/welcome', {title: 'Cargar Oferta'})	
 	});
 }

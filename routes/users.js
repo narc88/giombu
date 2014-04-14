@@ -1,5 +1,8 @@
 var UserModel = require('../models/user').UserModel;
 var ImageModel = require('../models/image').ImageModel;
+var DealModel = require('../models/deal').DealModel;
+var SubscriberModel = require('../models/subscriber').SubscriberModel;
+var BonusModel = require('../models/bonus').BonusModel;
 
 var util = require('../helpers/util');
 var encrypter = require('../helpers/encryption');
@@ -12,6 +15,29 @@ module.exports = function(app){
 			res.render('users/list', {title: 'Lista de usuarios', users:users});
 		});
 	});
+
+	app.get('/user/:id', function(req, res){
+		UserModel.findById(req.params.id).exec( function(err, user){
+			if (err) throw err;
+			UserModel.find({'promoter_id':req.params.id}, function (err, contacts) {
+				if (err) return handleError(err);
+				DealModel.find({'sales.user':req.params.id}).sort("-created").exec(function (err, deals) {
+					if (err) return handleError(err);
+					SubscriberModel.find({'email':user.email}).populate('franchise').exec( function (err, subscriptions) {
+						if (err) return handleError(err);
+						BonusModel.find( {user : req.params.id}, function(err, bonuses){
+							if(!err){
+								res.render('users/view', {title: 'Perfil', user: user,bonuses:bonuses, contacts:contacts,deals:deals,subscriptions:subscriptions});
+							}else{
+								console.log('Error'+ err);
+							}
+						});
+					});
+				});
+			});
+		});
+	});
+
 
 	app.get('/users/create', function(req, res){
 		res.render('users/create', {title: 'Registro'});

@@ -31,12 +31,3 @@ block content
 			br
 			input.enviar(name='submit', type='submit')
 			hr
-	.form_photo
-		-if(user.image.count == 0)
-			img(src="/images/mr_bean.jpg")	
-		-else
-			img(src="/images/"+user.image[0].filename.toString()).span2.image
-	form(action="/intranet/users/save_user_image",id="uploadForm", method="post", enctype="multipart/form-data")
-		input.file(type="file", id="userImageInput", name="image")
-		input.margin(type="hidden", id="id", name="user_id", value="#{user._id.toString()}")
-		input.subir(type="submit", name="sulbmit")

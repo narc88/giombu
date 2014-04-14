@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+	.span9
+		h3 Lista de Usuarios
+		table.table_user_list
+			-each user in users
+				tr.span3
+					td.thumbnail 
+					td
+						h5 #{user.name} #{user.lname}
+						p #{user.username}
+						
+					td.span1
+						a(href="/intranet/users/admin_view_user_profile/#{user._id}", rel="tooltip", title="Editar").btn.btn-primary.pull-right 
+							i.icon-pencil

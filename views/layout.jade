@@ -1,7 +1,11 @@
 doctype html
 html
-  head
-    title= title
-    link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+	head
+		title= title
+		include includes/includes_intranet/scripts
+		link(rel='stylesheet', href='/stylesheets/style.css')
+	body
+		#conversations_div
+		#navbar
+		include includes/includes_intranet/head 
+		block content

@@ -1,0 +1,18 @@
+#myModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+	.modal-header
+		button(class="close", data-dismiss="modal", aria-hidden="true") &times
+		- if(typeof(error) != 'undefined')
+			p #{error}
+		- else
+			h3 ¿Estás registrado?
+	.modal-body
+		div( class='container_form')
+			form(method='post', action='/users/login_user/')
+				label Usuario
+				input(name='username', type='text', class="required")
+				label Contraseña	
+				input(name='password', type='password', class="required") 
+				br
+				button.btn.btn-primary(name='submit', type='submit') Enviar
+	.modal-footer
+		a(href="/users/create") Registrate en Giombu

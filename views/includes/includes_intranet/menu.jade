@@ -1,0 +1,83 @@
+#left
+	a(href='/intranet/users/profile') 
+		#profile
+			.thumbnail 
+				-if (typeof user !== "undefined")
+					-if (typeof user.image === "undefined")
+						img(src="/images/mr_bean.jpg")
+					-else
+						img(src="/images/"+user.image[0].filename.toString())
+				-else
+					img(src="/images/mr_bean.jpg")
+			.data 
+				-if (!(typeof user === "undefined"))
+					p #{user.username} #{user.partner}
+					a(href='/users/edit/') Editar Perfil
+	ul(class="nav nav-list")
+		li.nav-header Ofertas
+		li
+			a(href='/intranet/deals/list') Ver Activas
+		li
+			a(href='/intranet/deals/list') Ver Próximas
+		li
+			a(href='/deals/create') Crear Oferta
+
+		li.nav-header Menu
+		li
+			a(href='/intranet/news') Noticias
+//		-if (!(typeof user.promoter === "undefined"))
+			li.nav-header Promotores
+			li
+				a(href='/intranet/promoters/list_sons/0') Listado
+			li
+				a(href='/intranet/invitations/list_promoters') Invitaciones
+			li
+				a(href='/intranet/bonuses/my_bonuses/') Mis Bonos
+//		-if (user.partner)
+			li.nav-header Socios
+			li
+				a(href='h1') Mi Tienda
+			li
+				a(href='h1') Mis Comisiones
+//		-if (!(typeof user.seller === "undefined"))
+			li.nav-header Vendedores
+			li
+				a(href='/sellers/list') Ventas
+			li
+				a(href='h1') Comisiones	
+		li.nav-header Contactos
+		li
+			a(href='/intranet/users/contacts/0') Listado
+		li
+			a(href='/intranet/invitations/list_contacts') Invitaciones
+		li.nav-header Administración
+		li
+			a(href='/intranet/stats') Estadísticas
+		li
+			a(href='/intranet/sales/list_all') Ventas
+		li
+			a(href='h1') Pagos
+		li
+			a(href='/intranet/products/list') Productos
+		li
+			a(href='/intranet/users/list') Usuarios
+		li
+			a(href='/countries/list') Paises
+		li
+			a(href='/intranet/franchisors/list') Franquiciantes
+		li
+			a(href='/intranet/stores/list') Comercios
+		li
+			a(href='/intranet/sellers/list') Vendedores
+		li
+			a(href='/intranet/currencies/list') Monedas
+		li
+			a(href="/bankAccount/list") Cuentas Bancarias
+			
+		li.nav-header Email Marketing
+		li
+			a(href='/intranet/subscribers/list') Suscriptores
+		li
+			a(href='/newsletters/new') Newsletters
+		li
+			a(href='h1') Lista de Mails

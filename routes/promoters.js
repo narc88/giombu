@@ -1,6 +1,7 @@
 var UserModel = require('../models/user').UserModel;
 var PromoterModel = require('../models/promoter').PromoterModel;
 var PromoterTextModel = require('../models/promoter_text').PromoterTextModel;
+var checkAuth = require('../middleware/checkAuth');
 
 
 
@@ -9,7 +10,7 @@ module.exports = function(app){
 
 
 
-	app.get('/promoters/register', function (req, res, next) {
+	app.get('/promoters/register', checkAuth.user , function (req, res, next) {
 		res.render('promoters/register', {title: 'Registro de Promotor' , user:req.session.user});
 	});
 

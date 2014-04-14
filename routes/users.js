@@ -125,7 +125,6 @@ module.exports = function(app){
 				}else{
 					if(user.password == encrypter.encrypt(req.body.password)){
 							req.session.user = user;
-							//req.session.user = doc;
 							req.session.user.selected_franchise = 'Guadalajara';
 							req.session.messagge = "Se ha logueado correctamente";
 							updateUserLevel(req, res, function(){

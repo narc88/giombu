@@ -2,7 +2,7 @@
 
 exports.user = function (req, res, next) {
 	if (!req.session.user) {
-		res.render('error');
+		res.render('users/login');
 	} else {
 		next();
 	}

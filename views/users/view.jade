@@ -1,0 +1,157 @@
+
+// my-template.jade
+extends ../layout
+
+//Bloque de contenido.
+block content
+	.span9
+		.img_profile
+			img(src="/images/#{user.image[0].filename}").span2.image
+			p #{user.username}
+			h5 Tenes #{contacts.length} contactos!
+		.bs-example.bs-example-tabs
+			ul#myTab(class="nav nav-tabs")
+				li.active
+					a(href="#misdatos", data-toggle="tab") Mis Datos
+				li
+					a(href="#missuscripciones", data-toggle="tab") Mis Suscripciones
+				li
+					a(href="#miscontactos", data-toggle="tab") Mis Contactos
+				li
+					a(href="#misofertas", data-toggle="tab") Mis Ofertas
+				li
+					a(href="#miscomisiones", data-toggle="tab") Mis Comisiones
+				li
+					a(href="#misbonos", data-toggle="tab") Mis Bonos
+			#myTabContent.tab-content
+				.tab-pane.fade.active.in#misdatos
+					h3 Datos del usuario
+					table.misdatos
+						tr 
+							td.tdmisdatos Nombre:
+							td #{user.name} #{user.lname}
+						tr
+							td.tdmisdatos Email:
+							td	#{user.email}
+						tr 
+							td.tdmisdatos Dirección:
+							td #{user.address} - #{user.state}, #{user.city} - #{user.country}
+						tr 
+							td.tdmisdatos Telefono:
+							td #{user.phone}
+						tr 
+							td.tdmisdatos Movil:
+							td #{user.mobile}
+				.tab-pane.fade.in#miscontactos
+					table.miscontactos
+						-each contact in contacts
+							tr 
+								td.tdmisdatos Nombre:
+								td
+									a(href="/users/profile/#{contact._id}") #{contact.name} #{contact.lname}	
+				.tab-pane.fade.in#misofertas
+					table.misofertas
+						-each deal in deals
+							tr 
+								td.tdmisdatos 
+								td
+									a(href="/deals/view/#{deal._id}") #{deal.title} 
+								td $  #{deal.special_price}	
+				.tab-pane.fade.in#missuscripciones
+					table.missuscripciones
+						-each subscription in subscriptions
+							tr 
+								td.tdmisdatos Nombre:
+								td #{subscription.franchise.name}
+							tr
+								td.tdmisdatos Email:
+								td	#{subscription.created}
+				.tab-pane.fade.in#misbonos
+					table.misbonos
+						tr
+							th Monto
+							th Fecha
+						-each bonus in bonuses
+							tr 
+								td  #{bonus.amount}
+								td #{bonus.created}
+			-if (!(typeof user.promoter === "undefined"))
+				h3 Promotor
+				table
+					tr
+						td	Promotor:
+						td
+					tr
+						td	Introduccion:
+						td	#{user.promoter[0].promoter_text[0].page_title}
+					tr
+						td	Cuerpo
+						td	#{user.promoter[0].promoter_text[0].page_body}
+
+			-if (user.partner)
+				h3 Partner
+				table
+					tr
+						td	Tienda:
+						td	#{user.partner[0].email}
+			-if (user.seller)
+				h3 Vendedor
+				table
+					tr
+						td	Vendedor:
+						td
+		.accordion(id='accordion2')
+			.accordion-group 
+				.accordion-heading 
+					a(href='#collapseOne', class='accordion-toggle',  data-toggle='collapse',  data-parent='#accordion2') Editar
+				#collapseOne(class='accordion-body collapse', style='height: 0px;')
+					.accordion-inner 
+						.form_edit_profile
+							form(method='post',id="users_edit", action='/users/update/')
+								label Nombre de Usuario:
+									input(name='username', type='text', value='#{user.username}' ,class="required")
+								label Nombre completo:
+									input(name='name', type='text', value='#{user.name}' ,class="required")
+								label Apellido(s):
+									input(name='lname', type='text', value='#{user.lname}' ,class="required")
+								label Email:
+									input(name='email', type='text', value='#{user.email}'  ,class="required email")
+								label Phone:
+									input(name='phone', type='text', value='#{user.phone}')
+								label Cell Phone:
+									input(name='mobile', type='text', value='#{user.mobile}')
+								label Direccion: 
+									input(name='address', type='text', value='#{user.address}')
+								label Pais:
+									input(name='country', type='text', value='#{user.country}')
+								label Provincia:
+									input(name='state', type='text', value='#{user.state}')
+								label Ciudad:
+									input(name='city', type='text', value='#{user.city}' ,class="required")
+								label Zip:
+									input(name='zip', type='text', value='#{user.zip}')
+								br
+								input.enviar(name='submit', type='submit')
+								hr
+//		.progress.progress-striped.active
+//			.bar(style="width: #{contacts}%;") 
+//			h6 #{contacts} Contactos
+		.results
+			h4 Suscripciones
+				-for (var i = subscriptions.length - 1; i >= 0; i--) {
+					p #{subscriptions[i].franchise.name}
+				-};
+			h4 Ofertas compradas
+		table.table
+			-each deal in deals
+				tr
+					td
+						span.label.pull-right #{deal.status}
+					td
+						img( src="/images/243_large_f4415b921f7e566042424fb70b1ba3a4.jpeg").span2
+					td
+						h5 #{deal.title}
+					td
+						p #{deal.tagline}
+					td.span1
+						a(href="/intranet/deals/view/#{deal._id}").btn.pull-right Ver

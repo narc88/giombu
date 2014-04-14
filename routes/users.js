@@ -8,15 +8,26 @@ var util = require('../helpers/util');
 var encrypter = require('../helpers/encryption');
 module.exports = function(app){
 	
-
-	app.get('/users', function(req, res){
+	//Este regex nos permite pedir la misma funcion como json, para usar donde necesitamos elegir quien nos invito y similar.
+	app.get('/users.:format(json)?', function(req, res){
 		UserModel.find().exec( function(err, users){
 			if (err) throw err;
+			if(req.params.format){
+				usernames = [];
+				for (var i = users.length - 1; i >= 0; i--) {
+					usernames.push(users[i].username)
+				};
+				res.send(usernames)
+			}
 			res.render('users/list', {title: 'Lista de usuarios', users:users});
 		});
 	});
+	
+	app.get('/users/create', function(req, res){
+		res.render('users/create', {title: 'Registro'});
+	});
 
-	app.get('/user/:id', function(req, res){
+	app.get('/users/:id', function(req, res){
 		UserModel.findById(req.params.id).exec( function(err, user){
 			if (err) throw err;
 			UserModel.find({'promoter_id':req.params.id}, function (err, contacts) {
@@ -29,18 +40,13 @@ module.exports = function(app){
 							if(!err){
 								res.render('users/view', {title: 'Perfil', user: user,bonuses:bonuses, contacts:contacts,deals:deals,subscriptions:subscriptions});
 							}else{
-								console.log('Error'+ err);
+								if (err) return handleError(err);
 							}
 						});
 					});
 				});
 			});
 		});
-	});
-
-
-	app.get('/users/create', function(req, res){
-		res.render('users/create', {title: 'Registro'});
 	});
 	
 	app.post('/users/save', function(req, res){

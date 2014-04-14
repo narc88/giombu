@@ -12,7 +12,6 @@ module.exports = function(app){
 	
 	//Este regex nos permite pedir la misma funcion como json, para usar donde necesitamos elegir quien nos invito y similar.
 	app.get('/users.:format(json)?', function(req, res, next){
-		console.log('base url');
 		UserModel.find().exec( function(err, users){
 			if (err) throw err;
 			if(req.params.format){
@@ -129,9 +128,12 @@ module.exports = function(app){
 							//req.session.user = doc;
 							req.session.user.selected_franchise = 'Guadalajara';
 							req.session.messagge = "Se ha logueado correctamente";
-							res.redirect('/users/user_login_update');
+							updateUserLevel(req, res, function(){
+								console.log("Usuario logueado: ");
+								console.log(req.session.user);
+								res.redirect('/');
+							});
 							
-							console.log("Usuario logueado: " + req.session.user._id);
 
 					}else{
 						res.redirect('/users/login');
@@ -156,11 +158,31 @@ module.exports = function(app){
 	});
 
 
+	function updateUserLevel(req, res, callback){
+
+		UserModel.find({promoter_id : req.session.user._id}).exec(function (err, sons){
+			if(sons){
+				req.session.user.level = sons.length/10;
+				req.session.user.save(function(err){
+					if(!err){
+						callback();
+					}else{
+						throw err;
+					}
+				});
+			}else{
+				callback();
+			}
+		});
+
+	}
+
+
+
 	//Esta llamada es muy general es por eso que debe ir a lo ultimo.
 	//Por ejemplo si esta llamada esta al principio del archivo, cuando se llama a /users/login
 	//toma 'login' como si fuese un ID de algun user. Este caso es valido para llamadas similares.
 	app.get('/users/:id', function(req, res){
-		console.log('retrieve user');
 		UserModel.findById(req.params.id).exec( function(err, user){
 			if (err) throw err;
 			UserModel.find({'promoter_id':req.params.id}, function (err, contacts) {

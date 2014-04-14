@@ -11,7 +11,7 @@ var encrypter = require('../helpers/encryption');
 module.exports = function(app){
 	
 	//Este regex nos permite pedir la misma funcion como json, para usar donde necesitamos elegir quien nos invito y similar.
-	app.get('/users.:format(json)?', function(req, res){
+	app.get('/users.:format(json)?', function(req, res, next){
 		console.log('base url');
 		UserModel.find().exec( function(err, users){
 			if (err) throw err;
@@ -125,17 +125,13 @@ module.exports = function(app){
 					res.redirect('/users/login');
 				}else{
 					if(user.password == encrypter.encrypt(req.body.password)){
-						if(req.session){
 							req.session.user = user;
 							//req.session.user = doc;
 							req.session.user.selected_franchise = 'Guadalajara';
 							req.session.messagge = "Se ha logueado correctamente";
 							res.redirect('/users/user_login_update');
 							
-							log.info("Usuario logueado: " + req.session.user._id);
-						}else{
-							console.log('ERROR - invalid session');
-						}
+							console.log("Usuario logueado: " + req.session.user._id);
 
 					}else{
 						res.redirect('/users/login');

@@ -5,7 +5,7 @@ module.exports = function(app){
 
 	//Root
 	app.get('/', function(req, res){
-	  res.render('index', { title: 'Express' });
+		res.render('index', { title: 'Giombu' });
 	});
 
 	users(app);

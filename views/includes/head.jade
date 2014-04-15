@@ -1,15 +1,19 @@
-div(class="body_interior")
-	.header_franchise
+.header_conteiner
+	.header
 		a(href="/")
-			img(src="/img/logo_giombu.png")
-		.login
+			img(class='fleft', src="/img/logo_giombu.png")
+		#menu_top.fright
+			ul
 			if typeof user === "undefined"
-				img(src='/img/icon_suscribir.png')
-				a(href='#subscription', role='button', data-toggle='modal') Suscríbete
-				img(src='/img/icon_crear_cuenta.png')
-				a(href="/users/register") Registrate
-				img(src='/img/icon_login_person.png')
-				a(href='#myModal', role='button', data-toggle='modal') Accede						
+				li
+					img(src='/img/icon_suscribir.png')
+					a(href='#subscription', role='button', data-toggle='modal') Suscríbete
+				li.space
+					img(src='/img/icon_crear_cuenta.png')
+					a(href="/users/register") Registrate
+				li.space
+					img(src='/img/icon_login_person.png')
+					a(href='#myModal', role='button', data-toggle='modal') Accede       
 			else
 				if  typeof user.username === "undefined"
 					img(src='/img/icon_suscribir.png')
@@ -51,7 +55,7 @@ div(class="body_interior")
 							icon.icon-chevron-down
 				#collapseOne(class='accordion-body collapse off')
 					.accordion-inner.inner_home
-	.menu 
+	.menu.clear
 		li.menu_current
 			a(href='/deals/home') Ofertas de hoy
 		li 

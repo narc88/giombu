@@ -1,19 +1,19 @@
-#left
+#left.fleft
 	a(href='/intranet/users/profile') 
 		#profile
 			.thumbnail 
 				-if (typeof user !== "undefined")
 					-if (typeof user.image === "undefined")
-						img(src="/images/mr_bean.jpg")
+						img(src="/images/mr_bean.jpg", class='img-thumbnail')
 					-else
-						img(src="/images/"+user.image[0].filename.toString())
+						img(class='img-thumbnail', src="/images/"+user.image[0].filename.toString())
 				-else
-					img(src="/images/mr_bean.jpg")
+					img(class='img-thumbnail', src="/images/mr_bean.jpg")
 			.data 
 				-if (!(typeof user === "undefined"))
 					p #{user.username} #{user.partner}
 					a(href='/users/edit/') Editar Perfil
-	ul(class="nav nav-list")
+	ul(class="nav nav-pills nav-stacked")
 		li.nav-header Ofertas
 		li
 			a(href='/intranet/deals/list') Ver Activas
@@ -25,7 +25,7 @@
 		li.nav-header Menu
 		li
 			a(href='/intranet/news') Noticias
-//		-if (!(typeof user.promoter === "undefined"))
+		//-if (!(typeof user.promoter === "undefined"))
 			li.nav-header Promotores
 			li
 				a(href='/intranet/promoters/list_sons/0') Listado
@@ -33,13 +33,13 @@
 				a(href='/intranet/invitations/list_promoters') Invitaciones
 			li
 				a(href='/intranet/bonuses/my_bonuses/') Mis Bonos
-//		-if (user.partner)
+		//-if (user.partner)
 			li.nav-header Socios
 			li
 				a(href='h1') Mi Tienda
 			li
 				a(href='h1') Mis Comisiones
-//		-if (!(typeof user.seller === "undefined"))
+		//-if (!(typeof user.seller === "undefined"))
 			li.nav-header Vendedores
 			li
 				a(href='/sellers/list') Ventas

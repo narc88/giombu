@@ -126,7 +126,8 @@ module.exports = function(app){
 				}else{
 					if(user.password == encrypter.encrypt(req.body.password)){
 							req.session.user = user;
-							req.session.user.selected_franchise = 'Guadalajara';
+							req.session.userData = {};
+							req.session.userData.selected_franchise = 'Guadalajara';
 							req.session.messagge = "Se ha logueado correctamente";
 							updateUserLevel(req, res, function(){
 								console.log("Usuario logueado: ");
@@ -162,20 +163,39 @@ module.exports = function(app){
 
 		UserModel.find({promoter_id : req.session.user._id}).exec(function (err, sons){
 			if(sons){
-				LevelModel.findOne({"number" : {$gt : sons.length/10}}).sort({"number": 1}).exec(function(err, level){
+
+				var number = sons.length/10;
+
+				LevelModel.findOne({'number' : {$gte : number}}).sort({'number': 1}).exec(function(err, level){
+
 					if (err) throw err;
-					console.log(level)
-				})
-			//	req.session.user.level = sons.length/10;
-			//	req.session.user.save(function(err){
-			//		if(!err){
-		//				callback();
-	//				}else{
-		//				throw err;
-	//				}
-	//			});
-			}else{
-				callback();
+
+					if(level){
+
+						req.session.user.level = level._id;
+
+						req.session.user.save(function(err){
+							console.log(err);
+							if (err) throw err;	
+							callback();						
+						});
+
+						
+					}else{
+						LevelModel.findOne({'number' : LevelModel.MAX_LEVEL}, function(err, level){
+
+							if (err) throw err;
+
+							req.session.user.level = level._id;
+
+							req.session.user.save(function(err){
+								if (err) throw err;							
+								callback();
+							});
+
+						});
+					}
+				});
 			}
 		});
 

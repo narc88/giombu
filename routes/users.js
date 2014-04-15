@@ -3,6 +3,7 @@ var ImageModel = require('../models/image').ImageModel;
 var DealModel = require('../models/deal').DealModel;
 var SubscriberModel = require('../models/subscriber').SubscriberModel;
 var BonusModel = require('../models/bonus').BonusModel;
+var LevelModel = require('../models/level').LevelModel;
 
 var util = require('../helpers/util');
 var encrypter = require('../helpers/encryption');
@@ -161,14 +162,18 @@ module.exports = function(app){
 
 		UserModel.find({promoter_id : req.session.user._id}).exec(function (err, sons){
 			if(sons){
-				req.session.user.level = sons.length/10;
-				req.session.user.save(function(err){
-					if(!err){
-						callback();
-					}else{
-						throw err;
-					}
-				});
+				LevelModel.findOne({"number" : {$gt : sons.length/10}}).sort({"number": 1}).exec(function(err, level){
+					if (err) throw err;
+					console.log(level)
+				})
+			//	req.session.user.level = sons.length/10;
+			//	req.session.user.save(function(err){
+			//		if(!err){
+		//				callback();
+	//				}else{
+		//				throw err;
+	//				}
+	//			});
 			}else{
 				callback();
 			}

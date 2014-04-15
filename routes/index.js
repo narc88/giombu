@@ -1,5 +1,6 @@
 var users = require('./users');
 var promoters = require('./promoters');
+var levels = require('./levels');
 var errors = require('./errors');
 
 module.exports = function(app){
@@ -11,7 +12,7 @@ module.exports = function(app){
 
 	users(app);
 	promoters(app);
-
+	levels(app);
 	// error handlers
 	errors(app);
 

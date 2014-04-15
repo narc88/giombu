@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 
 var LevelSchema =  new mongoose.Schema({
-	number				: { type: String, required: true },
+	number				: { type: Number, required: true },
 	name    			: { type: String, required: true , trim:true},
 	bonus				: { type: Number, required: true, min:0},
 	description	   		: { type: String },

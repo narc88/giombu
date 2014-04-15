@@ -10,7 +10,6 @@ var private_config = require('./private_config');
 
 mongoose.set('debug', true);
 
-
 mongoose.connect(private_config.connection_string, function(err){
 	if(err) throw err;
 	var app = express();

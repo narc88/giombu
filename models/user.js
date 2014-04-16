@@ -44,3 +44,6 @@ var UserSchema = new mongoose.Schema({
 
 UserSchema.set('versionKey', false);
 exports.UserModel = mongoose.model('User', UserSchema);
+
+
+exports.ROLES = ['admin', 'common_user'];

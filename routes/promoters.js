@@ -1,6 +1,5 @@
 var UserModel = require('../models/user').UserModel;
 var PromoterModel = require('../models/promoter').PromoterModel;
-var PromoterTextModel = require('../models/promoter_text').PromoterTextModel;
 var checkAuth = require('../middleware/checkAuth');
 
 
@@ -18,28 +17,54 @@ module.exports = function(app){
 
 
 	app.post('/promoters/add', function (req, res, next) {
+
 		UserModel.findById( req.session.user._id , function(err, user){
 
-			var promoter_new = new PromoterModel();
-			var promoter_text_new = new PromoterTextModel();
-			promoter_text_new.page_title = req.body.page_title
-			promoter_text_new.page_body = req.body.page_body
-			promoter_text_new.subscribers_invite = req.body.subscribers_invite
-			promoter_new.parent_id = req.body.parent_id
-			promoter_new.promoter_text = promoter_text_new
+			var promoter = new PromoterModel();
+			promoter.page_title = req.body.page_title;
+			promoter.page_body = req.body.page_body;
+			promoter.subscribers_invite = req.body.subscribers_invite;
 
-			req.session.user.promoter = promoter_new
-			user.promoter = promoter_new
+			if (err) throw err;
 
-			user.save(function(err){
-				if(!err){
-					console.log(user);
-				} else {
-					console.log("Error: - " + err);
+
+			UserModel.findOne({ username : req.body.parent_id }, function(err, parentUser){
+
+				if (err) throw err;
+
+				if(parentUser){
+
+					promoter.parent_id = parentUser._id;
+
+
+					console.log('Promoter');
+					console.log(promoter);
+
+					promoter.save(function(err){
+
+						if (err) throw err;
+
+						user.promoter = promoter;
+
+						user.save(function(err){
+							if (err) throw err;
+							console.log(user);
+							res.render('users/register', {title: 'Cargar Oferta'});
+						});
+
+					});
+
+				}else{
+					//Debemos manejar este error o en mejor lugar evitar llegar a esta instancia
+					//sugiriendo los usernames en el frontend
+					throw new Error('No existe el usuario ' + req.body.parent_id);
 				}
+
+
 			});
-			res.render('users/register', {title: 'Cargar Oferta'});
+	
 		});
+
 	});
 
 

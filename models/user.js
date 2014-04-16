@@ -31,7 +31,6 @@ var UserSchema = new mongoose.Schema({
 	modified				: {type: Date, default: Date.now },
 	promoter_id 			: { type: mongoose.Schema.ObjectId, ref: 'User' },
 	level					: { type: mongoose.Schema.ObjectId, ref: 'Level' },
-	//level 					: { type: Number, default: 0},
 	//Relacionados
 	 invitation				: [InvitationSchema],
 	 image 					: [ImageSchema],

@@ -164,14 +164,14 @@ module.exports = function(app){
 		UserModel.find({promoter_id : req.session.user._id}).exec(function (err, sons){
 			if(sons){
 
-				var number = sons.length/10;
+				var number = sons.length/10+1;
 
 				LevelModel.findOne({'number' : {$gte : number}}).sort({'number': 1}).exec(function(err, level){
 
 					if (err) throw err;
 
 					if(level){
-
+						console.log(level)
 						req.session.user.level = level._id;
 						req.session.userData.level = level;
 

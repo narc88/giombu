@@ -450,22 +450,22 @@ module.exports = function (app){
 
 
 
-	//Estadisticas para ofertas
+//Estadisticas para ofertas
 
-	function map_by_day() {
-	  emit((this.created.getMonth()+1).toString()+this.created.getDate().toString()+this.created.getFullYear().toString() , 1);
-	}
+function map_by_day() {
+	emit((this.created.getMonth()+1).toString()+this.created.getDate().toString()+this.created.getFullYear().toString() , 1);
+}
 
-	function reduce_count(key, values) {
-	  var res = 0
-	  values.forEach(function (v) {
-			res = res + 1 
-		});
-	  return res;
-	}
+function reduce_count(key, values) {
+	var res = 0
+	values.forEach(function (v) {
+		res = res + 1 
+	});
+	return res;
+}
 
-	exports.calculate_new_deals = function(req, res, next){
-		mongoose.connection.db.executeDbCommand({mapreduce: "deals", map: map_by_day.toString(), reduce: reduce_count.toString(), out: {inline: 1}}, 
+exports.calculate_new_deals = function(req, res, next){
+	mongoose.connection.db.executeDbCommand({mapreduce: "deals", map: map_by_day.toString(), reduce: reduce_count.toString(), out: {inline: 1}}, 
 		function(err, deals){
 			if(!err){
 				console.log(deals.documents[0].results)
@@ -480,36 +480,36 @@ module.exports = function (app){
 				if (err) throw err;
 			}
 		});
+}
+
+
+//Estadisticas
+
+
+function map_by_day() {
+	emit((this.created.getMonth()+1).toString() , 1);
+}
+
+function reduce_count(key, values) {
+	var res = 0
+	values.forEach(function (v) {
+		res = res + 1 
+	});
+	return res;
+}
+
+exports.calculate_new_deals = function(req, res, next){
+	var today = new Date();
+	var year;
+	var month;
+	if(today.getMonth()>=5){
+		year = today.getFullYear();
+		month = today.getMonth()-5;
+	}else{
+		year = today.getFullYear()-1;
+		month = today.getMonth()-5+12;
 	}
-
-
-	//Estadisticas
-
-
-	function map_by_day() {
-	  emit((this.created.getMonth()+1).toString() , 1);
-	}
-
-	function reduce_count(key, values) {
-	  var res = 0
-	  values.forEach(function (v) {
-			res = res + 1 
-		});
-	  return res;
-	}
-
-	exports.calculate_new_deals = function(req, res, next){
-			var today = new Date();
-		var year;
-		var month;
-		if(today.getMonth()>=5){
-			year = today.getFullYear();
-			month = today.getMonth()-5;
-		}else{
-			year = today.getFullYear()-1;
-			month = today.getMonth()-5+12;
-		}
-		mongoose.connection.db.executeDbCommand({mapreduce: "deals", map: map_by_day.toString(), reduce: reduce_count.toString(), out: {inline: 1}, query: {created: {$gt: new Date(year, month, 1)}}},
+	mongoose.connection.db.executeDbCommand({mapreduce: "deals", map: map_by_day.toString(), reduce: reduce_count.toString(), out: {inline: 1}, query: {created: {$gt: new Date(year, month, 1)}}},
 		function(err, deals){
 			if(!err){
 				console.log(deals.documents[0].results)
@@ -524,40 +524,40 @@ module.exports = function (app){
 				if (err) throw err;
 			}
 		});
+}
+
+
+// Totales vendidos por mes.
+
+function map_sales_total_by_month() {
+	var total = 0  
+	for (var idx = 0; idx < this.sales.length; idx++) {
+		total= total + this.sales[idx].coupons.length;
 	}
+	var amount = total * this.special_price
+	emit((this.created.getMonth()+1).toString() , amount);
+}
 
+function reduce_count_total_by_month(key, values) {
+	var res = 0
+	values.forEach(function (v) {
+		res = res + v
+	});
+	return res;
+}
 
-	// Totales vendidos por mes.
-
-	function map_sales_total_by_month() {
-		var total = 0  
-		for (var idx = 0; idx < this.sales.length; idx++) {
-	         total= total + this.sales[idx].coupons.length;
-	    }
-	    var amount = total * this.special_price
-	  emit((this.created.getMonth()+1).toString() , amount);
+exports.calculate_total_by_month = function(req, res, next){
+	var today = new Date();
+	var year;
+	var month;
+	if(today.getMonth()>=5){
+		year = today.getFullYear();
+		month = today.getMonth()-5;
+	}else{
+		year = today.getFullYear()-1;
+		month = today.getMonth()-5+12;
 	}
-
-	function reduce_count_total_by_month(key, values) {
-	  var res = 0
-	  values.forEach(function (v) {
-			res = res + v
-		});
-	  return res;
-	}
-
-	exports.calculate_total_by_month = function(req, res, next){
-		var today = new Date();
-		var year;
-		var month;
-		if(today.getMonth()>=5){
-			year = today.getFullYear();
-			month = today.getMonth()-5;
-		}else{
-			year = today.getFullYear()-1;
-			month = today.getMonth()-5+12;
-		}
-		mongoose.connection.db.executeDbCommand({mapreduce: "deals", map: map_sales_total_by_month.toString(), reduce: reduce_count_total_by_month.toString(), out: {inline: 1}, query: {created: {$gt: new Date(year, month, 1)}}},
+	mongoose.connection.db.executeDbCommand({mapreduce: "deals", map: map_sales_total_by_month.toString(), reduce: reduce_count_total_by_month.toString(), out: {inline: 1}, query: {created: {$gt: new Date(year, month, 1)}}},
 		function(err, deals){
 			if(!err){
 				console.log(deals);
@@ -572,30 +572,30 @@ module.exports = function (app){
 				if (err) throw err;
 			}
 		});
+}
+
+//Total de cupones
+
+function map_coupon_total_by_month() {
+	var total = 0  
+	for (var idx = 0; idx < this.sales.length; idx++) {
+		total= total + this.sales[idx].coupons.length;
 	}
+	emit((this.created.getMonth()+1).toString() , total);
+}
 
-	//Total de cupones
-
-	function map_coupon_total_by_month() {
-		var total = 0  
-		for (var idx = 0; idx < this.sales.length; idx++) {
-	         total= total + this.sales[idx].coupons.length;
-	    }
-	  emit((this.created.getMonth()+1).toString() , total);
+exports.calculate_coupon_total_by_month = function(req, res, next){
+	var today = new Date();
+	var year;
+	var month;
+	if(today.getMonth()>=5){
+		year = today.getFullYear();
+		month = today.getMonth()-5;
+	}else{
+		year = today.getFullYear()-1;
+		month = today.getMonth()-5+12;
 	}
-
-	exports.calculate_coupon_total_by_month = function(req, res, next){
-		var today = new Date();
-		var year;
-		var month;
-		if(today.getMonth()>=5){
-			year = today.getFullYear();
-			month = today.getMonth()-5;
-		}else{
-			year = today.getFullYear()-1;
-			month = today.getMonth()-5+12;
-		}
-		mongoose.connection.db.executeDbCommand({mapreduce: "deals", map: map_coupon_total_by_month.toString(), reduce: reduce_count_total_by_month.toString(), out: {inline: 1}, query: {created: {$gt: new Date(year, month, 1)}}}, 
+	mongoose.connection.db.executeDbCommand({mapreduce: "deals", map: map_coupon_total_by_month.toString(), reduce: reduce_count_total_by_month.toString(), out: {inline: 1}, query: {created: {$gt: new Date(year, month, 1)}}}, 
 		function(err, deals){
 			if(!err){
 				console.log(deals);
@@ -610,4 +610,4 @@ module.exports = function (app){
 				if (err) throw err;
 			}
 		});
-	}
+}

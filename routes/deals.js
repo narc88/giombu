@@ -114,7 +114,7 @@ module.exports = function (app){
 			}else{
 				DealModel.find( {} ).limit(10).sort("-created")
 					.exec(function (err, deals) {
-						  if (err) return handleError(err);
+						if (err) return handleError(err);
 						if(deals){
 							console.log('Sin franquicia'+deals.length);
 							var messagge = req.session.messagge;
@@ -280,7 +280,7 @@ module.exports = function (app){
 				}
 		  	});
 		}
-	}
+	});
 
 	//Lista las deals
 	app.get('/deals/travel', function(req, res, next){
@@ -439,7 +439,13 @@ module.exports = function (app){
 			user: req.session.user
 		});
 
-	}
+	});
+
+
+
+
+
+}
 
 
 
@@ -605,8 +611,3 @@ module.exports = function (app){
 			}
 		});
 	}
-
-
-
-}
-

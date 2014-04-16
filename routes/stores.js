@@ -1,7 +1,7 @@
 var StoreModel = require('../models/store').StoreModel;
 var UserModel = require('../models/user').UserModel;
 var BranchModel = require('../models/branch').BranchModel;
-var Encrypter = require('./encryption_controller');
+// var Encrypter = require('./encryption_controller');
 
 
 

@@ -20,6 +20,7 @@ module.exports = function(app){
 	franchisors(app);
 	franchises(app);
 	currencies(app);
+	countries(app);
 
 	// error handlers
 	errors(app);

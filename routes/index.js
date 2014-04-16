@@ -1,7 +1,10 @@
 var users = require('./users');
 var promoters = require('./promoters');
 var levels = require('./levels');
+var deals = require('./deals');
+var stores = require('./stores');
 var errors = require('./errors');
+
 
 var franchisors = require('./franchisors');
 var franchises = require('./franchises');
@@ -20,12 +23,14 @@ module.exports = function(app){
 	franchisors(app);
 	franchises(app);
 	currencies(app);
+	deals(app);
+	stores(app);
 
 	// error handlers
 	errors(app);
 
-
-
+	//DEBUG!
+	require('./debug')(app);
 
 }
 

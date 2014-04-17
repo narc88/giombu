@@ -6,14 +6,9 @@ var checkAuth = require('../middleware/checkAuth');
 
 module.exports = function(app){
 
-
-
-
 	app.get('/promoters/register', checkAuth.user , function (req, res, next) {
 		res.render('promoters/register', {title: 'Registro de Promotor' , user:req.session.user});
 	});
-
-
 
 
 	app.post('/promoters/add', function (req, res, next) {
@@ -68,21 +63,20 @@ module.exports = function(app){
 	});
 
 
-
-
-
 	app.get('/intranet/promoters/list_sons/:start_item', function (req, res, next) {
-		UserModel.find({ 'promoter.parent_id': req.session.user._id}).skip(req.params.start_item).limit(10).exec(function(err, sons){
-			if(sons){
-				res.render('promoters/list_sons', {title: 'Tus promotores',user:req.session.user, sons:sons});
-			}else{
-				var sons = new Array(1);
-				sons[0] = req.session.user;
+		var query = UserModel.find({ 'promoter.parent_id': req.session.user._id });
+		query.skip(req.params.start_item);
+		query.limit(10);
+		query.exec(function(err, sons){
+			
+			if (err) throw err;
 
-				console.log(sons);
-				res.render('promoters/list_sons', {title: 'Tus promotores',user:req.session.user, sons:sons});
-			}
-			console.log(sons);
+			res.render('promoters/list_sons', {
+				title: 'Tus promotores',
+				user:req.session.user, 
+				sons:sons
+			});
+
 		});
 	});
 

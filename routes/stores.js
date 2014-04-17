@@ -1,6 +1,7 @@
 var StoreModel = require('../models/store').StoreModel;
 var UserModel = require('../models/user').UserModel;
 var BranchModel = require('../models/branch').BranchModel;
+var CheckAuth = require('../middleware/checkAuth');
 // var Encrypter = require('./encryption_controller');
 
 
@@ -12,7 +13,7 @@ module.exports = function(app){
 		res.render('stores/create', {title: 'Crear Store'});
 	}
 
-	app.get('/stores/create_store_branch', function (req, res, next) {
+	app.get('/stores/create_store_branch', CheckAuth.user, CheckAuth.seller ,function (req, res, next) {
 		res.render('stores/create_store_branch', {title: 'Cargar tienda',user:req.session.user});
 	});
 

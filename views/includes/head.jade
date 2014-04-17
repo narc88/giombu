@@ -3,42 +3,49 @@
 		a(href="/")
 			img(class='fleft', src="/img/logo_giombu.png")
 		#menu_top.fright
-			ul
-			if typeof user === "undefined"
-				li
-					img(src='/img/icon_suscribir.png')
-					a(href='#subscription', role='button', data-toggle='modal') Suscríbete
-				li.space
-					img(src='/img/icon_crear_cuenta.png')
-					a(href="/users/register") Registrate
-				li.space
-					img(src='/img/icon_login_person.png')
-					a(href='#myModal', role='button', data-toggle='modal') Accede       
-			else
-				if  typeof user.username === "undefined"
-					img(src='/img/icon_suscribir.png')
-					a(href='#subscription', role='button', data-toggle='modal') Suscríbete
-					span |
-					img(src='/img/icon_crear_cuenta.png')
-					a(href="/users/register") Registrate
-					span |
-					img(src='/img/icon_login_person.png')
-					a(href='#myModal', role='button', data-toggle='modal') Accede
-				else
-					img(src='/img/icon_suscribir.png')
-					a(href='#subscription', role='button', data-toggle='modal') Suscríbete
-					span |
-					img(src='/img/icon_login_person.png')
-					a(href="/users/dashboard" ) #{user.name}
-					span |
-					img(src='/img/icon_logout.png')
-					a(href="/users/logout") Salir
-					//.selected_franchise
-					//	a(href="/intranet/deals/list/#{user.selected_franchise}") #{user.selected_franchise}
-			if(typeof messagge === "undefined")
-				p
-			else
-				p #{messagge}
+		nav(role="navigation").navbar.navbar-default
+			.container-fluid
+				.collapse.navbar-collapse
+					ul.nav.navbar-nav.navbar-right
+						if typeof user === "undefined"
+							li
+								a(href='#subscription', role='button', data-toggle='modal')
+									span.glyphicon.glyphicon-envelope.col-md-pull-1
+									|Suscríbete
+
+							li
+								a(href="/users/register")
+									span.glyphicon.glyphicon-plus.col-md-pull-1
+									|Registrate
+							li
+								a(href='#myModal', role='button', data-toggle='modal')
+									span.glyphicon.glyphicon-user.col-md-pull-1
+									|Accede
+						else
+							if  typeof user.username === "undefined"
+								img(src='/img/icon_suscribir.png')
+								a(href='#subscription', role='button', data-toggle='modal') Suscríbete
+								span |
+								img(src='/img/icon_crear_cuenta.png')
+								a(href="/users/register") Registrate
+								span |
+								img(src='/img/icon_login_person.png')
+								a(href='#myModal', role='button', data-toggle='modal') Accede
+							else
+								img(src='/img/icon_suscribir.png')
+								a(href='#subscription', role='button', data-toggle='modal') Suscríbete
+								span |
+								img(src='/img/icon_login_person.png')
+								a(href="/users/dashboard" ) #{user.name}
+								span |
+								img(src='/img/icon_logout.png')
+								a(href="/users/logout") Salir
+								//.selected_franchise
+								//	a(href="/intranet/deals/list/#{user.selected_franchise}") #{user.selected_franchise}
+						if(typeof messagge === "undefined")
+							p
+						else
+							p #{messagge}
 	.franchise_select
 		.accordion.accordion2
 			.accordion-group.accordion_home

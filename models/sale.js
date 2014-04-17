@@ -10,6 +10,6 @@ var SaleSchema =  exports.SaleSchema = new mongoose.Schema({
 	coupons      		: [CouponSchema],
 	created    		 	: {type: Date, default: Date.now },
 	modified			: {type: Date, default: Date.now }
-})
+});
 
 exports.SaleModel = mongoose.model('Sale', SaleSchema);

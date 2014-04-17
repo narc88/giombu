@@ -1,6 +1,7 @@
-var UserModel = require('../models/user').UserModel;
-var ImageModel = require('../models/image').ImageModel;
-var DealModel = require('../models/deal').DealModel;
+var UserModel 	= require('../models/user').UserModel;
+var UserRoles 	= require('../models/user').UserRoles;
+var ImageModel 	= require('../models/image').ImageModel;
+var DealModel 	= require('../models/deal').DealModel;
 var SubscriberModel = require('../models/subscriber').SubscriberModel;
 var BonusModel = require('../models/bonus').BonusModel;
 var LevelModel = require('../models/level').LevelModel;
@@ -10,6 +11,12 @@ var encrypter = require('../helpers/encryption');
 
 
 module.exports = function(app){
+
+
+	//DELETE ME!
+	app.get('/testRoles', function(req, res, next){
+		res.send(UserRoles.getAdmin());
+	});
 	
 	//Este regex nos permite pedir la misma funcion como json, para usar donde necesitamos elegir quien nos invito y similar.
 	app.get('/users.:format(json)?', function(req, res, next){
@@ -44,13 +51,15 @@ module.exports = function(app){
 		user_new.phone = req.body.phone
 		user_new.mobile = req.body.mobile
 		user_new.address = req.body.address
-		user_new.roles.push("user")
+		user_new.roles.push(UserRoles.getUser());
 		user_new.country = req.body.country
 		user_new.state = req.body.state
 		user_new.city = req.body.city
 		user_new.zip = req.body.zip
 		user_new.is_active = true;
 		user_new.image.push(new ImageModel());
+
+		
 		if(req.body.inviter){
 			UserModel.findOne({username: req.body.inviter}, function(err, doc){
 				user_new.promoter_id = doc._id;
@@ -75,38 +84,46 @@ module.exports = function(app){
 		}
 	});
 
-
+	//Habria que agregar validaciones a esta llamada.
+	//un usuario comun solo debe poder editar sus datos.
+	//y solo el admin debe poder editar los datos de cualquier usuario.
 	app.get('/users/edit/:id', function(req, res){
 		UserModel.findById( req.params.id , function(err, user){
-			res.render('users/welcome', {title: 'Cargar Oferta', user:user})
+
+			if (err) throw err;
+
+			res.render('users/edit', {
+				title 	: 'Editar usuario',
+				user 	: user
+			});
 		});
 			
 	});
 
-
+	//Habria que agregar validaciones a esta llamada.
+	//un usuario comun solo debe poder editar sus datos.
+	//y solo el admin debe poder editar los datos de cualquier usuario.
 	app.post('/users/update', function(req, res){
-		var user_new = new UserModel();
-		UserModel.findById( req.session.user._id , function(err, user){
-			user_new = user;
-			user_new.username = req.body.username;
-			user_new.name = req.body.name;
-			user_new.lname = req.body.lname;
-			user_new.email = req.body.email;
-			user_new.phone = req.body.phone;
-			user_new.mobile = req.body.mobile;
-			user_new.address = req.body.address;
-			user_new.country = req.body.country;
-			user_new.city = req.body.city;
-			user_new.state = req.body.state;
-			user_new.zip = req.body.zip;
-			console.log(user_new);
-			user_new.save(function(err){
-				if(!err){
-					res.redirect('/users/'+user_new._id);
-				} else {
-					console.log("Error: - " + err);
-				}
-				res.render('users/welcome');
+
+		UserModel.findById( req.body.user._id , function(err, user){
+			user.username = req.body.username;
+			user.name = req.body.name;
+			user.lname = req.body.lname;
+			user.email = req.body.email;
+			user.phone = req.body.phone;
+			user.mobile = req.body.mobile;
+			user.address = req.body.address;
+			user.country = req.body.country;
+			user.city = req.body.city;
+			user.state = req.body.state;
+			user.zip = req.body.zip;
+			console.log(user);
+			user.save(function(err){
+
+				if (err) throw err;
+
+				res.redirect('/users/'+user_new._id);
+				
 			});
 		});
 		res.render('users/welcome', {title: 'Cargar Oferta'})	

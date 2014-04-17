@@ -1,0 +1,46 @@
+// my-template.jade
+extends ../layout
+
+//Bloque de contenido.
+block content
+	.span6
+		h3 Datos del comercio	
+		a(href="/intranet/stores/list") Lista de comercio
+		br
+		br
+		a(href="/stores/edit/" + '#{store._id}' ).btn.bnt_edit 
+			i.icon-pencil
+		a(href="/intranet/stores/add_image/" + '#{store._id}' ).btn.btn_stores_view Agregar Imagen
+		a(href="/intranet/stores/assign_partner/" + '#{store._id}' ).btn.btn_stores_view Seleccionar Usuario
+		a(data-toggle="modal", href="#myModal").btn.btn_stores_view  Comisiones 				
+		table.table_stores_view
+			tr
+				td.table_stores_view_td Name:
+				td	#{store.name}
+			tr
+				td.table_stores_view_td	Sobre el negocio:
+				td	#{store.about}
+			tr
+				td.table_stores_view_td	Email:
+				td	#{store.email}
+		#myModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+			.modal-header
+				button(class="close", data-dismiss="modal", aria-hidden="true") &times
+				h4 Comisiones
+			.modal-body
+				.stores_comisiones
+					a(href="/intranet/users/view/#{store.branches[0].partner._id}")  #{store.branches[0].partner.username}
+					table.table_commissions
+						th Cantidad 
+						th Fecha Creacion
+						-each commission in store.branches[0].partner.partner_commissions
+							a(href="/deals/#{commission.deal}")
+									tr
+										td
+											p #{commission.amount}
+										td 
+											p #{commission.created}
+
+
+
+

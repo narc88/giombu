@@ -14,6 +14,7 @@ module.exports = function(app){
 	app.use(express.urlencoded());
 	app.use(express.methodOverride());
 	app.use(express.static(path.join(__dirname, '../public')));
+	app.use('photos', __dirname+'/public/photos');
 	app.use(express.cookieParser());
 	app.use(express.session({ secret: 'giombu-giombu-secret' }));
 	app.use(express.bodyParser());

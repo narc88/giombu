@@ -52,8 +52,8 @@
 					h3.panel-heading
 					-if(typeof user !== "undefined")
 						-if(typeof user.selected_franchise === "undefined")
-							a(data-toggle='collapse', data-parent='#accordion', href='·#collapseOne') Cambiar de ciudad
-								icon.icon-chevron-down						
+							a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") Cambiar de cuidad 
+								icon.icon-chevron-down
 						-else
 							a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") #{user.selected_franchise.name} 
 								icon.icon-chevron-down

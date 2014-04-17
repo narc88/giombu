@@ -1,0 +1,102 @@
+extends ../home
+
+block content
+	.body_container
+		-if(deals.length > 0 )
+			.carousel-container.master_article 
+				div(id="myCarousel").carousel.slide
+					.carousel-inner
+						-if(typeof deals[0].images[0] !== "undefined" )
+							-for (var i = deals[0].images.length-1; i >= 0; i--) {
+								-if(i==0)
+									.item.active
+										a(href="/deals/view/#{deals[0]._id}")
+											img( src="/images/#{deals[0].images[i].filename}", class="image")
+								-else
+									.item
+										a(href="/deals/view/#{deals[0]._id}")
+											img( src="/images/#{deals[0].images[i].filename}", class="image")
+							-};
+							
+					.caption-top.transparent
+						.row
+							.span8
+								h1
+									a(href="/deals/view/#{deals[0]._id}", style="font-size:1.1em;") #{deals[0].title}
+								p
+									a(href="/deals/view/#{deals[0]._id}", style="font-size:0.9em;") #{deals[0].tagline}
+							.span2.pull-right
+								.buy.boxshadow.special_price.no_transparent
+									a(href="/sales/checkout/{#{deals[0]._id}")
+										.buy_box 
+											img( src="/img/checkout.png")
+											p 
+											p
+											p COMPRAR				
+							.span2.pull-right
+								.special_price.boxshadow.no_transparent
+									a(href="/deals/view/#{deals[0]._id}")
+										.detalles(style="font-size:0.8em;")
+												br
+												$ #{deals[0].special_price}
+												br
+												span(style="font-size:0.5em;") VER DETALLES
+					.caption-left.boxshadow.borderradius.transparent 
+						.row.deal_primary
+							.span.price 
+								label Precio Original
+								span $ #{deals[0].price}
+							.span.discount 
+								label Descuento 
+								span #{deals[0].discount} %
+							.span.special_price_1 
+								label Oferta
+								span $ #{deals[0].special_price}
+						.row.time
+							div.clock
+								img(src="/img/clock.png")
+							div(class="countdown",id="Deal0", data-end="#{deals[0].end_date.getMonth()+1}/#{deals[0].end_date.getDate()}/#{deals[0].end_date.getFullYear()} #{deals[0].end_date.getHours()}:#{deals[0].end_date.getMinutes()}:#{deals[0].end_date.getSeconds()}", data-gmt="-#{deals[0].end_date.getTimezoneOffset()/60}")
+					a(class="carousel-control left" , href="#myCarousel",  data-slide="prev")‹
+					a(class="carousel-control right" , href="#myCarousel",  data-slide="next")›
+			.other_deals
+				-for (var i = 1; i < deals.length - 1; i++) {
+					.row.items.span4
+						.span4.item
+							a(href="/deals/view/#{deals[i]._id}") 
+								-if(typeof deals[i].images[0] !== "undefined" )
+									img( src="/images/#{deals[i].images[0].filename}", class="image")
+							.caption
+								h2.h2_deal_home
+									a(href="/deals/view/#{deals[i]._id}") #{deals[i].title}
+								p
+									a(href="/deals/view/#{deals[i]._id}") #{deals[i].tagline}
+							.row.buttons
+								.span1
+									.price 
+										label Normal
+										p $ #{deals[i].price}
+									.discount
+										label Descuento
+										p #{deals[i].discount} %
+								.span2
+									.special_price
+										label Oferta
+										p $ #{deals[i].special_price}
+								.span1
+									.button_ver_oferta
+										button.btn.btn-primary Ver Oferta
+							.row.buttons							
+								div.clock
+									img(src="img/clock.png")
+								.span2
+									.countdown(id='Deal#{i}' ,data-end="#{deals[i].end_date.getMonth()+1}/#{deals[i].end_date.getDate()}/#{deals[i].end_date.getFullYear()} #{deals[i].end_date.getHours()}:#{deals[i].end_date.getMinutes()}:#{deals[i].end_date.getSeconds()}", data-gmt="-#{deals[i].end_date.getTimezoneOffset()/60}")
+				-};	
+		-else
+			p No hay ofertas de esta categoría
+
+#footer
+	p
+		| Comercializadora Giombu, S.A. de C.V -
+		| San Juan de los Lagos No. 21 -
+		| Vallarta Poniente -
+		| Guadalajara, Jalisco, México (44110)  	

@@ -23,12 +23,9 @@ module.exports = function(app){
 	franchisors(app);
 	franchises(app);
 	currencies(app);
-<<<<<<< HEAD
 	countries(app);
-=======
 	deals(app);
 	stores(app);
->>>>>>> upstream/pre-production
 
 	// error handlers
 	errors(app);

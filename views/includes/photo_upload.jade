@@ -1,5 +1,5 @@
 p Seleccione una foto
-form(action="/images/upload", method="POST", enctype='multipart/form-data')
+form(action="/images/upload/#{route_name}/#{get_id}", method="POST", enctype='multipart/form-data')
 	input(type="text", name="image[filename]", placeholder='Nombre de archivo')
 	input(type="file", name="image[image]")
 	input(type="submit", value="Upload")

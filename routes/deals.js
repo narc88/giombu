@@ -23,35 +23,43 @@ module.exports = function (app){
 	app.get('/deals/create', function (req, res, next) {
 		console.log('deals - create'.cyan.bold);
 		FranchisorModel.findById( req.session.user.franchisor , function(err, franchisor){
-			if(!err){
-				if(franchisor)
-				{
-					FranchiseModel.find( {"franchisor" : franchisor._id } , function(err, franchises){
-						if(!err){
-							if(franchises){
-								StoreModel.find( {/*franchisor : franchisor._id*/ } , function(err, stores){
-								
-									res.render('deals/create', {title: 'Cargar Oferta', user: req.session.user, stores:stores, franchisor:franchisor, franchises:franchises});
-								});
-							}else{
-								console.log('franchise -error in list - not found '.red.bold + err);
-							}
-						}else{
-							console.log('franchise - error in list - not found '.red.bold + err);
-						}
+
+			if (err) throw err;
+
+			FranchiseModel.find( {"franchisor" : franchisor._id } , function(err, franchises){
+
+				if (err) throw err;
+
+				if(franchises.length > 0){
+					StoreModel.find( {franchisor : franchisor._id } , function(err, stores){
+					
+						res.render('deals/create', {
+							title: 'Cargar Oferta',
+							user 		: req.session.user,
+							stores 		: stores,
+							franchisor 	: franchisor,
+							franchises 	: franchises
+						});
+
 					});
 				}else{
-					res.render('deals/create', {title: 'Cargar Oferta', user: req.session.user, franchisor:franchisor});
+					throw new Error('No hay franquicias en el pais del usuario');
 				}
-			}else{
-				console.log('franchise -error in list - not found '.red.bold + err);
-			}
+
+			});
+
 	  	});
 	});
 
 
 	//Agrega una nueva deal
 	app.post('/deals/add', function (req, res, next) {
+
+
+		//USAR req.body en lugar de req.param()
+		// console.log('Deals ADD');
+		// console.log(req.body);
+
 		var deal_new = req.param('deal');
 		deal_new.sale_count = 0; 		//Yo no lo pondria
 		deal_new.coupon_count = 0;

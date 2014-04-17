@@ -1,6 +1,7 @@
-var UserModel = require('../models/user').UserModel;
-var ImageModel = require('../models/image').ImageModel;
-var DealModel = require('../models/deal').DealModel;
+var UserModel 	= require('../models/user').UserModel;
+var UserRoles 	= require('../models/user').UserRoles;
+var ImageModel 	= require('../models/image').ImageModel;
+var DealModel 	= require('../models/deal').DealModel;
 var SubscriberModel = require('../models/subscriber').SubscriberModel;
 var BonusModel = require('../models/bonus').BonusModel;
 var LevelModel = require('../models/level').LevelModel;
@@ -10,6 +11,12 @@ var encrypter = require('../helpers/encryption');
 
 
 module.exports = function(app){
+
+
+	//DELETE ME!
+	app.get('/testRoles', function(req, res, next){
+		res.send(UserRoles.getAdmin());
+	});
 	
 	//Este regex nos permite pedir la misma funcion como json, para usar donde necesitamos elegir quien nos invito y similar.
 	app.get('/users.:format(json)?', function(req, res, next){
@@ -44,7 +51,7 @@ module.exports = function(app){
 		user_new.phone = req.body.phone
 		user_new.mobile = req.body.mobile
 		user_new.address = req.body.address
-		user_new.roles.push("user")
+		user_new.roles.push(UserRoles.getUser());
 		user_new.country = req.body.country
 		user_new.state = req.body.state
 		user_new.city = req.body.city

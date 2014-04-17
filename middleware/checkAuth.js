@@ -1,4 +1,4 @@
-
+var UserRoles = require('../models/user').UserRoles;
 
 exports.user = function (req, res, next) {
 	if (!req.session.user) {
@@ -32,7 +32,8 @@ exports.partner = function (req, res, next) {
 	}
 }
 exports.member = function (req, res, next) {
-	if (!util.has_role("member",req.session.user.roles)) {
+	var index = req.session.user.roles.indexOf(UserRoles.getMember());
+	if (index == -1) {
 		res.render('error');
 	} else {
 		next();
@@ -40,7 +41,8 @@ exports.member = function (req, res, next) {
 }
 
 exports.generalAdministrator = function (req, res, next) {
-	if (!util.has_role("generaladministrator",req.session.user.roles)) {
+	var index = req.session.user.roles.indexOf(UserRoles.getGeneralAdministrator());
+	if (index == -1) {
 		res.render('error');
 	} else {
 		next();
@@ -48,7 +50,8 @@ exports.generalAdministrator = function (req, res, next) {
 }
 
 exports.franchisorAdministrator = function (req, res, next) {
-	if (!util.has_role("franchisoradministrator",req.session.user.roles)) {
+	var index = req.session.user.roles.indexOf(UserRoles.getFranchisorAdministrator());
+	if (index == -1) {
 		res.render('error');
 	} else {
 		next();

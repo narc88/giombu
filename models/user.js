@@ -46,4 +46,28 @@ UserSchema.set('versionKey', false);
 exports.UserModel = mongoose.model('User', UserSchema);
 
 
-exports.ROLES = ['admin', 'common_user'];
+exports.UserRoles = (function(){
+	var admin = 'admin';
+	var user = 'user';
+	var member = 'member';
+	var generalAdministrator = 'generalAdministrator';
+	var franchisoradministrator = 'franchisoradministrator';
+
+	return{
+		getAdmin 	: function(){
+			return admin;
+		},
+		getUser 	: function(){
+			return user;
+		},
+		getMember 	: function(){
+			return member;
+		},
+		getGeneralAdministrator 	: function(){
+			return generalAdministrator;
+		},
+		getFranchisorAdministrator 	: function(){
+			return franchisoradministrator;
+		}
+	}
+})();

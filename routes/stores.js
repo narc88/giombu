@@ -5,12 +5,6 @@ var BranchModel = require('../models/branch').BranchModel;
 
 
 
-// //Stores
-
-
-// app.get('/intranet/stores/assign_partner/:id', stores.assign_partner );
-// app.post('/intranet/stores/assign_partner_save', stores.assign_partner_save );
-
 module.exports = function(app){
 
 	//ESTA FUNCION NO TENIA REFERENCIAS EN EL PROYECTO ANTERIOR
@@ -25,23 +19,22 @@ module.exports = function(app){
 
 	app.post('/stores/add_store_branch', function (req, res, next) {
 		var store_new = new StoreModel();
-		store_new.name = req.body.store_name
-		console.log(req.body)
-		store_new.about = req.body.store_about
-		store_new.email = req.body.store_email
+		store_new.name = req.body.store_name;
+		store_new.about = req.body.store_about;
+		store_new.email = req.body.store_email;
 
 		var branch_new = new BranchModel();
-		branch_new.name = req.body.name
-		branch_new.address = req.body.email
-		branch_new.zip = req.body.zip
-		branch_new.phone = req.body.phone
-		branch_new.seller =  req.session.user._id
-		branch_new.website = req.body.website
-		branch_new.fanpage = req.body.fanpage
-		branch_new.twitter = req.body.twitter
-		branch_new.contact = req.body.contact
-		branch_new.partner = req.body.partner
-		branch_new.default = '1'
+		branch_new.name = req.body.name;
+		branch_new.address = req.body.email;
+		branch_new.zip = req.body.zip;
+		branch_new.phone = req.body.phone;
+		branch_new.seller =  req.session.user._id;
+		branch_new.website = req.body.website;
+		branch_new.fanpage = req.body.fanpage;
+		branch_new.twitter = req.body.twitter;
+		branch_new.contact = req.body.contact;
+		branch_new.partner = req.body.partner;
+		branch_new.default = '1';
 		store_new.branches.push(branch_new);
 		store_new.save(function(err){
 			if(!err){

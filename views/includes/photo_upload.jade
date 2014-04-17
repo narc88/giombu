@@ -1,0 +1,5 @@
+p Seleccione una foto
+form(action="/images/upload", method="POST", enctype='multipart/form-data')
+	input(type="text", name="image[filename]", placeholder='Nombre de archivo')
+	input(type="file", name="image[image]")
+	input(type="submit", value="Upload")

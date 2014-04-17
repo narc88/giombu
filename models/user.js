@@ -23,9 +23,7 @@ var UserSchema = new mongoose.Schema({
 	phone					: { type: String},
 	mobile					: { type: String},
 	address					: { type: String},
-	city					: { type: String},
-	country					: { type: String},
-	state					: { type: String},
+	city					: { type: mongoose.Schema.ObjectId, ref: 'City' },
 	zip						: { type: String},
 	created    			    : {type: Date, default: Date.now },
 	modified				: {type: Date, default: Date.now },
@@ -38,7 +36,7 @@ var UserSchema = new mongoose.Schema({
 	 promoter 				: [PromoterSchema],
 	 roles 					: [{type:String}],
 	 partner 				: Boolean,
-	 franchisor			: [{ type: mongoose.Schema.ObjectId, ref: 'Franchisor' }],
+	 franchisor				: [{ type: mongoose.Schema.ObjectId, ref: 'Franchisor' }],
 	//Verificar estos campos
 });
 

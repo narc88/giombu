@@ -3,13 +3,14 @@ var promoters = require('./promoters');
 var levels = require('./levels');
 var deals = require('./deals');
 var stores = require('./stores');
-var errors = require('./errors');
-
-
 var franchisors = require('./franchisors');
 var franchises = require('./franchises');
 var currencies = require('./currencies');
 var countries = require('./countries');
+var images = require('./images');
+
+var errors = require('./errors');
+
 module.exports = function(app){
 
 	//Root
@@ -26,6 +27,7 @@ module.exports = function(app){
 	countries(app);
 	deals(app);
 	stores(app);
+	images(app);
 
 	// error handlers
 	errors(app);

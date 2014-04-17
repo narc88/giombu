@@ -6,7 +6,7 @@ var errors = require('./errors');
 var franchisors = require('./franchisors');
 var franchises = require('./franchises');
 var currencies = require('./currencies');
-
+var countries = require('./countries');
 module.exports = function(app){
 
 	//Root

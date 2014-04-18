@@ -46,21 +46,17 @@
 			else
 				p #{messagge}
 	.franchise_select
-		div(class='panel-group', id='accordion')
-			div(class='panel panel-default')
-				div(class='panel-heading')
-					h3.panel-heading
-					-if(typeof user !== "undefined")
-						-if(typeof user.selected_franchise === "undefined")
-							a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") Cambiar de cuidad 
-								icon.icon-chevron-down
-						-else
-							a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") #{user.selected_franchise.name} 
-								icon.icon-chevron-down
-					-else
-						a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") Cambiar de cuidad 
-							icon.icon-chevron-down
-					div(id='collapseOne',class='panel-collapse collapse in')				
+		button(class='btn btn-primary btn-lg', data-toggle='modal', data-target='#myModal') Cambiar ciudad
+		div(class='modal fade', id='myModal', tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+			div(class='modal-dialog')
+				div(class='modal-content')
+					div(class='modal-header')
+						button(type='button', class='close', data-dismiss='modal', aria-hidden='true') &times
+						h4 Ofertas en otras ciudades		
+					div(class='modal-body')
+						h5 Rosario 
+						h5 Parana
+						h5 Buenos Aires
 	.menu(class='nav-pills clear')
 		ul.nav.nav-pills
 			li.active

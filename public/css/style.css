@@ -31,6 +31,8 @@ body {
 #news {width: 20%} 
 
 /* Home */
+
+/* Head */
 .header_content {background-color: #fff;}
 .header {z-index: 2; position: relative; width: 90%; margin: 0 auto; padding-left: 10px; padding-right: 10px;}
 

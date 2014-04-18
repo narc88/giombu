@@ -10,7 +10,7 @@ var private_config = require('./private_config');
 
 mongoose.set('debug', true);
 
-mongoose.connect(private_config.connection_string, function(err){
+mongoose.connect("mongodb://giombu:giombu@oceanic.mongohq.com:10021/giombu", function(err){
 	if(err) throw err;
 	var app = express();
 	require('./middleware')(app);

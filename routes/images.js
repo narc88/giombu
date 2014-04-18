@@ -7,21 +7,33 @@ module.exports = function(app){
 
 	var save_image = function(dir){
 		return function(res,req){
+			var Model;
 			switch(req.params.param){
-				//case
+				case "users":
+					Model = require('../models/user').UserModel;
+				break;
 			}
-			console.log(req)
 			var img = req.files.image.image;
-			var name = req.body.image.name;
-			var path = join(dir, img.name);
-			fs.rename(img.path, path, function(err){
-				ImageModel.create({
-					name:name,
-					path:img.name
-				}, function(){
-					res.redirect('/')
-				});
-			})
+				var name = req.body.image.name;
+				var path = join(dir, img.name);
+				fs.rename(img.path, path, function(err){
+					ImageModel.create({
+						name:name,
+						path:img.name
+					}, function(){
+						Model.findOne({"_id" : req.param.id }).exec(function(err, model){
+							model.images.push(image._id)
+							model.save(function(err){
+								res.redirect("back")
+							})
+							
+						});
+						
+					});
+				})
+			
+			
+			
 		}
 	}
 

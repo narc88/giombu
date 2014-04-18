@@ -21,7 +21,10 @@ module.exports = function(app){
 
 	// expose session to views
 	app.use(function (req, res, next) {
-		res.locals.session = req.session;
+		if(typeof req.session.expose === 'undefined'){
+			req.session.expose = {};
+		}
+		res.locals.expose = req.session.expose;
 		next();
 	});
 

@@ -19,7 +19,7 @@ module.exports = function(app){
 	});
 	
 	//Este regex nos permite pedir la misma funcion como json, para usar donde necesitamos elegir quien nos invito y similar.
-	app.get('/users.:format(json)?', function(req, res, next){
+	app.get('/users:format(.json)?', function(req, res, next){
 		UserModel.find().exec( function(err, users){
 			if (err) throw err;
 			if(req.params.format){
@@ -142,14 +142,24 @@ module.exports = function(app){
 					res.redirect('/users/login');
 				}else{
 					if(user.password == encrypter.encrypt(req.body.password)){
+							
+							//Save the user in the session
 							req.session.user = user;
-							req.session.userData = {};
-							req.session.userData.selected_franchise = 'Guadalajara';
-							req.session.messagge = "Se ha logueado correctamente";
+							
+							//Expose some user data to the front-end
+							req.session.expose.selected_franchise = 'Guadalajara';
+							req.session.expose.user.username = user.username;
+							req.session.expose.user._id = user._id;
+							req.session.expose.user.name = user.name;
+							req.session.expose.user.lname = user.lname;
+
+							
 							updateUserLevel(req, res, function(){
 								console.log("Usuario logueado: ");
 								console.log(req.session.user);
-								res.redirect('/');
+								res.redirect('/', { 
+									message : 'Se ha logueado correctamente'
+								});
 							});
 							
 

@@ -1,4 +1,4 @@
-#myModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+#myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
 	.modal-header
 		button(class="close", data-dismiss="modal", aria-hidden="true") &times
 		- if(typeof(error) != 'undefined')
@@ -7,7 +7,7 @@
 			h3 ¿Estás registrado?
 	.modal-body
 		div( class='container_form')
-			form(method='post', action='/users/login_user/')
+			form(method='post', action='/users/login')
 				label Usuario
 				input(name='username', type='text', class="required")
 				label Contraseña	

@@ -6,14 +6,14 @@
 			.collapse.navbar-collapse
 
 				ul.nav.navbar-nav.navbar-left
-					-if((typeof user) !== "undefined")
-						-if(typeof user.selected_franchise === "undefined")
+					-if((typeof expose.user) !== "undefined")
+						-if(typeof expose.user.selected_franchise === "undefined")
 							li
 								a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") Cambiar de cuidad 
 									icon.icon-chevron-down
 						-else
 							li
-								a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") #{user.selected_franchise.name} 
+								a(class='accordion-toggle', data-toggle="collapse", data-parent="#accordion2", href="#collapseOne") #{expose.user.selected_franchise.name} 
 									icon.icon-chevron-down
 					-else
 						li
@@ -25,7 +25,7 @@
 					li 
 						a(href='/deals/travel') Descuentos en viajes	
 				ul.nav.navbar-nav.navbar-right
-					-if ((typeof user) === "undefined")
+					-if ((typeof expose.user) === "undefined")
 						li
 							a(href='#subscription', role='button', data-toggle='modal')
 								span.glyphicon.glyphicon-envelope.col-md-pull-1
@@ -47,7 +47,7 @@
 						li
 							a(href="/users/dashboard" ) 
 								span.glyphicon.glyphicon-user.col-md-pull-1
-								|#{user.name}
+								|#{expose.user.name}
 						li
 							a(href="/users/logout" ) 
 								span.glyphicon.glyphicon-log-out.col-md-pull-1
@@ -55,7 +55,8 @@
 						//.selected_franchise
 						//	a(href="/intranet/deals/list/#{user.selected_franchise}") #{user.selected_franchise}
 	.notification-message
-		-if(typeof messagge === "undefined")
+		-if(typeof message === "undefined")
 			p
 		-else
-			p #{messagge}
+			p #{message}
+

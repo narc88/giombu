@@ -5,6 +5,9 @@ var DealModel 	= require('../models/deal').DealModel;
 var SubscriberModel = require('../models/subscriber').SubscriberModel;
 var BonusModel = require('../models/bonus').BonusModel;
 var LevelModel = require('../models/level').LevelModel;
+var CountryModel = require('../models/country').CountryModel;
+var StateModel = require('../models/state').StateModel;
+var CityModel = require('../models/city').CityModel;
 
 var util = require('../helpers/util');
 var encrypter = require('../helpers/encryption');
@@ -35,53 +38,56 @@ module.exports = function(app){
 	
 
 	app.get('/users/create', function(req, res){
-		res.render('users/create', {title: 'Registro'});
+		CountryModel.find({}, function(err, countries){
+			if (err) throw err;
+
+			StateModel.find({}, function(err, states){
+				if (err) throw err;
+
+				CityModel.find({}, function(err, cities){
+					if (err) throw err;
+
+					res.render('users/create', {
+						title 		: 'Registro',
+						countries 	: countries,
+						states		: states,
+						cities		: cities
+					});
+
+				});
+				
+			});
+
+		});
 	});
 
 
 	app.post('/users/save', function(req, res){
-		var user_new = new UserModel();
-		user_new.username = req.body.username
-		user_new.name = req.body.name
-		user_new.lname = req.body.lname
-		user_new.email = req.body.email
-		user_new.password = encrypter.encrypt(req.body.password);
-		user_new.gender = req.body.gender
-		user_new.birthday = util.date_mongo(req.body.birthday, "00:00")
-		user_new.phone = req.body.phone
-		user_new.mobile = req.body.mobile
-		user_new.address = req.body.address
-		user_new.roles.push(UserRoles.getUser());
-		user_new.country = req.body.country
-		user_new.state = req.body.state
-		user_new.city = req.body.city
-		user_new.zip = req.body.zip
-		user_new.is_active = true;
-		user_new.image.push(new ImageModel());
 
+		req.body.user.password = encrypter.encrypt(req.body.user.password);
+
+		var user = new UserModel(req.body.user);
+
+		console.log('New User');
+		console.log(user);
+
+		user.roles.push(UserRoles.getUser());
+		user.image.push(new ImageModel());
+
+		UserModel.findOne({username: req.body.inviter}, function(err, inviter){
+
+			if (err) throw err;
+
+			if(inviter){
+				user.promoter_id = inviter._id;
+			}
+
+			user.save(function(err){
+				if (err) throw err;
+				res.redirect('/');
+			});
+		});
 		
-		if(req.body.inviter){
-			UserModel.findOne({username: req.body.inviter}, function(err, doc){
-				user_new.promoter_id = doc._id;
-				user_new.save(function(err){
-					if(!err){
-						res.redirect('/');
-					} else {
-						if (err) throw err;
-						console.log("Error: - " + err);
-					}
-				});
-			});
-		}else{
-			user_new.save(function(err){
-				if(!err){
-					res.redirect('/');
-				} else {
-					console.log("Error: - " + err);
-					if (err) throw err;
-				}
-			});
-		}
 	});
 
 	//Habria que agregar validaciones a esta llamada.
@@ -148,6 +154,7 @@ module.exports = function(app){
 							
 							//Expose some user data to the front-end
 							req.session.expose.selected_franchise = 'Guadalajara';
+							req.session.expose.user = {};
 							req.session.expose.user.username = user.username;
 							req.session.expose.user._id = user._id;
 							req.session.expose.user.name = user.name;
@@ -157,9 +164,7 @@ module.exports = function(app){
 							updateUserLevel(req, res, function(){
 								console.log("Usuario logueado: ");
 								console.log(req.session.user);
-								res.redirect('/', { 
-									message : 'Se ha logueado correctamente'
-								});
+								res.redirect('/');
 							});
 							
 
@@ -199,7 +204,7 @@ module.exports = function(app){
 
 					if(level){
 						req.session.user.level = level._id;
-						req.session.userData.level = level;
+						req.session.expose.user.level = level;
 
 						req.session.user.save(function(err){
 							if (err) throw err;	

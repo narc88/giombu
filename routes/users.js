@@ -6,6 +6,8 @@ var SubscriberModel = require('../models/subscriber').SubscriberModel;
 var BonusModel = require('../models/bonus').BonusModel;
 var LevelModel = require('../models/level').LevelModel;
 var CountryModel = require('../models/country').CountryModel;
+var StateModel = require('../models/state').StateModel;
+var CityModel = require('../models/city').CityModel;
 
 var util = require('../helpers/util');
 var encrypter = require('../helpers/encryption');
@@ -37,16 +39,24 @@ module.exports = function(app){
 
 	app.get('/users/create', function(req, res){
 		CountryModel.find({}, function(err, countries){
+			if (err) throw err;
+
 			StateModel.find({}, function(err, states){
 				if (err) throw err;
-				res.render('users/create', {
-					title 		: 'Registro',
-					countries 	: countries,
-					states		: states
+
+				CityModel.find({}, function(err, cities){
+					if (err) throw err;
+
+					res.render('users/create', {
+						title 		: 'Registro',
+						countries 	: countries,
+						states		: states,
+						cities		: cities
+					});
+
 				});
 				
 			});
-			if (err) throw err;
 
 		});
 	});

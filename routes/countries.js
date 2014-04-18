@@ -21,7 +21,7 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Entre Rios'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
 
@@ -41,7 +41,7 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Santa Fe'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
 
@@ -71,7 +71,7 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Buenos Aires'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
 
@@ -110,7 +110,7 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Cordoba'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
 
@@ -131,7 +131,7 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Mendoza'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
 
@@ -151,7 +151,7 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Corrientes'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
 

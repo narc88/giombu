@@ -53,21 +53,21 @@ block content
 				.form-group
 					label.col-md-5.control-label *Dirección: 
 					.col-md-7
-						input(name='user[address]', type='text', class="form-control input-sm required") 
-					label.col-md-4.control-label *Páis:
+						input(name='user[address]', type='text', class="form-control input-sm required")
+				.form-group
+					label.col-md-5.control-label *Páis:
 					.col-md-7
-						select(name='user[country]', type='text' ,id="select_country").form-control.required.col-md-8
+						select(name='user[country]', type='text' ,id="select_country").form-control.required.col-md-8.input-sm
 							-each country in countries
 								option( value="#{country._id}") #{country.name}	
 				.form-group
-					label.col-md-4.control-label *Provincia:
+					label.col-md-5.control-label *Provincia:
 					.col-md-7
-						select(name='user[state]', type='text' ,id="select_state").form-control.required.col-md-8
-
+						select(name='user[state]', type='text' ,id="select_state").form-control.required.col-md-8.input-sm
 				.form-group
-					label.col-md-4.control-label *Ciudad:
+					label.col-md-5.control-label *Ciudad:
 					.col-md-7
-						select(name='user[city]', type='text' ,id="select_city").form-control.required
+						select(name='user[city]', type='text' ,id="select_city").form-control.required.input-sm
 				.form-group
 					label.col-md-5.control-label *Codigo Postal:
 					.col-md-7

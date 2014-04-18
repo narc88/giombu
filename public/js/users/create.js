@@ -19,7 +19,6 @@
 		
 		$('#select_city').empty();
 		var url = '/cities/getCitiesForAState/' + $('#select_state').val();
-		console.log(url);
 		$.ajax({
 			type 	: 'GET',
 			url 	: url,

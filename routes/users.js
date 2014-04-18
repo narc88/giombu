@@ -154,6 +154,7 @@ module.exports = function(app){
 							
 							//Expose some user data to the front-end
 							req.session.expose.selected_franchise = 'Guadalajara';
+							req.session.expose.user = {};
 							req.session.expose.user.username = user.username;
 							req.session.expose.user._id = user._id;
 							req.session.expose.user.name = user.name;
@@ -163,9 +164,7 @@ module.exports = function(app){
 							updateUserLevel(req, res, function(){
 								console.log("Usuario logueado: ");
 								console.log(req.session.user);
-								res.redirect('/', { 
-									message : 'Se ha logueado correctamente'
-								});
+								res.redirect('/');
 							});
 							
 
@@ -205,7 +204,7 @@ module.exports = function(app){
 
 					if(level){
 						req.session.user.level = level._id;
-						req.session.userData.level = level;
+						req.session.expose.user.level = level;
 
 						req.session.user.save(function(err){
 							if (err) throw err;	

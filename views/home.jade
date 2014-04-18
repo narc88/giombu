@@ -3,10 +3,11 @@ html
 	head
 		title Giombu
 		include includes/scripts
-	body
-		include includes/head
-		block content
-		include includes/login_modal
-		include includes/suscription_modal
-		include includes/photo_upload
-	include includes/footer
+	body(style="background-image:url('/img/background.jpg');background-size: 100%;background-attachment:fixed;")
+		.container
+			include includes/head
+			block content
+			include includes/login_modal
+			include includes/suscription_modal
+			include includes/photo_upload
+			include includes/footer

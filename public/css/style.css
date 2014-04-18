@@ -39,3 +39,5 @@ body {
 #menu_top {width: 40%;}
 #menu_top li {list-style: none;}
 .menu {z-index: 2; position: relative; width: 90%; margin: 0 auto; padding-left: 10px; padding-right: 10px; padding-top: 20px;}
+
+.franchise_select{width: auto;}

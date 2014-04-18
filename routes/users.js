@@ -188,12 +188,10 @@ module.exports = function(app){
 					if (err) throw err;
 
 					if(level){
-						console.log(level)
 						req.session.user.level = level._id;
 						req.session.userData.level = level;
 
 						req.session.user.save(function(err){
-							console.log(err);
 							if (err) throw err;	
 							callback();						
 						});

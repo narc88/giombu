@@ -1,5 +1,13 @@
-p Seleccione una foto
-form(action="/images/upload", method="POST", enctype='multipart/form-data')
-	input(type="text", name="image[filename]", placeholder='Nombre de archivo')
-	input(type="file", name="image[image]")
-	input(type="submit", value="Upload")
+.col-md-6
+	p Seleccione una foto
+	form(action="/images/upload/#{route_name}/#{get_id}", id="upload_image", method="POST", enctype='multipart/form-data').form-horizontal
+		.form-group
+			.col-md-4
+				input(type="text", name="image[filename]", placeholder='Nombre de archivo').form-control
+		.form-group
+			.col-md-4
+				input(type="file", name="image[image]").form-control
+		.form-group
+			.col-md-2
+				button(name='submit', type='submit').btn.btn-default.form-control Upload
+

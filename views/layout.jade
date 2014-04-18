@@ -3,13 +3,14 @@ html
 	head
 		title= title
 		include includes/includes_intranet/scripts
-	body
-		#conversations_div
-		#navbar
-		include includes/includes_intranet/head 
-		include includes/includes_intranet/menu
-		include includes/includes_intranet/center
-			block content
-		include includes/includes_intranet/news
+	body(style="background-image:url('/img/background.jpg');background-size: 100%;background-attachment:fixed;")
+		.container
+			#conversations_div
+			#navbar
+			include includes/includes_intranet/head 
+			include includes/includes_intranet/menu
+			include includes/includes_intranet/center
+				block content
+			include includes/includes_intranet/news
 
 

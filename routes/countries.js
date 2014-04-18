@@ -1,7 +1,27 @@
 var CountryModel = require('../models/country').CountryModel;
 var CurrencyModel = require('../models/currency').CurrencyModel;
 var StateModel = require('../models/state').StateModel;
+var CityModel = require('../models/city').CityModel;
+
 module.exports = function(app){
+
+
+
+
+	//Este regex nos permite pedir la misma funcion como json, para usar donde necesitamos elegir quien nos invito y similar.
+	app.get('/countries.json', function(req, res, next){
+		CountryModel.findById.exec( function(err, country){
+			if (err) throw err;
+			if(req.params.format){
+				usernames = [];
+				for (var i = countries.length - 1; i >= 0; i--) {
+					countries.push(countries[i].name)
+				};
+				res.send(usernames)
+			}
+		});
+	});
+
 	app.get('/countries/initialize', function(req, res){
 		CurrencyModel.findOne().exec(function(err,currency){
 			CountryModel.remove().exec(function(err,country){
@@ -22,9 +42,20 @@ module.exports = function(app){
 						state.country = country._id
 						state.save(function(err){
 							if(!err){
-								console.log(state);
+								StateModel.findOne({"name":"Entre Rios"}).exec(function(err,state_found){
+									var city = new CityModel();
+									city.name = 'Parana'
+									city.state = state_found._id
+									city.save(function(err){
+										if(!err){
+											console.log(city);
+										} else {
+											console.log("Error: - " + err);
+										}
+									});
+								});
 							} else {
-								console.log("Error: - " + err);
+								
 							}
 						});
 						var state = new StateModel();
@@ -160,6 +191,7 @@ module.exports = function(app){
 			CountryModel.findOne({"name":"Argentina"}).exec(function(){
 
 			})
+			res.send("OK")
 	})
 });
 }

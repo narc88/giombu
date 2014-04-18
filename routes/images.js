@@ -1,29 +1,44 @@
-var ImageModel = require('../models/country').ImageModel;
-var CurrencyModel = require('../models/currency').CurrencyModel;
-var StateModel = require('../models/state').StateModel;
+var ImageModel = require('../models/image').ImageModel;
+
+//Modelos donde se cargan fotos
+var UserModel = require('../models/user').UserModel;
+var DealModel = require('../models/deal').DealModel;
+var StoreModel = require('../models/store').StoreModel;
+
 var fs = require('fs');
 
 module.exports = function(app){
 
 	var save_image = function(dir){
-		return function(res,req){
+		return function(req,res){
 			var Model;
+			
 			switch(req.params.param){
 				case "users":
-					Model = require('../models/user').UserModel;
+					Model = UserModel;
 				break;
+				case "deals":
+					Model = DealModel;
+				break;
+				case "stores":
+					Model = StoreModel;
+				break;
+				default:
+					console.log(req.params.id)
 			}
 			var img = req.files.image.image;
 				var name = req.body.image.name;
-				var path = join(dir, img.name);
+				var path = dir+img.name;
 				fs.rename(img.path, path, function(err){
-					ImageModel.create({
-						name:name,
-						path:img.name
-					}, function(){
-						Model.findOne({"_id" : req.param.id }).exec(function(err, model){
+					var image = new ImageModel()
+					image.name = name,
+					image.path = img.name
+					image.save(function(err){
+						Model.findOne({"_id" : req.params.id }).exec(function(err, model){
 							model.images.push(image._id)
 							model.save(function(err){
+								if(err)
+									throw err
 								res.redirect("back")
 							})
 							

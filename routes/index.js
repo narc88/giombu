@@ -7,6 +7,8 @@ var franchisors = require('./franchisors');
 var franchises = require('./franchises');
 var currencies = require('./currencies');
 var countries = require('./countries');
+var cities = require('./cities');
+var states = require('./states');
 var images = require('./images');
 
 var errors = require('./errors');
@@ -28,6 +30,8 @@ module.exports = function(app){
 	deals(app);
 	stores(app);
 	images(app);
+	states(app);
+	cities(app);
 
 	// error handlers
 	errors(app);

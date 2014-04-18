@@ -6,9 +6,12 @@ extends ../layout
 block content
 	.span9
 		.img_profile
-			img(src="/images/#{user.image[0].filename}").span2.image
+			p #{user.images}
 			p #{user.username}
 			h5 Tenes #{contacts.length} contactos!
+		- var route_name = "users"
+		- var get_id = user._id
+		include ../includes/image_upload
 		.bs-example.bs-example-tabs
 			ul#myTab(class="nav nav-tabs")
 				li.active
@@ -155,6 +158,4 @@ block content
 						p #{deal.tagline}
 					td.span1
 						a(href="/intranet/deals/view/#{deal._id}").btn.pull-right Ver
-		- var params = "users"
-		- var id = user._id
-		include includes/image_upload
+	

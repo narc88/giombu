@@ -6,7 +6,8 @@ body {
 .fright {float: right;}
 .clear {clear: both;}
 
-.space{margin: 0 5px 0 5px;}
+.space{margin: 5px !important}
+
 /* Intranet */
 
 .header_franchise_layout {background-color: #fff; height: 80px; border-bottom: 1px solid #e5e5e5;}
@@ -24,20 +25,8 @@ body {
 	padding: 20px 0 0 0;
 }
 
-#left .thumbnail {
 
-}
 #center {width: 60%; padding: 20px 10px 0 20px;}
 #news {width: 20%} 
 
-/* Home */
 
-/* Head */
-.header_content {background-color: #fff;}
-.header {z-index: 2; position: relative; width: 90%; margin: 0 auto; padding-left: 10px; padding-right: 10px;}
-
-#menu_top {width: 40%;}
-#menu_top li {list-style: none;}
-.menu {z-index: 2; position: relative; width: 90%; margin: 0 auto; padding-left: 10px; padding-right: 10px; padding-top: 20px;}
-
-.franchise_select{width: auto;}

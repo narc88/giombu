@@ -1,10 +1,11 @@
 #header
 	a(href="/")
-		img(class='fleft', src="/img/logo_giombu.png")
+		img(src="/img/logo_giombu.png")
+	.pull-right
+		include form_suscription
 	nav(role="navigation").navbar.navbar-default
 		.container-fluid
 			.collapse.navbar-collapse
-
 				ul.nav.navbar-nav.navbar-left
 					-if((typeof expose.user) !== "undefined")
 						-if(typeof expose.user.selected_franchise === "undefined")
@@ -27,12 +28,7 @@
 				ul.nav.navbar-nav.navbar-right
 					-if ((typeof expose.user) === "undefined")
 						li
-							a(href='#subscription', role='button', data-toggle='modal')
-								span.glyphicon.glyphicon-envelope.col-md-pull-1
-								|Suscríbete
-
-						li
-							a(href="/users/register")
+							a(href="/users/create")
 								span.glyphicon.glyphicon-plus.col-md-pull-1
 								|Registrate
 						li
@@ -40,10 +36,6 @@
 								span.glyphicon.glyphicon.glyphicon-log-in.col-md-pull-1
 								|Accede
 					-else
-						li
-							a(href='#subscription', role='button', data-toggle='modal')
-								span.glyphicon.glyphicon-envelope.col-md-pull-1
-								|Suscríbete
 						li
 							a(href="/users/dashboard" ) 
 								span.glyphicon.glyphicon-user.col-md-pull-1

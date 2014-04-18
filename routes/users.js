@@ -19,7 +19,7 @@ module.exports = function(app){
 	});
 	
 	//Este regex nos permite pedir la misma funcion como json, para usar donde necesitamos elegir quien nos invito y similar.
-	app.get('/users.:format(json)?', function(req, res, next){
+	app.get('/users:format(.json)?', function(req, res, next){
 		UserModel.find().exec( function(err, users){
 			if (err) throw err;
 			if(req.params.format){

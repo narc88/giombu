@@ -32,7 +32,7 @@ block content
 							td #{user.name} #{user.lname}
 						tr
 							td.tdmisdatos Email:
-							td	#{user.email}
+							td #{user.email}
 						tr 
 							td.tdmisdatos Dirección:
 							td #{user.address} - #{user.state}, #{user.city} - #{user.country}
@@ -48,7 +48,7 @@ block content
 							tr 
 								td.tdmisdatos Nombre:
 								td
-									a(href="/users/profile/#{contact._id}") #{contact.name} #{contact.lname}	
+									a(href="/users/profile/#{contact._id}") #{contact.name} #{contact.lname}
 				.tab-pane.fade.in#misofertas
 					table.misofertas
 						-each deal in deals
@@ -65,7 +65,7 @@ block content
 								td #{subscription.franchise.name}
 							tr
 								td.tdmisdatos Email:
-								td	#{subscription.created}
+								td #{subscription.created}
 				.tab-pane.fade.in#misbonos
 					table.misbonos
 						tr
@@ -73,20 +73,20 @@ block content
 							th Fecha
 						-each bonus in bonuses
 							tr 
-								td  #{bonus.amount}
+								td #{bonus.amount}
 								td #{bonus.created}
-			-if (!(typeof user.promoter === "undefined"))
+			-if (!(typeof user.promoter[0] === "undefined"))
 				h3 Promotor
 				table
 					tr
-						td	Promotor:
+						td Promotor:
 						td
 					tr
-						td	Introduccion:
-						td	#{user.promoter[0].promoter_text[0].page_title}
+						td Introduccion:
+						td #{user.promoter[0].page_title}
 					tr
-						td	Cuerpo
-						td	#{user.promoter[0].promoter_text[0].page_body}
+						td Cuerpo
+						td #{user.promoter[0].page_body}
 
 			-if (user.partner)
 				h3 Partner
@@ -155,3 +155,6 @@ block content
 						p #{deal.tagline}
 					td.span1
 						a(href="/intranet/deals/view/#{deal._id}").btn.pull-right Ver
+		- var params = "users"
+		- var id = user._id
+		include includes/image_upload

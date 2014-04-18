@@ -34,10 +34,6 @@ module.exports = function(app){
 	images(app);
 	states(app);
 	cities(app);
-<<<<<<< HEAD
-=======
-
->>>>>>> upstream/pre-production
 
 	// error handlers
 	errors(app);

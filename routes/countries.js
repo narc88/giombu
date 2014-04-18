@@ -9,7 +9,7 @@ module.exports = function(app){
 
 	//Este regex nos permite pedir la misma funcion como json, para usar donde necesitamos elegir quien nos invito y similar.
 	app.get('/countries.json', function(req, res, next){
-		CountryModel.findById.exec( function(err, country){
+		CountryModel.find().sort("-name").exec( function(err, country){
 			if (err) throw err;
 			if(req.params.format){
 				usernames = [];

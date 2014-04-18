@@ -2,7 +2,6 @@ var CountryModel = require('../models/country').CountryModel;
 var CurrencyModel = require('../models/currency').CurrencyModel;
 var StateModel = require('../models/state').StateModel;
 var CityModel = require('../models/city').CityModel;
-
 module.exports = function(app){
 
 
@@ -40,20 +39,20 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Entre Rios'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
-								StateModel.findOne({"name":"Entre Rios"}).exec(function(err,state_found){
-									var city = new CityModel();
-									city.name = 'Parana'
-									city.state = state_found._id
-									city.save(function(err){
-										if(!err){
-											console.log(city);
-										} else {
-											console.log("Error: - " + err);
-										}
-									});
+
+								console.log(state);
+
+								var city = new CityModel({
+									name 	: 'Parana',
+									state 	: state._id
 								});
+
+								city.save(function(err){
+									if (err) throw err;
+								});
+
 							} else {
 								
 							}
@@ -61,9 +60,29 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Santa Fe'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
+
+								var city = new CityModel({
+									name 	: 'Rosario',
+									state 	: state._id
+								});
+
+								city.save(function(err){
+									if (err) throw err;
+								});
+
+								var city = new CityModel({
+									name 	: 'Santa Fe',
+									state 	: state._id
+								});
+
+								city.save(function(err){
+									if (err) throw err;
+								});
+
+
 							} else {
 								console.log("Error: - " + err);
 							}
@@ -71,9 +90,38 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Buenos Aires'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
+
+								var city = new CityModel({
+									name 	: 'Buenos Aires',
+									state 	: state._id
+								});
+
+								city.save(function(err){
+									if (err) throw err;
+								});
+
+								var city = new CityModel({
+									name 	: 'Pergamino',
+									state 	: state._id
+								});
+
+								city.save(function(err){
+									if (err) throw err;
+								});
+
+								var city = new CityModel({
+									name 	: 'La Plata',
+									state 	: state._id
+								});
+
+								city.save(function(err){
+									if (err) throw err;
+								});
+
+
 							} else {
 								console.log("Error: - " + err);
 							}
@@ -81,9 +129,20 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Cordoba'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
+
+
+								var city = new CityModel({
+									name 	: 'Cordoba',
+									state 	: state._id
+								});
+
+								city.save(function(err){
+									if (err) throw err;
+								});
+
 							} else {
 								console.log("Error: - " + err);
 							}
@@ -91,9 +150,19 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Mendoza'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
+
+								var city = new CityModel({
+									name 	: 'Mendoza',
+									state 	: state._id
+								});
+
+								city.save(function(err){
+									if (err) throw err;
+								});
+
 							} else {
 								console.log("Error: - " + err);
 							}
@@ -101,9 +170,19 @@ module.exports = function(app){
 						var state = new StateModel();
 						state.name = 'Corrientes'
 						state.country = country._id
-						state.save(function(err){
+						state.save(function(err, state){
 							if(!err){
 								console.log(state);
+
+								var city = new CityModel({
+									name 	: 'Corrientes',
+									state 	: state._id
+								});
+
+								city.save(function(err){
+									if (err) throw err;
+								});
+
 							} else {
 								console.log("Error: - " + err);
 							}

@@ -57,18 +57,19 @@ block content
 				.form-group
 					label.col-md-4.control-label *Páis:
 					.col-md-8
-						select(name='user[country]', type='text' ,class="form-control required").col-md-8
-							option(value="argentina") Argentina
+						select(name='user[country]', type='text' ,id="select_country").form-control.required.col-md-8
+							-each country in countries
+								option( value="#{country._id}") #{country.name}	
 				.form-group
 					label.col-md-4.control-label *Provincia:
 					.col-md-8
-						select(name='user[state]', type='text' ,class="form-control required").col-md-8
-							option( value="entrerios") Entre Rios
+						select(name='user[state]', type='text' ,id="select_state").form-control.required.col-md-8
+
 				.form-group
 					label.col-md-4.control-label *Ciudad:
 					.col-md-8
-						select(name='user[city]', type='text' ,class="form-control required")
-							option(value="parana") Parana
+						select(name='user[city]', type='text' ,id="select_city").form-control.required
+
 				.form-group
 					label.col-md-4.control-label *Codigo Postal:
 					.col-md-8
@@ -94,3 +95,4 @@ block content
 			.form-group
 				.col-md-offset-6.col-md-4
 					button(name='submit', type='submit').btn.btn-info.form-control Enviar
+	script(type='text/javascript' src='/js/users/create.js')

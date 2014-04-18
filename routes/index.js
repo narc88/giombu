@@ -10,6 +10,8 @@ var countries = require('./countries');
 var cities = require('./cities');
 var states = require('./states');
 var images = require('./images');
+var states = require('./states');
+var cities = require('./cities');
 
 var errors = require('./errors');
 
@@ -32,6 +34,10 @@ module.exports = function(app){
 	images(app);
 	states(app);
 	cities(app);
+<<<<<<< HEAD
+=======
+
+>>>>>>> upstream/pre-production
 
 	// error handlers
 	errors(app);

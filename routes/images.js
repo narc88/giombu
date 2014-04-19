@@ -31,8 +31,8 @@ module.exports = function(app){
 				var path = dir+img.name;
 				fs.rename(img.path, path, function(err){
 					var image = new ImageModel()
-					image.name = name,
-					image.path = img.name
+					image.filename = name;
+					image.path = path;
 					image.save(function(err){
 						Model.findOne({"_id" : req.params.id }).exec(function(err, model){
 							model.images.push(image._id)

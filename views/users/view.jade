@@ -6,6 +6,7 @@ extends ../layout
 block content
 	.span9
 		.img_profile
+			!=partial('partials/images/slides', user.images )
 			p #{user.images}
 			p #{user.username}
 			h5 Tenes #{contacts.length} contactos!

@@ -7,14 +7,12 @@
 			type 	: 'GET',
 			url 	: url,
 			success : function(states){
-
-	for (var i = states.length - 1; i >= 0; i--) {
-		$('#select_state').append(
-			'<option value="' + states[i]._id + '" >' + states[i].name + '</option>'
-			);
-	};
-				
-},
+						for (var i = states.length - 1; i >= 0; i--) {
+							$('#select_state').append(
+								'<option value="' + states[i]._id + '" >' + states[i].name + '</option>'
+								);
+						};			
+					},
 			error   : function(jqXHR, textStatus, errorThrown ){
 				console.log('AJAX states - ' + textStatus + ' - ' + errorThrown);
 			}

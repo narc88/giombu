@@ -1,0 +1,12 @@
+div(id="#{id}", class="carousel slide", data-ride="carousel")
+	ol(class="carousel-indicators")
+		-for (var i = images.length - 1; i >= 0; i--)
+			li( data-target="#{id}", data-slide-to="#{i}")
+	.carousel-inner
+		.item
+			img(src="#{image.filename}" , alt="#{image.name}")
+			.carousel-caption
+	a(class="left carousel-control", href="#{id}", data-slide="prev")
+		span(class="glyphicon glyphicon-chevron-left")
+	a(class="left carousel-control", href="#{id}", data-slide="prev")
+		span(class="glyphicon glyphicon-chevron-left")

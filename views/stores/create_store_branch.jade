@@ -5,7 +5,7 @@ block content
 	a(href="/stores/create_store_branch") Crear nuevo comercio
 	br
 	.col-md-5
-		form(method='post', id="stores_create_store_branch", action='/stores/add_store_branch').form-horizontal
+		form(method='post', id="form_create_store_branch", action='/stores/add_store_branch').form-horizontal
 			.form-group
 				label.col-md-4 name
 				.col-md-8
@@ -33,7 +33,7 @@ block content
 				.col-md-8
 					input(name='branch[name]', type='text' ,class="required").form-control.input-sm
 			.form-group
-				label.col-md-4 email
+				label.col-md-4 address
 				.col-md-8
 					input(name='branch[address]', type='text' ,class="required").form-control.input-sm
 			.form-group
@@ -60,14 +60,9 @@ block content
 				label.col-md-4 twitter
 				.col-md-8
 					input(name='branch[twitter]', type='text').form-control.input-sm
-		
-			.form-group
-					label.col-md-4 partner
-					.col-md-8
-						input(name='store[partner]', type='text').form-control.input-sm
 			.form-group
 				label.col-md-4 Usuario que tiene la sucursal asignada: 
 				.col-md-8
-					input(type='text', name="partner",placeholder="Usuario" ,class="users_input typeahead" , data-provide="typeahead", data-items="4").form-control.input-sm
+					input(type='text', name="branch[partner]", id='branch_partner', placeholder="Usuario" ,class="users_input typeahead" , data-provide="typeahead", data-items="4").form-control.input-sm
 			.form-group
-				button(type='submit').btn.btn-default Save
+				button(type='submit' id='submit_btn').btn.btn-default Save

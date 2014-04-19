@@ -10,7 +10,6 @@ var StoreSchema = new mongoose.Schema({
 	about				: { type: String },
 	email				: { type: String },
 	creator	   			: { type: mongoose.Schema.ObjectId, ref: 'User' }, //deberia ser un seller
-	partner				: { type: mongoose.Schema.ObjectId, ref: 'User' },
 	franchisor			: { type: mongoose.Schema.ObjectId, ref: 'Franchisor' },
 	images 				: [{ type: mongoose.Schema.ObjectId, ref: 'Image' }],
 	branches			: [BranchSchema],

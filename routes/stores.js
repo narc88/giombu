@@ -1,20 +1,12 @@
 var StoreModel = require('../models/store').StoreModel;
 var UserModel = require('../models/user').UserModel;
+var UserRoles = require('../models/user').UserRoles;
 var BranchModel = require('../models/branch').BranchModel;
 var CheckAuth = require('../middleware/checkAuth');
 var FranchisorModel = require('../models/franchisor').FranchisorModel;
 // var Encrypter = require('./encryption_controller');
 
-
-
-module.exports = function(app){
-
-	//ESTA FUNCION NO TENIA REFERENCIAS EN EL PROYECTO ANTERIOR
-	exports.register = function (req, res, next) {
-		res.render('stores/create', {title: 'Crear Store'});
-	}
-
-	app.get('/stores/create_store_branch', CheckAuth.user, CheckAuth.seller,function (req, res, next) {
+var createStoreBranch = function(req, res, message){
 		FranchisorModel.find({}, function(err, franchisors){
 
 			if (err) throw err;
@@ -22,16 +14,24 @@ module.exports = function(app){
 			res.render('stores/create_store_branch', {
 				title 			: 'Cargar tienda',
 				user 			: req.session.user,
-				franchisors 	: franchisors
+				franchisors 	: franchisors,
+				message 		: message
 			});
 
 		});
+}
+
+module.exports = function(app){
+
+
+	app.get('/stores/create_store_branch', CheckAuth.user, CheckAuth.seller,function (req, res, next) {
+		createStoreBranch(req, res);
 	});
 
 
 	app.post('/stores/add_store_branch', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
 
-		UserModel.findOne({ username : req.body.store.partner }, function(err, partner){
+		UserModel.findOne({ username : req.body.branch.partner }, function(err, partner){
 
 			if (err) throw err;
 
@@ -41,26 +41,45 @@ module.exports = function(app){
 			var store = new StoreModel(req.body.store);
 
 			if (partner){
-				store.partner = partner._id;	
+				branch.partner = partner._id;
+				var index = partner.roles.indexOf(UserRoles.getPartner());
+
+				if(index == -1){
+					partner.roles.push(UserRoles.getPartner());
+				}
+
+				partner.save(function(err){
+					if (err) throw err;
+				});
+			}else{
+				console.log('Stores - ERROR - No existe el usuario ingresado');
+				createStoreBranch(req, res,
+					'No existe el usuario ingresado'
+					);
+
+				return;
 			}
 
 			store.creator = req.session.user._id;
 			store.branches.push(branch);
 
-			res.json(store);
-
-			// store.save(function(err){
+			store.save(function(err){
 				
-			// 	if (err) throw err;
+				if (err){
+					console.log('Stores - ERROR - ' + err);
+					createStoreBranch(req, res, err);
+					return;
+				}else{
+					res.render('stores/view', {
+						title 		: 'Comercio',
+						store 		: store,
+						user 		: req.session.user
+					});
+					
+				}
 
-			// 	console.log(store_new);
-			// 	res.render('stores/view', {
-			// 		title 		: 'Comercio',
-			// 		store 		: store,
-			// 		user 		: req.session.user
-			// 	});
 				
-			// });
+			});
 
 		});
 

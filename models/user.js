@@ -50,7 +50,7 @@ exports.UserRoles = (function(){
 	var partner = 'partner';
 	var promoter = 'promoter';
 	var generalAdministrator = 'generalAdministrator';
-	var franchisoradministrator = 'franchisoradministrator';
+	var franchisorAdministrator = 'franchisorAdministratAr';
 
 	return{
 		getAdmin 	: function(){
@@ -75,7 +75,7 @@ exports.UserRoles = (function(){
 			return generalAdministrator;
 		},
 		getFranchisorAdministrator 	: function(){
-			return franchisoradministrator;
+			return franchisorAdministrator;
 		}
 	}
 })();

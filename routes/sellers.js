@@ -1,4 +1,5 @@
 var UserModel = require('../models/user').UserModel;
+var UserRoles = require('../models/user').UserRoles;
 
 
 module.exports = function(app){
@@ -10,7 +11,7 @@ module.exports = function(app){
 	app.post('/sellers/add', function (req, res, next) {
 		UserModel.findById( req.session.user._id , function(err, user){
 
-			user.seller = true;
+			user.roles.push(UserRoles.getSeller());
 
 			user.save(function(err){
 				

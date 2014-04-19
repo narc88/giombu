@@ -32,10 +32,8 @@ var UserSchema = new mongoose.Schema({
 	//Relacionados
 	 invitation				: [InvitationSchema],
 	 images 				: [{ type: mongoose.Schema.ObjectId, ref: 'Image' }],
-	 seller					: Boolean,
 	 promoter 				: [PromoterSchema],
 	 roles 					: [{type:String}],
-	 partner 				: Boolean,
 	 franchisor				: [{ type: mongoose.Schema.ObjectId, ref: 'Franchisor' }],
 	//Verificar estos campos
 });
@@ -48,6 +46,9 @@ exports.UserRoles = (function(){
 	var admin = 'admin';
 	var user = 'user';
 	var member = 'member';
+	var seller = 'seller';
+	var partner = 'partner';
+	var promoter = 'promoter';
 	var generalAdministrator = 'generalAdministrator';
 	var franchisoradministrator = 'franchisoradministrator';
 
@@ -60,6 +61,15 @@ exports.UserRoles = (function(){
 		},
 		getMember 	: function(){
 			return member;
+		},
+		getSeller 	: function(){
+			return seller;
+		},
+		getPromoter 	: function(){
+			return promoter;
+		},
+		getPartner 	: function(){
+			return partner;
 		},
 		getGeneralAdministrator 	: function(){
 			return generalAdministrator;

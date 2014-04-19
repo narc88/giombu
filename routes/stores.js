@@ -2,6 +2,7 @@ var StoreModel = require('../models/store').StoreModel;
 var UserModel = require('../models/user').UserModel;
 var BranchModel = require('../models/branch').BranchModel;
 var CheckAuth = require('../middleware/checkAuth');
+var FranchisorModel = require('../models/franchisor').FranchisorModel;
 // var Encrypter = require('./encryption_controller');
 
 
@@ -13,39 +14,56 @@ module.exports = function(app){
 		res.render('stores/create', {title: 'Crear Store'});
 	}
 
-	app.get('/stores/create_store_branch', CheckAuth.user, CheckAuth.seller ,function (req, res, next) {
-		res.render('stores/create_store_branch', {title: 'Cargar tienda',user:req.session.user});
+	app.get('/stores/create_store_branch', CheckAuth.user, CheckAuth.seller,function (req, res, next) {
+		FranchisorModel.find({}, function(err, franchisors){
+
+			if (err) throw err;
+
+			res.render('stores/create_store_branch', {
+				title 			: 'Cargar tienda',
+				user 			: req.session.user,
+				franchisors 	: franchisors
+			});
+
+		});
 	});
 
 
-	app.post('/stores/add_store_branch', function (req, res, next) {
-		var store_new = new StoreModel();
-		store_new.name = req.body.store_name;
-		store_new.about = req.body.store_about;
-		store_new.email = req.body.store_email;
+	app.post('/stores/add_store_branch', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
 
-		var branch_new = new BranchModel();
-		branch_new.name = req.body.name;
-		branch_new.address = req.body.email;
-		branch_new.zip = req.body.zip;
-		branch_new.phone = req.body.phone;
-		branch_new.seller =  req.session.user._id;
-		branch_new.website = req.body.website;
-		branch_new.fanpage = req.body.fanpage;
-		branch_new.twitter = req.body.twitter;
-		branch_new.contact = req.body.contact;
-		branch_new.partner = req.body.partner;
-		branch_new.default = '1';
-		store_new.branches.push(branch_new);
-		store_new.save(function(err){
-			if(!err){
-				console.log(store_new);
-				res.render('stores/view', {title: 'Comercio', store:store_new, user:req.session.user});
-			} else {
-				console.log("Error: - " + err);
+		UserModel.findOne({ username : req.body.store.partner }, function(err, partner){
+
+			if (err) throw err;
+
+			var branch = new BranchModel(req.body.branch);
+			branch.default = true;
+			
+			var store = new StoreModel(req.body.store);
+
+			if (partner){
+				store.partner = partner._id;	
 			}
+
+			store.creator = req.session.user._id;
+			store.branches.push(branch);
+
+			res.json(store);
+
+			// store.save(function(err){
+				
+			// 	if (err) throw err;
+
+			// 	console.log(store_new);
+			// 	res.render('stores/view', {
+			// 		title 		: 'Comercio',
+			// 		store 		: store,
+			// 		user 		: req.session.user
+			// 	});
+				
+			// });
+
 		});
-	// res.render('users/register', {title: 'Cargar Oferta', user:req.session.user});
+
 	});
 
 

@@ -2,7 +2,7 @@
 var mongoose = require('mongoose');
 
 BranchSchema = exports.BranchSchema = new mongoose.Schema({
-	default				: { type: Boolean },
+	default				: { type: Boolean, default: false },
 	name				: { type: String , required:true},
 	address				: { type: String },
 	lat					: { type: Number},

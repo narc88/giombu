@@ -9,7 +9,8 @@ exports.user = function (req, res, next) {
 }
 
 exports.promoter = function (req, res, next) {
-	if (!req.session.user.promoter) {
+	var index = req.session.user.roles.indexOf(UserRoles.getPromoter());
+	if (index == -1) {
 		res.render('error', {
 			description : 'El usuario logueado no es promotor'
 		});
@@ -19,7 +20,8 @@ exports.promoter = function (req, res, next) {
 }
 
 exports.seller = function (req, res, next) {
-	if (!req.session.user.seller) {
+		var index = req.session.user.roles.indexOf(UserRoles.getSeller());
+	if (index == -1) {
 		res.render('error', {
 			description : 'El usuario logueado no es vendedor'
 		});
@@ -29,7 +31,9 @@ exports.seller = function (req, res, next) {
 }
 
 exports.partner = function (req, res, next) {
-	if (!req.session.user.partner) {
+
+	var index = req.session.user.roles.indexOf(UserRoles.getPartner());
+	if (index == -1) {
 		res.render('error', {
 			description : 'El usuario logueado no es socio'
 		});
@@ -37,6 +41,7 @@ exports.partner = function (req, res, next) {
 		next();
 	}
 }
+
 exports.member = function (req, res, next) {
 	var index = req.session.user.roles.indexOf(UserRoles.getMember());
 	if (index == -1) {

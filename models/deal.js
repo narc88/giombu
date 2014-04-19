@@ -33,7 +33,7 @@ var DealSchema = new mongoose.Schema({
 	//Compras realizadas
 	sales				: [SaleSchema],
 	//Imagenes
-	images 				: [ImageSchema],
+	images 				: [{ type: mongoose.Schema.ObjectId, ref: 'Image' }],
 	created    		    : { type: Date, default: Date.now },
 	modified        	: { type: Date, default: Date.now }
 })

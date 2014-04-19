@@ -1,13 +1,20 @@
 
 (function(){
-	$('#select_country').change(function(){
-		
+	$('#select_country').bind( "change" ,function(){
 		$('#select_state').empty();
-		var url = '/states/getStatesForACountry/' + $('#select_country').val();
+		var url = '/states/' + $('#select_country').val()+'.json';
 		$.ajax({
 			type 	: 'GET',
 			url 	: url,
-			success : refreshStates,
+			success : function(states){
+
+	for (var i = states.length - 1; i >= 0; i--) {
+		$('#select_state').append(
+			'<option value="' + states[i]._id + '" >' + states[i].name + '</option>'
+			);
+	};
+				
+},
 			error   : function(jqXHR, textStatus, errorThrown ){
 				console.log('AJAX states - ' + textStatus + ' - ' + errorThrown);
 			}
@@ -18,7 +25,7 @@
 	$('#select_state').change(function(){
 		
 		$('#select_city').empty();
-		var url = '/cities/getCitiesForAState/' + $('#select_state').val();
+		var url = '/cities/' + $('#select_state').val()+'.json';
 		$.ajax({
 			type 	: 'GET',
 			url 	: url,
@@ -28,7 +35,7 @@
 			}
 		});
 	});
-
+	$('#select_country').trigger("change")
 })();
 
 

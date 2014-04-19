@@ -31,7 +31,7 @@ var UserSchema = new mongoose.Schema({
 	level					: { type: mongoose.Schema.ObjectId, ref: 'Level' },
 	//Relacionados
 	 invitation				: [InvitationSchema],
-	 image 					: [ImageSchema],
+	 images 				: [{ type: mongoose.Schema.ObjectId, ref: 'Image' }],
 	 seller					: Boolean,
 	 promoter 				: [PromoterSchema],
 	 roles 					: [{type:String}],

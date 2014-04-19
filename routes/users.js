@@ -248,6 +248,7 @@ module.exports = function(app){
 						if (err) return handleError(err);
 						BonusModel.find( {user : req.params.id}, function(err, bonuses){
 							if(!err){
+								console.log(user)
 								res.render('users/view', {title: 'Perfil', user: user,bonuses:bonuses, contacts:contacts,deals:deals,subscriptions:subscriptions});
 							}else{
 								if (err) return handleError(err);

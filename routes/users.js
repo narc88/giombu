@@ -72,7 +72,7 @@ module.exports = function(app){
 		console.log(user);
 
 		user.roles.push(UserRoles.getUser());
-		user.image.push(new ImageModel());
+		
 
 		UserModel.findOne({username: req.body.inviter}, function(err, inviter){
 

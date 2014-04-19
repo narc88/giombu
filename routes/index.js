@@ -12,6 +12,7 @@ var states = require('./states');
 var images = require('./images');
 var states = require('./states');
 var cities = require('./cities');
+var sellers = require('./sellers');
 
 var errors = require('./errors');
 
@@ -34,6 +35,7 @@ module.exports = function(app){
 	images(app);
 	states(app);
 	cities(app);
+	sellers(app);
 
 	// error handlers
 	errors(app);

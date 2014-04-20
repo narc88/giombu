@@ -1,6 +1,5 @@
 var path = require('path');
 var express = require('express');
-var partials = require('express-partials')
 module.exports = function(app){
 
 
@@ -18,7 +17,6 @@ module.exports = function(app){
 	app.use(express.cookieParser());
 	app.use(express.session({ secret: 'giombu-giombu-secret' }));
 	app.use(express.bodyParser());
-	app.use(partials());
 	// expose session to views
 	app.use(function (req, res, next) {
 		if(typeof req.session.expose === 'undefined'){

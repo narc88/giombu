@@ -238,7 +238,7 @@ module.exports = function(app){
 	//Por ejemplo si esta llamada esta al principio del archivo, cuando se llama a /users/login
 	//toma 'login' como si fuese un ID de algun user. Este caso es valido para llamadas similares.
 	app.get('/users/:id', function(req, res){
-		UserModel.findById(req.params.id).exec( function(err, user){
+		UserModel.findById(req.params.id).populate('images').exec( function(err, user){
 			if (err) throw err;
 			UserModel.find({'promoter_id':req.params.id}, function (err, contacts) {
 				if (err) return handleError(err);

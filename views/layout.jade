@@ -7,9 +7,12 @@ html
 		.container
 			#conversations_div
 			#navbar
-			include includes/includes_intranet/head 
-			include includes/includes_intranet/menu
-			include includes/includes_intranet/center
-			include includes/includes_intranet/news
+			include includes/includes_intranet/head
+			.menu.pull-left.col-md-2
+				include includes/includes_intranet/menu
+			.content.pull-left.col-md-8
+				include includes/includes_intranet/center
+			.news.pull-left.col-md-2
+				include includes/includes_intranet/news
 
 

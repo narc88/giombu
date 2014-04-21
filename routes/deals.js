@@ -8,6 +8,7 @@ var FranchiseModel = require('../models/franchise').FranchiseModel;
 var colors = require('colors');
 var util = require('../helpers/util');
 var mongoose = require('mongoose');
+var CheckAuth = require('../middleware/checkAuth');
 //Logging system
 // var logentries = require('node-logentries');
 // var log = logentries.logger({
@@ -20,7 +21,7 @@ module.exports = function (app){
 
 
 	//Llama a la vista de creacion de una nueva deal
-	app.get('/deals/create', function (req, res, next) {
+	app.get('/deals/create', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
 		console.log('deals - create'.cyan.bold);
 		FranchisorModel.findById( req.session.user.franchisor , function(err, franchisor){
 

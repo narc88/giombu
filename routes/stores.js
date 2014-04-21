@@ -31,6 +31,10 @@ module.exports = function(app){
 
 	app.post('/stores/add_store_branch', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
 
+
+		//TODO add the Franchisor to the Store
+		//and add the Franchise adn City to the Branch
+
 		UserModel.findOne({ username : req.body.branch.partner }, function(err, partner){
 
 			if (err) throw err;
@@ -70,11 +74,8 @@ module.exports = function(app){
 					createStoreBranch(req, res, err);
 					return;
 				}else{
-					res.render('stores/view', {
-						title 		: 'Comercio',
-						store 		: store,
-						user 		: req.session.user
-					});
+
+					res.redirect('/stores/view/' + store._id);
 					
 				}
 

@@ -4,17 +4,18 @@ var UserRoles = require('../models/user').UserRoles;
 var BranchModel = require('../models/branch').BranchModel;
 var CheckAuth = require('../middleware/checkAuth');
 var FranchisorModel = require('../models/franchisor').FranchisorModel;
+var CountryModel = require('../models/country').CountryModel;
 // var Encrypter = require('./encryption_controller');
 
 var createStoreBranch = function(req, res, message){
-		FranchisorModel.find({}, function(err, franchisors){
+		CountryModel.find({}, function(err, countries){
 
 			if (err) throw err;
 
 			res.render('stores/create_store_branch', {
 				title 			: 'Cargar tienda',
 				user 			: req.session.user,
-				franchisors 	: franchisors,
+				countries 		: countries,
 				message 		: message
 			});
 

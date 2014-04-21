@@ -15,16 +15,24 @@ block content
 				.col-md-8
 					input(name='store[email]', type='text',class="required").form-control.input-sm
 			.form-group
+				label.col-md-4 country
+				.col-md-8
+					select(name="store[country]", id="country_selector").form-control.input-sm
+						option(value="0") Selecciona Pais
+						-each country in countries
+							option(value="#{country._id}") #{country.name}
+			.form-group
 				label.col-md-4 franchisor
 				.col-md-8
 					select(name="store[franchisor]", id="franchisor_selector").form-control.input-sm
-						-each franchisor in franchisors
-							option(value="#{franchisor._id}") #{franchisor.name}
-				.franchisor_selector_items
+					
 			.form-group
 				label.col-md-4 about
 				.col-md-8
 					input(name='store[about]', type='text' ,class="required").form-control.input-sm
+			
+
+
 			br
 			h4 Informacion de la Sucursal
 
@@ -32,6 +40,16 @@ block content
 				label.col-md-4 name
 				.col-md-8
 					input(name='branch[name]', type='text' ,class="required").form-control.input-sm
+			.form-group
+				label.col-md-4 state
+				.col-md-8
+					select(name="branch[state]", id="state_selector").form-control.input-sm
+
+			.form-group
+				label.col-md-4 franchise
+				.col-md-8
+					select(name="branch[franchise]", id="franchise_selector").form-control.input-sm
+
 			.form-group
 				label.col-md-4 address
 				.col-md-8
@@ -66,3 +84,5 @@ block content
 					input(type='text', name="branch[partner]", id='branch_partner', placeholder="Usuario" ,class="users_input typeahead" , data-provide="typeahead", data-items="4").form-control.input-sm
 			.form-group
 				button(type='submit' id='submit_btn').btn.btn-default Save
+
+	script(tpye="text/javascript" src="/js/stores/create_store_branch.js")

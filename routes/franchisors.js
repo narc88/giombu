@@ -3,6 +3,8 @@ var CurrencyModel = require('../models/currency').CurrencyModel;
 var CountryModel = require('../models/country').CountryModel;
 
 module.exports = function(app){
+
+
 	app.get('/franchisors/initialize', function(req, res){
 
 		CurrencyModel.findOne().exec(function(err,currency){
@@ -66,4 +68,14 @@ module.exports = function(app){
 			})
 		});
 	});
+
+
+	app.get('/franchisors/:id:format(.json)?', function(req, res, next){
+		FranchisorModel.find({ country : req.params.id}).sort("-name").exec( function(err, franchisors){
+			if (err) throw err;
+			res.json(franchisors);
+		});
+	});
+
+
 }

@@ -7,8 +7,6 @@ block content
 	.img_profile
 		p #{user.username}
 		h5 Tenes #{contacts.length} contactos!
-	- images = user.images
-		include ../includes/slides
 	ul(class="nav nav-tabs")
 		li.active
 			a(href="#misdatos", data-toggle="tab") Mis Datos
@@ -82,6 +80,7 @@ block content
 			- id = user._id
 			.images
 				include ../partials/images/carousel
+				include ../partials/images/media_list
 		-if (!(typeof user.promoter[0] === "undefined"))
 			h3 Promotor
 			table

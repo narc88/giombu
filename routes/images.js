@@ -56,20 +56,21 @@ module.exports = function(app){
 
 	var delete_image = function(dir){
 		return function(req,res){
+			console.log("me llamaban")
 			var Model = get_model(req.params.param);
-			if(Model){
+			
 				Model.update(
 				  { _id: req.params.param_id },
-				  { $pull: { 'images._id': { number: req.params.image_id} } }
-				);
+				  { $pull: { 'images': req.params.image_id } }
+				).exec(function(){
+					
 				res.redirect("back")
-			}else{
-				console.log("Parametros erroneos")
-			}
+				})
+			
 			
 		}
 	}
 
-	app.post('/images/delete/:param/:param_id/:image_id', delete_image(app.get('photos')));
+	app.get('/images/delete/:param/:param_id/:image_id', delete_image(app.get('photos')));
 }
 

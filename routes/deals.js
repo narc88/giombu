@@ -19,7 +19,20 @@ var CheckAuth = require('../middleware/checkAuth');
 
 module.exports = function (app){
 
-
+	//Tenemos que agregar el filtro por franquicia por defecto, o seleccionada. Nico 21/04
+	app.get('/deals', function(req, res, next){
+		DealModel.find( {} ).sort("-created").exec(function(err, deals){
+			if(!err){
+				if(deals.count != 0){
+					res.render('deals/list', {title: 'Lista de ofertas', deals : deals});
+				}else{
+					res.render('not_found', {title: 'Oferta'});
+				}
+			}else{
+				console.log('deal - list - '.red.bold + err);
+			}
+	  	});
+	});
 	//Llama a la vista de creacion de una nueva deal
 	app.get('/deals/create', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
 		console.log('deals - create'.cyan.bold);
@@ -256,40 +269,7 @@ module.exports = function (app){
 	}
 
 
-	//Lista las deals
-	app.get('/intranet/deals/list', function(req, res, next){
-		if(req.session.user.franchise_selected){
-			DealModel.find( {} ).where('franchises').in([req.session.user.franchise_selected._id]).sort("-created").exec(function(err, deals){
-				if(!err){
-					if(deals.count != 0){
-						console.log(deals.count+"count")
-						console.log('deal - list - Se envian los deals encontrados');
-						res.render('deals/list', {title: 'Lista de deals', user: req.session.user,  deals : deals});
-					}else{
-						console.log('deal - list - No hay deals');
-						res.render('not_found', {title: 'Oferta', user: req.session.user});
-					}
-				}else{
-					console.log('deal - list - '.red.bold + err);
-				}
-		  	});
-		}else{
-			DealModel.find( {} ).sort("-created").exec(function(err, deals){
-				if(!err){
-					if(deals.count != 0){
-						console.log(deals.count+"count")
-						console.log('deal - list - Se envian los deals encontrados');
-						res.render('deals/list', {title: 'Lista de deals', user: req.session.user,  deals : deals});
-					}else{
-						console.log('deal - list - No hay deals');
-						res.render('not_found', {title: 'Oferta', user: req.session.user});
-					}
-				}else{
-					console.log('deal - list - '.red.bold + err);
-				}
-		  	});
-		}
-	});
+	
 
 	//Lista las deals
 	app.get('/deals/travel', function(req, res, next){

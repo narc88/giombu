@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+	.span9
+		h3 Lista de Comercios
+		table.table_store_list
+			-each store in stores
+				.media
+					.pull-left(href="#")
+						img(class="media-object", src="/img/check.png", style="width:100px" , alt="Just a Placeholder")
+					.media-body
+						h4.media-heading #{store.name}
+						.media-body
+							a(href="/stores/#{store._id}", rel="tooltip") #{store.name}

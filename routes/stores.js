@@ -250,5 +250,22 @@ module.exports = function(app){
 	});
 
 
+	//devuelve los branches para un store
+	//:id -> store._id
+	app.get('/stores/branches/:id:format(.json)?', function(req, res, next){
+		StoreModel.findById(req.params.id)
+		.populate('branches.franchise')
+		.exec(function(err, store){
+
+			if (err) throw err;
+
+			if(store){
+				res.json(store.branches);
+			}else{
+				res.json([]);
+			}
+
+		});
+	});
 
 }

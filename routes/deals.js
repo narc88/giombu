@@ -33,36 +33,27 @@ module.exports = function (app){
 			}
 	  	});
 	});
+
 	//Llama a la vista de creacion de una nueva deal
 	app.get('/deals/create', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
 		console.log('deals - create'.cyan.bold);
-		FranchisorModel.findById( req.session.user.franchisor , function(err, franchisor){
+		StoreModel.find( { creator : req.session.user._id })
+		.populate('franchisor')
+		.populate('branches.franchise')
+		.exec(function(err, stores){
+			
+			console.log(stores);
+			for (var i = stores.length - 1; i >= 0; i--) {
+				console.log(stores[i].branches[0].franchise);
+			};
 
-			if (err) throw err;
-
-			FranchiseModel.find( {"franchisor" : franchisor._id } , function(err, franchises){
-
-				if (err) throw err;
-
-				if(franchises.length > 0){
-					StoreModel.find( {franchisor : franchisor._id } , function(err, stores){
-					
-						res.render('deals/create', {
-							title: 'Cargar Oferta',
-							user 		: req.session.user,
-							stores 		: stores,
-							franchisor 	: franchisor,
-							franchises 	: franchises
-						});
-
-					});
-				}else{
-					throw new Error('No hay franquicias en el pais del usuario');
-				}
-
+			res.render('deals/create', {
+				title: 'Cargar Oferta',
+				user 		: req.session.user,
+				stores 		: stores
 			});
 
-	  	});
+		});
 	});
 
 

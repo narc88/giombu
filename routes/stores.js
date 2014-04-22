@@ -24,6 +24,20 @@ var createStoreBranch = function(req, res, message){
 
 module.exports = function(app){
 
+	app.get('/stores', function(req, res, next){
+		StoreModel.find({}).exec(function(err, stores){
+			if(!err){
+				if(stores){
+						res.render('stores/list', {title: 'Stores', stores : stores});
+				}else{
+					console.log('store - view - No se encontro el store ( ' + req.params.id +' )');
+				}
+			}else{
+				console.log('store - view - '.red.bold + err);
+			}
+
+		});
+	});
 
 	app.get('/stores/create_store_branch', CheckAuth.user, CheckAuth.seller,function (req, res, next) {
 		createStoreBranch(req, res);
@@ -93,21 +107,6 @@ module.exports = function(app){
 			if(!err){
 				if(user){
 					res.render('stores/edit', {title: 'Editar Store', user : user});
-				}else{
-					console.log('Usuario no encontrado, cualquiera el error');
-				}
-			}else{
-				console.log('No lo encontre');
-			}
-		});
-	});
-
-
-	app.get('/intranet/stores/add_image/:id', function (req, res, next) {
-		StoreModel.findById( req.params.id , function(err, store){
-			if(!err){
-				if(store){
-					res.render('stores/add_image', {title: 'Agregar imagen',store:store, user : req.session.user});
 				}else{
 					console.log('Usuario no encontrado, cualquiera el error');
 				}

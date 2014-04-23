@@ -22,17 +22,17 @@ module.exports = function (app){
 		 console.log('error de suscripcion')
 		}
 		});
-	}
+	});
 
 	//BORRA TODAS LAS SUSCRIPCIONES de ese mail
 	app.post('/subscribers/erase_subscriber/:email', function (req, res, next) {
 	   SubscriberModel.find({ email:req.params.email }).remove();
-	}
+	});
 
 	//Borra la suscripcion de la franquicia en cuestión.
 	app.get('/subscribers/erase_subscriber/:email/:franchise', function (req, res, next) {
 	   SubscriberModel.find({ email:req.params.email , franchise:req.params.franchise}).remove();
-	}
+	});
 
 	app.get('/subscribers', function(req, res, next){
 
@@ -51,5 +51,5 @@ module.exports = function (app){
 			}
 
 	  });
-	}
+	});
 }

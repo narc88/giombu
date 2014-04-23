@@ -13,7 +13,8 @@ var images = require('./images');
 var states = require('./states');
 var cities = require('./cities');
 var sellers = require('./sellers');
-var subscribers = require('./sellers');
+var subscribers = require('./subscribers');
+var invitations = require('./invitations');
 
 var errors = require('./errors');
 
@@ -38,7 +39,7 @@ module.exports = function(app){
 	cities(app);
 	sellers(app);
 	subscribers(app);
-
+	invitations(app);
 	// error handlers
 	errors(app);
 

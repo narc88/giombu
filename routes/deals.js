@@ -174,37 +174,6 @@ module.exports = function (app){
 	});
 
 
-	//Muestra la vista detallada de una deal en particular
-	app.get('/deals/view/:id', function(req, res, next){
-		DealModel.findById( req.params.id ).populate('franchises').populate('store').sort("-created").exec( function(err, deal){
-			if(!err){
-				if(deal){
-					console.log(deal);
-					DealModel.find().nor([{ "_id":req.params.id}]).populate('franchises').populate('store').exec( function(err, deals){
-						if(!err){
-							if(deals){
-								QuestionModel.find({'deal':deal._id}).populate('user').populate('deal').exec( function(err, questions){
-									if(!err){
-					
-									console.log(deals.length)
-									res.render('deals/show', {title: 'Oferta', user: req.session.user, deal : deal, deals:deals, questions:questions});
-									}
-							});
-							}
-						}
-					});
-				}else{
-					console.log('deals - view - No se encontro el deal ( ' + req.body.deal_id +' )');
-					res.render('not_found', {title: 'Oferta', user: req.session.user});
-				}
-			}else{
-				console.log('deals - view - '.red.bold + err);
-				res.render('not_found', {title: 'Oferta', user: req.session.user});
-			}
-	  });
-	});
-
-
 	app.get('/intranet/deals/erase_image/:id/:image_id', function (req, res, next) {
 	    DealModel.update({_id: req.params.id}, 
 	        {$pull: {images: {_id: req.params.image_id}}}, {upsert: true}, function(err, deal){
@@ -421,7 +390,35 @@ module.exports = function (app){
 
 	});
 
-
+	//Muestra la vista detallada de una deal en particular
+	app.get('/deals/:id', function(req, res, next){
+		DealModel.findById( req.params.id ).populate('franchises').populate('store').sort("-created").exec( function(err, deal){
+			if(!err){
+				if(deal){
+					console.log(deal);
+					DealModel.find().nor([{ "_id":req.params.id}]).populate('franchises').populate('store').exec( function(err, deals){
+						if(!err){
+							if(deals){
+								QuestionModel.find({'deal':deal._id}).populate('user').populate('deal').exec( function(err, questions){
+									if(!err){
+					
+									console.log(deals.length)
+									res.render('deals/view', {title: 'Oferta', deal : deal, deals:deals, questions:questions});
+									}
+							});
+							}
+						}
+					});
+				}else{
+					console.log('No se encontro el deal ( ' + req.body.deal_id +' )');
+					res.render('not_found', {title: 'Oferta', user: req.session.user});
+				}
+			}else{
+				console.log('deals - view - '.red.bold + err);
+				res.render('error', {title: 'Oferta', user: req.session.user});
+			}
+	  });
+	});
 
 
 

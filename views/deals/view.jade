@@ -187,10 +187,10 @@ block content
 								label.form_view % Vendedor:			
 									input(name='deal[seller_percentage]', type='text', value='#{deal.seller_percentage}',class="required number" ,minlength="1",maxlength="2").control
 							.control-group
-								label.form_view % Giombu:			
+								label.form_view % Giombu:
 									input(name='deal[giombu_percentage]', type='text', value='#{deal.giombu_percentage}' ,class="required number" ,minlength="1",maxlength="2").control 
 							.control-group
-								label.form_view % Promotor:			
+								label.form_view % Promotor:	
 									input(name='deal[promoter_percentage]', type='text', value='#{deal.promoter_percentage}',class="required number" ,minlength="1",maxlength="2").control 					
 							.form_view.offset2
 								input(name='submit', type='submit', value="Guardar")
@@ -205,7 +205,7 @@ block content
 								td #{deal.shipping_cost} $
 							tr
 								td.td_name	Tienda:
-								td	#{deal.store.name} 
+								td	#{deal.store} 
 							tr
 								td.td_name	Vendedor:
 								td	#{deal.seller}

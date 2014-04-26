@@ -15,6 +15,7 @@ var cities = require('./cities');
 var sellers = require('./sellers');
 var subscribers = require('./subscribers');
 var invitations = require('./invitations');
+var questions = require('./questions');
 
 var errors = require('./errors');
 
@@ -40,6 +41,7 @@ module.exports = function(app){
 	sellers(app);
 	subscribers(app);
 	invitations(app);
+	questions(app);
 	// error handlers
 	errors(app);
 

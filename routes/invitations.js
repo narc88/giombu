@@ -5,6 +5,7 @@ var Mailer = require('../helpers/mailer');
 module.exports = function (app){
  
   app.get('/invitations/create',  function (req, res, next) {
+    console.log(req.headers.host)
     res.render('invitations/create', {title: 'Invitar personas a unirse a giombu', user:req.session.user});
   });
 
@@ -23,9 +24,9 @@ module.exports = function (app){
                var body = "Has sido invitado a formar parte de la comunidad Giombu, una comunidad de comercio electrónico en pleno crecimiento. ¡Esperamos que tu tambien quieras formar parte de esto! Para ingresar, por favor sigue el link debajo.";
                body += '"'+ invitation_new.body +'"';
                if(invitation_new.invitation_type == 'user'){
-                  var html_content = "<a href='http://localhost:3000/users/accept_invitation/"+invitation_new._id+"'>Click Aquí para comenzar a ser parte de GIOMBU</a>";
+                  var html_content = "<a href='"+req.headers.host+"/users/accept_invitation/"+invitation_new._id+"'>Click Aquí para comenzar a ser parte de GIOMBU</a>";
                }else{
-                  var html_content = "<a href='http://localhost:3000/users/accept_promoter_invitation/"+invitation_new._id+"'>Click Aquí para comenzar a ser parte de GIOMBU</a>";
+                  var html_content = "<a href='"+req.headers.host+"/users/accept_promoter_invitation/"+invitation_new._id+"'>Click Aquí para comenzar a ser parte de GIOMBU</a>";
                }
                var subject = invitation_new.subject;
                var mails = invitation_new.email;

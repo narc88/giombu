@@ -16,7 +16,7 @@ module.exports = function (app){
 					  if (err) return handleError(err);
 					   console.log(questions);
 					    console.log(err);
-					  res.render('questions/list', {title: 'Preguntas', user:req.session.user, deal:deal, questions:questions});
+					  res.render('questions/list', {title: 'Preguntas', deal:deal, questions:questions});
 					})
 				}else{
 					console.log('deals - view - No se encontro el deal ( ' + req.body.deal_id +' )');
@@ -42,7 +42,7 @@ module.exports = function (app){
 						
 					} else {
 						console.log(err);
-				        res.render('questions/list', {title: 'Preguntas', user:req.session.user,error:'No se ha podido realizar la pregunta', deal:deal, questions:questions});
+				        res.render('questions/list', {title: 'Preguntas', error:'No se ha podido realizar la pregunta', deal:deal, questions:questions});
 				    }
 				    });
 				}else{

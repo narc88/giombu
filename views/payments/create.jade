@@ -1,0 +1,59 @@
+// my-template.jade
+extends ../layout
+
+//Bloques de contenido.
+
+
+block content
+		script(rel='text/javascript', src='/js/payment_validation.js')
+		h4
+			-if(typeof message !== "undefined")
+				span #{message}
+		label 
+			h3 Seleccionar Todos
+			input(type="checkbox", name="selectAll", id="selectAll")
+			.validation_message
+		form(class="payment_selector",method="post", id="create_payment", name="create_payment", action="/payments/new")
+			-if(typeof bonuses !== "undefined")
+				h3 Bonos
+				table
+					-each bonus in bonuses
+						tr
+							td
+								-if(bonus.paid_date)
+									span.label.label-success Cobrado
+								-else
+									span.label No cobrado
+							td
+								label #{bonus.created} $ #{bonus.amount}
+									input(type="checkbox",class="select_list", name="bonuses", amount="#{bonus.amount}" ,value="#{bonus._id}") 
+						
+			-if(typeof user.promoter[0] !== "undefined")
+				h3 Comisiones promotor
+				table
+					-each commission in user.promoter[0].commissions	
+						tr
+							td
+								-if(commission.paid_date)
+									span.label.label-success Cobrado
+								-else
+									span.label No cobrado
+							td
+								label #{commission.created} $ #{commission.amount}
+									input(type="checkbox",class="select_list", name="commissionsPromoter", amount="#{commission.amount}", value="#{commission._id}")
+			-if(typeof user.promoter[0] !== "undefined")
+				h3 Comisiones vendedor
+				table
+					-each commission in user.seller[0].commissions	
+						tr
+							td
+								-if(commission.paid_date)
+									span.label.label-success Cobrado
+								-else
+									span.label No cobrado
+							td
+								label #{commission.created} $ #{commission.amount}
+									input(type="checkbox",class="select_list", name="commissionsSeller", amount="#{commission.amount}", value="#{commission._id}") 
+			input(type="button", value="Crear pago" , class="create_payment") 
+				
+

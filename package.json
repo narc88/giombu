@@ -14,6 +14,8 @@
     "colors": "~0.6.2",
     "express-partials": "0.0.2",
     "mandrill-api": "~1.0.39",
-    "mandrill-send": "~0.1.0"
+    "mandrill-send": "~0.1.0",
+    "pdfkit": "~0.6.1",
+    "events": "~1.0.0"
   }
 }

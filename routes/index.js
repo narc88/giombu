@@ -16,6 +16,10 @@ var sellers = require('./sellers');
 var subscribers = require('./subscribers');
 var invitations = require('./invitations');
 var questions = require('./questions');
+var payments = require('./payments');
+var sales = require('./sales');
+var commissions = require('./commissions');
+
 
 var errors = require('./errors');
 
@@ -42,6 +46,9 @@ module.exports = function(app){
 	subscribers(app);
 	invitations(app);
 	questions(app);
+	payments(app);
+	sales(app);
+	commissions(app);
 	// error handlers
 	errors(app);
 

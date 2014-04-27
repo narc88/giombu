@@ -393,32 +393,35 @@ module.exports = function (app){
 	//Muestra la vista detallada de una deal en particular
 	app.get('/deals/:id', function(req, res, next){
 		DealModel.findById( req.params.id ).populate('franchises').populate('store').sort("-created").exec( function(err, deal){
-			if(!err){
-				if(deal){
-					console.log(deal);
-					DealModel.find().nor([{ "_id":req.params.id}]).populate('franchises').populate('store').exec( function(err, deals){
-						if(!err){
-							if(deals){
-								QuestionModel.find({'deal':deal._id}).populate('user').populate('deal').exec( function(err, questions){
-									if(!err){
-					
-									console.log(deals.length)
-									res.render('deals/view', {title: 'Oferta', deal : deal, deals:deals, questions:questions});
-									}
-							});
+
+			if(err) throw err;
+
+			if(deal){
+
+				var query = DealModel.find();
+				query.nor([{ "_id":req.params.id}])
+				query.populate('franchises')
+				query.populate('store')
+				query.exec( function(err, deals){
+					if(err) throw err;
+					if(deals){
+						QuestionModel.find({'deal':deal._id}).populate('user').populate('deal').exec( function(err, questions){
+							if(!err){
+			
+							console.log(deals.length)
+							res.render('deals/view', {title: 'Oferta', deal : deal, deals:deals, questions:questions});
 							}
-						}
-					});
-				}else{
-					console.log('No se encontro el deal ( ' + req.body.deal_id +' )');
-					res.render('not_found', {title: 'Oferta', user: req.session.user});
-				}
+						});
+					}
+				});
 			}else{
-				console.log('deals - view - '.red.bold + err);
-				res.render('error', {title: 'Oferta', user: req.session.user});
+				console.log('No se encontro el deal ( ' + req.body.deal_id +' )');
+				res.render('not_found', {title: 'Oferta', user: req.session.user});
 			}
-	  });
+
+		});
 	});
+
 
 
 

@@ -75,9 +75,11 @@ module.exports = function(app){
 		});
 		
 	});
-	
+	app.on('sale', function(param){
+		console.log("nah")
+	})
 	app.get('/sales/test', function (req, res, next) {
-		if(eventEmitter.emit("sale", "hola")){
+		if(app.emit("sale", "hola")){
 								res.send("Emitido")
 							}else{
 								res.send("No emitido")

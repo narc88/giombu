@@ -24,8 +24,8 @@ var DealSchema = new mongoose.Schema({
 	promoter_percentage	: { type: Number, required: true, min:0, max:99 },
 	status				: { type: String },
 	shipping_cost		: { type: Number},
-	store   			: { type: mongoose.Schema.ObjectId, ref: 'Store' },
-	seller   			: { type: mongoose.Schema.ObjectId, ref: 'Seller' },
+	branches   			: [{ type: mongoose.Schema.ObjectId, ref: 'Branch' }],
+	seller   			: { type: mongoose.Schema.ObjectId, ref: 'User' },
 	franchises  		: [{ type: mongoose.Schema.ObjectId, ref: 'Franchise' }],
 	currency	   		: { type: mongoose.Schema.ObjectId, ref: 'Currency' },
 	//Peso para ordenarlas

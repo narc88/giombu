@@ -59,7 +59,7 @@ module.exports = function(app){
 					//UN request a alguna url que responda con un json de confirmacion, nada mas.
 					deal.sales.push(sale_new);
 					deal.save(function (err) {
-							if(emitter.emit("sale", deal)){
+							if(app.emit("sale", deal)){
 								res.send("Emitido")
 							}else{
 								res.send("No emitido")
@@ -75,15 +75,7 @@ module.exports = function(app){
 		});
 		
 	});
-	app.on('sale', function(param){
-		console.log("nah")
-	})
-	app.get('/sales/test', function (req, res, next) {
-		if(app.emit("sale", "hola")){
-								res.send("Emitido")
-							}else{
-								res.send("No emitido")
-							}});
+	
 	/**
 		 * Lista de ventas realizadas.
 		 *

@@ -22,12 +22,12 @@ module.exports = function(app){
 		commission_new.amount = (deal.seller_percentage)/100*(deal.special_price)*(sale.coupons.length);
 
 		//Commission partner
-		DealModel.findById( req.body.id ).populate("store").exec(fucntion(err, branch){
+		DealModel.findById( req.body.id ).populate("store").exec(function(err, branch){
 			var commission_new = new CommissionModel(); 
 			commission_new.user_id = deal.seller;
 			commission_new.sale = sale._id;
 			commission_new.amount = (deal.seller_percentage)/100*(deal.special_price)*(sale.coupons.length);
-		})
+		});
 		
 	});
 

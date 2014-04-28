@@ -1,9 +1,6 @@
 branches = {};
 (function(){
-	$('#start_date').datepicker();
-	$('#end_date').datepicker();
-	$('#start_redeem').datepicker();
-	$('#end_redeem').datepicker();
+
 	$('#tags').tagsInput();
 	$('#start_time').timepicker({
 		minuteStep: 15,
@@ -33,7 +30,7 @@ branches = {};
 
 				for (var i = branches.length - 1; i >= 0; i--) {
 					var checkbox = $('<div class="checkbox"></div>');
-					var label = $('<label><input value="' + branches[i]._id + '", name="branch[_id]",  type="checkbox" />' +
+					var label = $('<label><input value="' + branches[i]._id + '", name="deal[branches]['+ i +']",  type="checkbox" />' +
 						branches[i].name + ' - ' + branches[i].franchise.name + '</label>');
 
 					checkbox.append(label);

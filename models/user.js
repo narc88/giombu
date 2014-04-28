@@ -53,6 +53,9 @@ exports.UserRoles = (function(){
 	var franchisorAdministrator = 'franchisorAdministratAr';
 
 	return{
+		list 		: function(){
+			return [admin, user, member, seller, partner, promoter, generalAdministrator, franchisorAdministrator];
+		},
 		getAdmin 	: function(){
 			return admin;
 		},

@@ -9,6 +9,7 @@ var colors = require('colors');
 var util = require('../helpers/util');
 var mongoose = require('mongoose');
 var CheckAuth = require('../middleware/checkAuth');
+var DealStatus = require('../models/deal').DealStatus;
 //Logging system
 // var logentries = require('node-logentries');
 // var log = logentries.logger({
@@ -43,8 +44,9 @@ module.exports = function (app){
 
 			res.render('deals/create', {
 				title: 'Cargar Oferta',
-				user 		: req.session.user,
-				stores 		: stores
+				user 			: req.session.user,
+				stores 			: stores,
+				deal_status		: DealStatus.list()
 			});
 
 		});
@@ -373,28 +375,41 @@ module.exports = function (app){
 
 	//Muestra la vista detallada de una deal en particular
 	app.get('/deals/:id', function(req, res, next){
-		DealModel.findById( req.params.id ).populate('franchises').populate('store').sort("-created").exec( function(err, deal){
+		DealModel.findById( req.params.id )
+		.populate('store')
+		.exec( function(err, deal){
 
 			if(err) throw err;
 
+			console.log(deal);
+
 			if(deal){
 
-				var query = DealModel.find();
-				query.nor([{ "_id":req.params.id}])
-				query.populate('store')
-				query.populate('branches')
-				query.populate('branches.franchises')
-				query.exec( function(err, deals){
+				// TODO checkear estouy
+
+				DealModel.find()
+				.nor([{ "_id":req.params.id}])
+				.populate('store')
+				.exec( function(err, deals){
+
 					if(err) throw err;
-					if(deals){
-						QuestionModel.find({'deal':deal._id}).populate('user').populate('deal').exec( function(err, questions){
-							if(!err){
-			
-							console.log(deals.length)
-							res.render('deals/view', {title: 'Oferta', deal : deal, deals:deals, questions:questions});
-							}
+						
+					QuestionModel.find({'deal':deal._id})
+					.populate('user')
+					.populate('deal')
+					.exec( function(err, questions){
+						
+						if(err) throw err;
+						
+						res.render('deals/view', {
+							title 			: 'Oferta', 
+							deal  			: deal, 
+							deals 			: deals, 
+							questions 		: questions
 						});
-					}
+						
+					});
+
 				});
 			}else{
 				console.log('No se encontro el deal ( ' + req.body.deal_id +' )');

@@ -40,3 +40,25 @@ var DealSchema = new mongoose.Schema({
 })
 DealSchema.set('versionKey', false);
 exports.DealModel = mongoose.model('Deal', DealSchema);
+
+
+exports.DealStatus = (function(){
+	var draft = 'draft';
+	var active = 'active';
+	var closed = 'closed';
+
+	return{
+		list 	 	: function(){
+			return [draft, active, closed];
+		},
+		getDraft 	: function(){
+			return draft;
+		},
+		getActive 	: function(){
+			return active;
+		},
+		getClosed 	: function(){
+			return closed;
+		}
+	}
+})();

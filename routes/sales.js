@@ -6,11 +6,9 @@ var UserModel = require('../models/user').UserModel;
 var NewModel = require('../models/new').NewModel;
 var CommissionModel = require('../models/commission').CommissionModel;
 var EventModel = require('../models/event').EventModel;
-var CouponModel = require('../models/coupon').CouponModel;
 var Encrypter = require('../helpers/encryption');
 var PDFDocument = require('pdfkit');
-var events = require('events');
-var eventEmitter = new events.EventEmitter();
+
 
 module.exports = function(app){
 

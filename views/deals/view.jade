@@ -2,247 +2,100 @@
 extends ../layout
 
 block content
-	.span9
+	.col-md-9
 		h2 Oferta
-		p Desea eliminar la oferta? 
-			a(href='/deals/remove/' + deal._id.toString()) click aqui 
-		form(method='post',id="deals_edit", action='/deals/add')
-			.accordion(id ="accordion2")
-				.accordion-group
-					.accordion-heading
-						a(href='#collapseDatos1', data-toggle="collapse", data-parent="#accordion2").title_deal Datos Generales
-					#collapseDatos1(class="accordion-body in collapse", style='height: auto;') 
-						.table_datos_grals
-							table.table_deal
-								tr
-									td.td_name	Estado:
-									td	#{deal.status}
-								tr
-									td.td_name Titulo:
-									td	#{deal.title}
-								tr
-									td.td_name Subtitulo:
-									td	#{deal.tagline}
-								tr
-									td.td_name	Link:
-									td	#{deal.slug}
-								tr
-									td.td_name	Caracteristicas:
-									td	#{deal.characteristics}
-								tr
-									td.td_name	Condiciones:
-									td	#{deal.conditions}
 
-				.accordion-group
-					.accordion-heading
-						a(href='#collapseDatos2', data-toggle="collapse", data-parent="#accordion2") Editar
-					#collapseDatos2(class="accordion-body in collapse", style='height: 0px;')
-						.accordion-inner
-								input(name='deal_id', type='hidden', value='#{deal._id}')
-							.control-group
-								label.form_view Estado:	
-									select(name='deal[status]')
-										option(value="draft") Borrador
-										option(value="active") Activa
-										option(value="closed") Cerrada
-							.control-group
-								label.form_view  Titulo:			
-									input(name='deal[title]', type='text', value='#{deal.title}',class="required").control 		
-							.control-group
-								label.form_view Tagline:			
-									input(name='deal[tagline]', type='text', value='#{deal.tagline}',class="required").control 
-							.control-group
-								label.form_view Slug:			
-									input(name='deal[slug]', type='text', value='#{deal.slug}',class="required").control 
-							.control-group
-								label.form_view Características:	
-									textarea(name='deal[characteristics]', type='text', value='#{deal.characteristics}',class="required",rows="13", cols="70").control 
-										
-							.control-group
-								label.form_view Condiciones:			
-									textarea(name='deal[conditions]', type='text', value='#{deal.conditions}',class="required",rows="13", cols="70").control 
-										
-							.form_view.offset2
-								input(name='submit', type='submit', value="Guardar")
-			.accordion(id ="accordion3")
-				.accordion-group
-					.accordion-heading
-						a(href='#collapsePrecios1', data-toggle="collapse", data-parent="#accordion3").title_deal Precios
-					#collapsePrecios1(class="accordion-body in collapse", style='height: auto;')
-						table.table_deal
-							tr
-								td.td_name	Precio original:
-								td $ #{deal.price} 
-							tr
-								td.td_name	Precio Final:
-								td $ #{deal.special_price} 
-							tr
-								td.td_name	Descuento:
-								td $ #{deal.discount} 
-				.accordion-group
-					.accordion-heading
-						a(href='#collapsePrecios2', data-toggle="collapse", data-parent="#accordion3") Editar
-					#collapsePrecios2(class="accordion-body in collapse", style='height: 0px;')
-						.accordion-inner
-							.control-group
-								label.form_view Precio:			
-									input(name='deal[price]', type='text', value='#{deal.price}',class="required number" ,minlength="1",maxlength="6").control 
-							.control-group
-								label.form_view Descuento:			
-									input(name='deal[discount]', type='text', value='#{deal.discount}',class="required number" ,minlength="1",maxlength="2").control
-							.control-group
-								label.form_view Precio especial:			
-									input(name='deal[special_price]', type='text', value='#{deal.special_price}',class="required number" ,minlength="1",maxlength="6").control 
-							.form_view.offset2
-								input(name='submit', type='submit', value="Guardar")				
-				.accordion(id ="accordion4")
-				.accordion-group
-					.accordion-heading
-						a(href='#collapseFechas1', data-toggle="collapse", data-parent="#accordion4").title_deal Fechas 
-					#collapseFechas1(class="accordion-body in collapse", style='height: auto;')
-						table.table_deal
-							tr
-								td.td_name Inicio de la oferta:
-								td	#{deal.start_date}
-							tr
-								td.td_name Fin de la oferta:
-								td	#{deal.end_date}
-							tr
-								td.td_name Inicio de canje:
-								td	#{deal.start_redeem}
-							tr
-								td.td_name Fin de canje:
-								td	#{deal.end_redeem}
-				.accordion-group
-					.accordion-heading
-						a(href='#collapseFechas2', data-toggle="collapse", data-parent="#accordion4") Editar
-					#collapseFechas2(class="accordion-body in collapse", style='height: 0px;')
-						.accordion-inner
-							.control-group
-								label.form_view Fecha comienzo:
-									input(name='deal[start_date]', type='date', value='#{deal.start_date_string}', placeholder="dd/mm/yyyy" ,class="required date").control#start_date
-							.control-group
-								label.form_view Hora comienzo:
-									input(name='deal[start_time]', type='time', value='#{deal.start_time}' ,class="required").control#start_time
-							.control-group
-								label.form_view Fecha fin:
-									input(name='deal[end_date]', type='date', value='#{deal.end_date_string}', placeholder="dd/mm/yyyy" ,class="required date").control#end_date
-							.control-group
-								label.form_view Hora fin:
-									input(name='deal[end_time]', type='time', value='#{deal.end_time}' ,class="required").control#end_time
-							.control-group
-								label.form_view Inicio fecha canje:
-									input(name='deal[start_redeem]', type='date', value='#{deal.start_redeem_string}', placeholder="dd/mm/yyyy" ,class="required date").control#start_redeem
-							.control-group
-								label.form_view Fin fecha canje:
-									input(name='deal[end_redeem]', type='date', value='#{deal.end_redeem_string}', placeholder="dd/mm/yyyy" ,class="required date").control#end_redeem
-							.form_view.offset2
-									input(name='submit', type='submit', value="Guardar")			
-			.accordion(id ="accordion5")
-				.accordion-group
-					.accordion-heading
-						a(href='#collapseCantidad1', data-toggle="collapse", data-parent="#accordion5").title_deal Cantidad de Cupones 
-					#collapseCantidad1(class="accordion-body in collapse", style='height: auto;')		
-						table.table_deal
-							tr
-								td.td_name Cantidad maxima:
-								td	#{deal.max_coupons}
-							tr
-								td.td_name Maxima por usuario:
-								td	#{deal.max_coupons_by_user} 
-				.accordion-group
-					.accordion-heading
-						a(href='#collapseCantidad2', data-toggle="collapse", data-parent="#accordion5") Editar
-					#collapseCantidad2(class="accordion-body in collapse", style='height: 0px;')
-						.accordion-inner
-							.control-group
-								label.form_view Max. de cupones:			
-									input(name='deal[max_coupons]', type='text', value='#{deal.max_coupons}' ,class="required number" ,minlength="1",maxlength="3").control 
-							.control-group
-								label.form_view Max. por usuario:			
-									input(name='deal[max_coupons_by_user]', type='text', value='#{deal.max_coupons_by_user}' ,class="required number" ,minlength="1",maxlength="2").control 
-							.form_view.offset2
-								input(name='submit', type='submit', value="Guardar")				
-				.accordion(id ="accordion6")
-				.accordion-group
-					.accordion-heading
-						a(href='#collapsePorcentaje1', data-toggle="collapse", data-parent="#accordion6").title_deal Porcentajes
-					#collapsePorcentaje1(class="accordion-body in collapse", style='height: auto;')		
-						table.table_deal
-							tr
-								td.td_name Vendedor:
-								td	#{deal.seller_percentage}%
-							tr
-								td.td_name Giombu:
-								td	#{deal.giombu_percentage}%
-							tr
-								td.td_name Promotor:
-								td	#{deal.promoter_percentage}%
-				.accordion-group
-					.accordion-heading
-						a(href='#collapsePorcentaje2', data-toggle="collapse", data-parent="#accordion6") Editar
-					#collapsePorcentaje2(class="accordion-body in collapse", style='height: 0px;')
-						.accordion-inner
-							.control-group
-								label.form_view % Vendedor:			
-									input(name='deal[seller_percentage]', type='text', value='#{deal.seller_percentage}',class="required number" ,minlength="1",maxlength="2").control
-							.control-group
-								label.form_view % Giombu:
-									input(name='deal[giombu_percentage]', type='text', value='#{deal.giombu_percentage}' ,class="required number" ,minlength="1",maxlength="2").control 
-							.control-group
-								label.form_view % Promotor:	
-									input(name='deal[promoter_percentage]', type='text', value='#{deal.promoter_percentage}',class="required number" ,minlength="1",maxlength="2").control 					
-							.form_view.offset2
-								input(name='submit', type='submit', value="Guardar")
-			.accordion(id ="accordion7")
-				.accordion-group
-					.accordion-heading
-						a(href='#collapseOtros1', data-toggle="collapse", data-parent="#accordion7").title_deal Otras
-					#collapseOtros1(class="accordion-body in collapse", style='height: auto;')		
-						table.table_deal
-							tr
-								td.td_name	Costo de Envío:
-								td #{deal.shipping_cost} $
-							tr
-								td.td_name	Tienda:
-								td	#{deal.store} 
-							tr
-								td.td_name	Vendedor:
-								td	#{deal.seller}
-							tr
-								td.td_name	Franquiciante:
-								td	#{deal.franchisor}
-				.accordion-group
-					.accordion-heading
-						a(href='#collapseOtros2', data-toggle="collapse", data-parent="#accordion7") Editar
-					#collapseOtros2(class="accordion-body in collapse", style='height: 0px;')
-						.accordion-inner
-							.control-group
-								label.form_view Costo de envío:			
-									input(name='deal[shipping_cost]', type='text', value='#{deal.shipping_cost}',class="required number",minlength="1", maxlength="5").control 
-							.form_view.offset2
-								input(name='submit', type='submit', value="Guardar")
+		h3 Datos generales
 
-	.foto_datos_grals
-				-each image in deal.images 
-					img(src="/images/"+image.filename , id="uploadedImage").photo
-					.btn-group
-						.btn 
-							-if(image.default){
-								a( href='/intranet/deals/set_as_principal/'+deal._id.toString()+ '/' + image._id.toString()) Principal
-							-}else{
-								a( href='/intranet/deals/set_as_principal/'+deal._id.toString()+ '/' + image._id.toString() , disabled) Principal
-							-}
-						.btn 
-							a( href='/intranet/deals/erase_image/'+deal._id.toString()+ '/' + image._id.toString() ) Borrar				
-				form(action="/images/save_image", id="uploadForm", method="post", enctype="multipart/form-data")
-					input(type="file", id="userImageInput", name="image").foto_deal_view
-					input(type="hidden", id="id", name="deal_id", value="#{deal._id.toString()}")
-					br
-					input(type="submit", name="Subir Imagen").enviar_deal_view
+		table.table
+			tr
+				td	Estado:
+				td	#{deal.status}
+			tr
+				td Titulo:
+				td	#{deal.title}
+			tr
+				td Subtitulo:
+				td	#{deal.tagline}
+			tr
+				td	Link:
+				td	#{deal.slug}
+			tr
+				td	Caracteristicas:
+				td	#{deal.characteristics}
+			tr
+				td	Condiciones:
+				td	#{deal.conditions}
 
-		a(href='/sales/closure/#{deal._id}') Crear pdf de Cierre				
+		br
+		h3 Precios
 
+		table.table
+			tr
+				td	Precio original:
+				td $ #{deal.price} 
+			tr
+				td	Precio Final:
+				td $ #{deal.special_price} 
+			tr
+				td	Descuento:
+				td $ #{deal.discount} 
 
+		br
+		h3 Fechas
 
-	
+		table.table
+			tr
+				td.td_name Inicio de la oferta:
+				td	#{deal.start_date}
+			tr
+				td.td_name Fin de la oferta:
+				td	#{deal.end_date}
+			tr
+				td.td_name Inicio de canje:
+				td	#{deal.start_redeem}
+			tr
+				td.td_name Fin de canje:
+				td	#{deal.end_redeem}
+
+		br
+		h3 Cantidad de cupones
+
+		table.table
+			tr
+				td Cantidad maxima:
+				td	#{deal.max_coupons}
+			tr
+				td Maxima por usuario:
+				td	#{deal.max_coupons_by_user} 
+
+		br
+		h3 Porcentajes
+
+		table.table
+			tr
+				td Vendedor:
+				td	#{deal.seller_percentage}%
+			tr
+				td Giombu:
+				td	#{deal.giombu_percentage}%
+			tr
+				td Promotor:
+				td	#{deal.promoter_percentage}%
+
+		br
+		h3 Otras
+
+		table.table
+			tr
+				td	Costo de Envío:
+				td #{deal.shipping_cost} $
+			tr
+				td	Tienda:
+				td	#{deal.store.name} 
+			tr
+				td	Vendedor:
+				td	#{deal.seller}
+			tr
+				td	Franquiciante:
+				td	#{deal.franchisor}

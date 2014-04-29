@@ -9,6 +9,7 @@ var colors = require('colors');
 var util = require('../helpers/util');
 var mongoose = require('mongoose');
 var CheckAuth = require('../middleware/checkAuth');
+var DealStatus = require('../models/deal').DealStatus;
 //Logging system
 // var logentries = require('node-logentries');
 // var log = logentries.logger({
@@ -22,14 +23,13 @@ module.exports = function (app){
 	//Tenemos que agregar el filtro por franquicia por defecto, o seleccionada. Nico 21/04
 	app.get('/deals', function(req, res, next){
 		DealModel.find( {} ).sort("-created").exec(function(err, deals){
-			if(!err){
-				if(deals.count != 0){
-					res.render('deals/list', {title: 'Lista de ofertas', deals : deals});
-				}else{
-					res.render('not_found', {title: 'Oferta'});
-				}
+			
+			if(err) throw err;
+
+			if(deals.length > 0){
+				res.render('deals/list', {title: 'Lista de ofertas', deals : deals});
 			}else{
-				console.log('deal - list - '.red.bold + err);
+				res.render('not_found', {title: 'Oferta'});
 			}
 	  	});
 	});
@@ -41,16 +41,12 @@ module.exports = function (app){
 		.populate('franchisor')
 		.populate('branches.franchise')
 		.exec(function(err, stores){
-			
-			console.log(stores);
-			for (var i = stores.length - 1; i >= 0; i--) {
-				console.log(stores[i].branches[0].franchise);
-			};
 
 			res.render('deals/create', {
 				title: 'Cargar Oferta',
-				user 		: req.session.user,
-				stores 		: stores
+				user 			: req.session.user,
+				stores 			: stores,
+				deal_status		: DealStatus.list()
 			});
 
 		});
@@ -60,19 +56,10 @@ module.exports = function (app){
 	//Agrega una nueva deal
 	app.post('/deals/add', function (req, res, next) {
 
+		var deal_new = req.body.deal;
 
-		//USAR req.body en lugar de req.param()
-		// console.log('Deals ADD');
-		// console.log(req.body);
-
-		var deal_new = req.param('deal');
-		deal_new.sale_count = 0; 		//Yo no lo pondria
-		deal_new.coupon_count = 0;
-		//Validar los ids de los siguientes datos
-		//Crear correctamente los dates en base a los valores ingresados
-		//FECHAS
-		deal_new.franchises = req.param('franchises');
-		deal_new.tagline = req.param('deal').tagline.split(",");
+		//Fechas
+		deal_new.tagline = deal_new.tagline.split(",");
 		//Armo la fecha de inicio
 		deal_new.start_date = util.date_mongo(deal_new.start_date, deal_new.start_time);
 		//Armo la fecha de fin
@@ -81,18 +68,14 @@ module.exports = function (app){
 		deal_new.start_redeem = util.date_mongo(deal_new.start_redeem, "00:00");
 		//Armo la fecha de fin de canje
 		deal_new.end_redeem = util.date_mongo(deal_new.end_redeem, "00:00");
+
+		//Establezco al usuario que crea la Deal como el vendedor
+		deal_new.seller = req.session.user._id;
 		
 		//Quito las horas ya que no pertenecen al modelo
 		delete deal_new.start_time;
 		delete deal_new.end_time;
-	/*
-		deal_new.store = '';
-		deal_new.seller = '';
-		deal_new.franchisor = '';
-		deal_new.franchise = '';
-		deal_new.currency = '';
-		deal_new.images = '';
-	*/
+
 		//Genero la nueva deal a partir de la coleccion que arme
 		var deal = new DealModel(deal_new);
 
@@ -392,33 +375,50 @@ module.exports = function (app){
 
 	//Muestra la vista detallada de una deal en particular
 	app.get('/deals/:id', function(req, res, next){
-		DealModel.findById( req.params.id ).populate('franchises').populate('store').sort("-created").exec( function(err, deal){
-			if(!err){
-				if(deal){
-					console.log(deal);
-					DealModel.find().nor([{ "_id":req.params.id}]).populate('franchises').populate('store').exec( function(err, deals){
-						if(!err){
-							if(deals){
-								QuestionModel.find({'deal':deal._id}).populate('user').populate('deal').exec( function(err, questions){
-									if(!err){
-					
-									console.log(deals.length)
-									res.render('deals/view', {title: 'Oferta', deal : deal, deals:deals, questions:questions});
-									}
-							});
-							}
-						}
+		DealModel.findById( req.params.id )
+		.populate('store')
+		.exec( function(err, deal){
+
+			if(err) throw err;
+
+			console.log(deal);
+
+			if(deal){
+
+				// TODO checkear estouy
+
+				DealModel.find()
+				.nor([{ "_id":req.params.id}])
+				.populate('store')
+				.exec( function(err, deals){
+
+					if(err) throw err;
+						
+					QuestionModel.find({'deal':deal._id})
+					.populate('user')
+					.populate('deal')
+					.exec( function(err, questions){
+						
+						if(err) throw err;
+						
+						res.render('deals/view', {
+							title 			: 'Oferta', 
+							deal  			: deal, 
+							deals 			: deals, 
+							questions 		: questions
+						});
+						
 					});
-				}else{
-					console.log('No se encontro el deal ( ' + req.body.deal_id +' )');
-					res.render('not_found', {title: 'Oferta', user: req.session.user});
-				}
+
+				});
 			}else{
-				console.log('deals - view - '.red.bold + err);
-				res.render('error', {title: 'Oferta', user: req.session.user});
+				console.log('No se encontro el deal ( ' + req.body.deal_id +' )');
+				res.render('not_found', {title: 'Oferta', user: req.session.user});
 			}
-	  });
+
+		});
 	});
+
 
 
 

@@ -52,7 +52,7 @@ block content
 		.form-group
 			label.col-md-4.control-label Fecha de comienzo:
 			.col-md-8
-				input(name='deal[start_date]', type='date', placeholder="dd/mm/yyyy" ,class="required date").form-control#start_date.input-sm
+				input(name='deal[start_date]', type='date', placeholder="dd/mm/yyyy" ,class="required date").form-control.input-sm
 		.form-group
 			label.col-md-4.control-label Hora de comienzo:
 			.col-md-8
@@ -60,7 +60,7 @@ block content
 		.form-group
 			label.col-md-4.control-label Fecha de fin:
 			.col-md-8
-				input(name='deal[end_date]', type='date', placeholder="dd/mm/yyyy" ,class="required date").form-control#end_date.input-sm
+				input(name='deal[end_date]', type='date', placeholder="dd/mm/yyyy" ,class="required date").form-control.input-sm
 		.form-group
 			label.col-md-4.control-label Hora de fin:
 			.col-md-8
@@ -68,11 +68,11 @@ block content
 		.form-group
 			label.col-md-4.control-label Inicio fecha de canje:
 			.col-md-8
-				input(name='deal[start_redeem]', type='date', placeholder="dd/mm/yyyy" ,class="required date").form-control#start_redeem.input-sm
+				input(name='deal[start_redeem]', type='date', placeholder="dd/mm/yyyy" ,class="required date").form-control.input-sm
 		.form-group
 			label.col-md-4.control-label Fin fecha de canje:
 			.col-md-8
-				input(name='deal[end_redeem]', type='date', placeholder="dd/mm/yyyy" ,class="required date").form-control#end_redeem.input-sm
+				input(name='deal[end_redeem]', type='date', placeholder="dd/mm/yyyy" ,class="required date").form-control.input-sm
 		.form-group
 			label.col-md-4.control-label Max. de cupones:
 			.col-md-8
@@ -108,11 +108,13 @@ block content
 			.form-group 
 				label.col-md-4.control-labell Disponible en franquicias:
 				.col-md-8#branches_list
+					-var i = 0
 					-each branch in stores[0].branches
 						.checkbox
 							label
-								input(value="#{branch._id}", name='branch[_id]',  type='checkbox' )
+								input(value="#{branch._id}", name='deal[branches][#{i}]',  type='checkbox' )
 								|#{branch.name} - #{branch.franchise.name}
+						-i++
 		.form-group
 			.col-sm-offset-4.col-sm-8
 				button(type='submit').btn.btn-default Cargar

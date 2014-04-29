@@ -38,7 +38,6 @@ module.exports = function(app){
 		commission_new.sale = sale._id;
 		commission_new.currency = deal.currency
 		commission_new.amount = (deal.seller_percentage)/100*(deal.special_price)*(sale.coupons.length);
-
 		
 	});
 

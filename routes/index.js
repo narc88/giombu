@@ -19,6 +19,7 @@ var questions = require('./questions');
 var payments = require('./payments');
 var sales = require('./sales');
 var commissions = require('./commissions');
+var news = require('./news');
 
 
 var errors = require('./errors');
@@ -49,6 +50,7 @@ module.exports = function(app){
 	payments(app);
 	sales(app);
 	commissions(app);
+	news(app);
 	// error handlers
 	errors(app);
 

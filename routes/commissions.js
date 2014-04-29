@@ -22,7 +22,9 @@ module.exports = function(app){
 		bonus_new.user = user._id
 		bonus_new.promoter = user.promoter._id
 		bonus_new.currency = deal.currency
-		bonus_new.save();
+		bonus_new.save(function(err){
+			app.emit("new_bonus_event", deal);
+		});
 
 		//Commision al promoter
 		var commission_new = new CommissionModel();          
@@ -30,7 +32,9 @@ module.exports = function(app){
 		commission_new.sale = sale._id;
 		commission_new.currency = deal.currency
 		commission_new.amount = (deal.promoter_percentage)/100*(deal.special_price)*(sale.coupons.length);
-		commission_new.save();
+		commission_new.save(function(err){
+			app.emit("commission_event", "Commission", deal, commission_new);
+		});
 
 		//Commission seller
 		var commission_new = new CommissionModel(); 
@@ -38,6 +42,9 @@ module.exports = function(app){
 		commission_new.sale = sale._id;
 		commission_new.currency = deal.currency
 		commission_new.amount = (deal.seller_percentage)/100*(deal.special_price)*(sale.coupons.length);
+		commission_new.save(function(err){
+			app.emit("commission_event", "Commission_Seller", deal, commission_new);
+		});
 		
 	});
 

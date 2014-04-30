@@ -4,41 +4,44 @@ extends ../layout
 block content
 	.col-md-9
 		h2 Oferta
+		a(href='/intranet/deals/edit/#{deal._id}') editar
+		br
+		a(href='eliminar').text-danger eliminar
 
 		h3 Datos generales
 
 		table.table
 			tr
-				td	Estado:
-				td	#{deal.status}
+				td Estado:
+				td #{deal.status}
 			tr
 				td Titulo:
-				td	#{deal.title}
+				td #{deal.title}
 			tr
 				td Subtitulo:
-				td	#{deal.tagline}
+				td #{deal.tagline}
 			tr
-				td	Link:
-				td	#{deal.slug}
+				td Link:
+				td #{deal.slug}
 			tr
-				td	Caracteristicas:
-				td	#{deal.characteristics}
+				td Caracteristicas:
+				td #{deal.characteristics}
 			tr
-				td	Condiciones:
-				td	#{deal.conditions}
+				td Condiciones:
+				td #{deal.conditions}
 
 		br
 		h3 Precios
 
 		table.table
 			tr
-				td	Precio original:
+				td Precio original:
 				td $ #{deal.price} 
 			tr
-				td	Precio Final:
+				td Precio Final:
 				td $ #{deal.special_price} 
 			tr
-				td	Descuento:
+				td Descuento:
 				td $ #{deal.discount} 
 
 		br
@@ -46,17 +49,17 @@ block content
 
 		table.table
 			tr
-				td.td_name Inicio de la oferta:
-				td	#{deal.start_date}
+				td Inicio de la oferta:
+				td #{deal.start_date}
 			tr
-				td.td_name Fin de la oferta:
-				td	#{deal.end_date}
+				td Fin de la oferta:
+				td #{deal.end_date}
 			tr
-				td.td_name Inicio de canje:
-				td	#{deal.start_redeem}
+				td Inicio de canje:
+				td #{deal.start_redeem}
 			tr
-				td.td_name Fin de canje:
-				td	#{deal.end_redeem}
+				td Fin de canje:
+				td #{deal.end_redeem}
 
 		br
 		h3 Cantidad de cupones
@@ -64,10 +67,10 @@ block content
 		table.table
 			tr
 				td Cantidad maxima:
-				td	#{deal.max_coupons}
+				td #{deal.max_coupons}
 			tr
 				td Maxima por usuario:
-				td	#{deal.max_coupons_by_user} 
+				td #{deal.max_coupons_by_user} 
 
 		br
 		h3 Porcentajes
@@ -75,27 +78,27 @@ block content
 		table.table
 			tr
 				td Vendedor:
-				td	#{deal.seller_percentage}%
+				td #{deal.seller_percentage}%
 			tr
 				td Giombu:
-				td	#{deal.giombu_percentage}%
+				td #{deal.giombu_percentage}%
 			tr
 				td Promotor:
-				td	#{deal.promoter_percentage}%
+				td #{deal.promoter_percentage}%
 
 		br
 		h3 Otras
 
 		table.table
 			tr
-				td	Costo de Envío:
+				td Costo de Envío:
 				td #{deal.shipping_cost} $
 			tr
-				td	Tienda:
-				td	#{deal.store.name} 
+				td Tienda:
+				td #{deal.store.name} 
 			tr
-				td	Vendedor:
-				td	#{deal.seller}
+				td Vendedor:
+				td #{deal.seller}
 			tr
-				td	Franquiciante:
-				td	#{deal.franchisor}
+				td Franquiciante:
+				td #{deal.franchisor}

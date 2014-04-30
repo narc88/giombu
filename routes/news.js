@@ -15,6 +15,7 @@ module.exports = function(app){
 			new_new.save(function(err){
 
 			});
+		});
 	});
 
 	app.on('redeem_coupon',function(deal ,sale, code ){
@@ -30,7 +31,7 @@ module.exports = function(app){
 				commission_new.currency = deal.currency
 				commission_new.amount = (deal.promoter_percentage)/100*(deal.special_price)*(sale.coupons.length);
 			}	
-		})
+		});
 		
-	})
+	});
 }

@@ -1,6 +1,7 @@
 var EventModel = require('../models/event').EventModel;
 var CouponModel = require('../models/coupon').CouponModel;
 var BonusModel = require('../models/bonus').BonusModel;
+var DealModel = require('../models/deal').DealModel;
 var CommissionModel = require('../models/commission').CommissionModel;
 
 module.exports = function(app){
@@ -50,18 +51,30 @@ module.exports = function(app){
 
 	app.on('redeem_coupon',function(deal ,sale, code ){
 		//Commission partner
-		StoreModel.find({"branches":{ $in : [sale.branch]}}).populate("branches").exec(function(err, store){
-			if(store){
-				var branch = store.branches.id(sale.branch)
-				var commission_new = new CommissionModel(); 
-				commission_new.user_id = deal.seller;
-				//MARCAR EL CUPON COMO CANJEADO
-				var coupon = deal.sales.coupon.id(code);
-				commission_new.sale = sale._id;
-				commission_new.currency = deal.currency
-				commission_new.amount = (deal.promoter_percentage)/100*(deal.special_price)*(sale.coupons.length);
-			}	
-		})
-		
+		var pos = -1;
+		for (var i = deal.stores.length - 1; i >= 0; i--) {
+			if(deal.stores[i]._id === sale._id){
+				pos = i
+			}else{
+
+			}
+		};
+		if(pos >= 0){
+			StoreModel.find({"branches":{ $in : [sale.branch]}}).populate("branches").exec(function(err, store){
+				if(store){
+					var branch = store.branches.id(sale.branch)
+					var commission_new = new CommissionModel(); 
+					commission_new.user_id = deal.seller;
+					//MARCAR EL CUPON COMO CANJEADO
+					var coupon = deal.sales.coupon.id(code);
+					commission_new.sale = sale._id;
+					commission_new.currency = deal.currency
+					commission_new.amount = (deal.promoter_percentage)/100*(deal.special_price)*(sale.coupons.length);
+					DealModel.update({"sales."+pos+".coupons.$.code":code}, {$set:{"sales."+pos+".coupons.$.status":"Redeemed"}});
+				}	
+			})
+		}else{
+			res.send("No encontrado")
+		}
 	})
 }

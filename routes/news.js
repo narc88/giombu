@@ -17,7 +17,7 @@ module.exports = function(app){
 			});
 	});
 
-	app.on('redeem_coupon',function(deal ,sale, code ){
+	app.on('redeem_coupon', function(deal, sale, code ){
 		//Commission partner
 		StoreModel.find({"branches":{ $in : [sale.branch]}}).populate("branches").exec(function(err, store){
 			if(store){

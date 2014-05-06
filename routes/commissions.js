@@ -49,7 +49,7 @@ module.exports = function(app){
 		
 	});
 
-	app.on('redeem_coupon',function(deal ,sale, code ){
+	app.on('redeem_coupon',function(deal, sale, code ){
 		//Commission partner
 		var pos = -1;
 		for (var i = deal.stores.length - 1; i >= 0; i--) {
@@ -70,7 +70,9 @@ module.exports = function(app){
 					commission_new.sale = sale._id;
 					commission_new.currency = deal.currency
 					commission_new.amount = (deal.promoter_percentage)/100*(deal.special_price)*(sale.coupons.length);
-					DealModel.update({"sales."+pos+".coupons.$.code":code}, {$set:{"sales."+pos+".coupons.$.status":"Redeemed"}});
+					commission_new.save(function(err){
+						DealModel.update({"sales."+pos+".coupons.$.code":code}, {$set:{"sales."+pos+".coupons.$.status":"Redeemed"}});
+					})
 				}	
 			})
 		}else{

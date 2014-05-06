@@ -16,6 +16,21 @@ exports.date_string = function(mongo_date){
 }
 
 //Recibe una fecha string con el formato de javascript
+//Retorna un string del tipo yyyy-mm-dd para cargar en los forms
+exports.date_form = function(mongo_date){
+
+	var date = new Date(mongo_date);
+	var d  = date.getDate();
+	var day = (d < 10) ? '0' + d : d;
+	var m = date.getMonth() + 1;
+	var month = (m < 10) ? '0' + m : m;
+	var yy = date.getYear();
+	var year = (yy < 1000) ? yy + 1900 : yy;
+
+	return year + "-" + month + "-" + day;
+}
+
+//Recibe una fecha string con el formato de javascript
 //Retorna horas y minutos en formato string del tipo HH:MM
 exports.time_string = function(mongo_date){
 

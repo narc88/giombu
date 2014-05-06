@@ -238,25 +238,42 @@ module.exports = function (app){
 	//Llama a la vista de edicion de una deal
 	app.get('/intranet/deals/edit/:deal_id', function(req, res, next){
 		DealModel.findById( req.params.deal_id, function(err, deal){
-			if(!err){
-				if(deal){
-					console.log(deal)
-					console.log('deal - edit - deal encontrado, redirecciono a deal/edit');
-					//Acomodo las fechas y horas para que sean humanamente visibles
-					//estos campos deben ser eliminados antes de realizar el update
-					deal.start_time = util.time_string(deal.start_date);
-					deal.end_time = util.time_string(deal.end_date);
-					deal.start_date_string = util.date_string(deal.start_date);
-					deal.end_date_string = util.date_string(deal.end_date);
-					deal.start_redeem_string = util.date_string(deal.start_redeem);
-					deal.end_redeem_string = util.date_string(deal.end_redeem);
-					res.render('deals/edit', {title: 'deal Edit', user: req.session.user, deal : deal});
-				}else{
-					console.log('deal - edit - No se encontro el deal ( ' + req.params.deal_id +' )');
-				}
+			if(err) throw err;
+			if(deal){
+				var extra = {};
+				//Acomodo las fechas y horas para que sean humanamente visibles
+				//estos campos deben ser eliminados antes de realizar el update
+				extra.start_time = util.time_string(deal.start_date);
+				extra.end_time = util.time_string(deal.end_date);
+				extra.start_date = util.date_form(deal.start_date);
+				extra.end_date = util.date_form(deal.end_date);
+				extra.start_redeem = util.date_form(deal.start_redeem);
+				extra.end_redeem = util.date_form(deal.end_redeem);
+
+				console.log(deal);
+				console.log(extra);
+
+				StoreModel.findById( deal.store )
+				.populate('franchisor')
+				.populate('branches.franchise')
+				.exec(function(err, store){
+
+					if (err) throw err;
+
+					res.render('deals/edit', {
+						title 		: 'deal Edit', 
+						user 		: req.session.user, 
+						deal 		: deal,
+						store 		: store,
+						extra 		: extra
+					});
+
+				});
+
+				
+
 			}else{
-				console.log('deal - edit - '.red.bold + err);
-				res.redirect('/');
+				console.log('deal - edit - No se encontro el deal ( ' + req.params.deal_id +' )');
 			}
 		});	
 	});
@@ -267,9 +284,9 @@ module.exports = function (app){
 	app.post('/deals/update', function(req, res, next){
 
 		console.log('deal - update'.cyan.bold);
-		console.log('deal - update - Busco el deal ( ' + req.body.deal_id +' )');
+		console.log('deal - update - Busco el deal ( ' + req.body.deal._id +' )');
 
-		DealModel.findById( req.body.deal_id , function(err, deal){
+		DealModel.findById( req.body.deal._id , function(err, deal){
 			if(!err){
 				if(deal){
 					console.log('deal - update - Se encontro el deal ( ' + req.body.deal_id +' )');
@@ -281,21 +298,17 @@ module.exports = function (app){
 					console.log("editado")
 					//Tomo los datos del front-end y los formateo en los campos de formato date correspondiente
 					//luego elemino los campos que no son necesario y actualizo la deal
-					edited_deal.start_date = util.date_mongo(edited_deal.start_date_string, edited_deal.start_time);
-					delete edited_deal.start_date_string;
+					edited_deal.start_date = util.date_mongo(edited_deal.start_date, edited_deal.start_time);
 					delete edited_deal.start_time;
 
-					edited_deal.end_date = util.date_mongo(edited_deal.end_date_string, edited_deal.end_time);
-					delete edited_deal.end_date_string;
+					edited_deal.end_date = util.date_mongo(edited_deal.end_date, edited_deal.end_time);
 					delete edited_deal.end_time;
 
-					edited_deal.start_redeem = util.date_mongo(edited_deal.start_redeem_string, '00:00');
-					delete edited_deal.start_redeem_string;
-
-					edited_deal.end_redeem = util.date_mongo(edited_deal.end_redeem_string, '00:00');
-					delete edited_deal.end_redeem_string;
+					edited_deal.start_redeem = util.date_mongo(edited_deal.start_redeem, '00:00');
+					edited_deal.end_redeem = util.date_mongo(edited_deal.end_redeem, '00:00');
 
 
+					delete edited_deal._id;
 					for (field in edited_deal){
 						if(edited_deal[field] != ''){
 							deal[field] = edited_deal[field];
@@ -303,7 +316,7 @@ module.exports = function (app){
 						}
 					}
 
-					deal.update(function (err) {
+					deal.save(function (err) {
 						if (!err) {
 							console.log('deal - update - Guardo una nueva deal');
 							console.log('deal - update - Redirecciono a deal/create');

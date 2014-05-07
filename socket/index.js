@@ -13,7 +13,7 @@ module.exports = function(err, socket, session){
 
 
 	//Esta bueno distribuir las llamadas en modulos para evitar generar una tormenta de codigo
-	require('./users')(socket);
+	require('./users')(socket, session);
 
 
 };

@@ -5,9 +5,9 @@ html
 		title Giombu
 		include includes/scripts
 	body(style="background-image:url('/img/background.jpg');background-size: 100%;background-attachment:fixed;")
-		script(rel='text/javascript', src='http://localhost:3000/socket.io/socket.io.js')
-		script(type="text/javascript").
-			var socket = io.connect('http://localhost');
+		script(rel='text/javascript', src='socket.io/socket.io.js')
+		script(rel="text/javascript").
+			var socket = io.connect('http://localhost:3000');
 			socket.on('news', function (data) {
 				console.log(data);
 				socket.emit('my other event', { my: 'data' });

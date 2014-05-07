@@ -22,10 +22,11 @@ mongoose.connect("mongodb://giombu:giombu@oceanic.mongohq.com:10021/giombu", fun
 
 	//SOCKET IO
 	var server =  server = require('http').createServer(app);
+
 	var io = require('socket.io').listen(server);
 	io.sockets.on('connection', require('./socket'));
 
-	app.listen(app.get('port'), function(){
+	server.listen(app.get('port'), function(){
 	  console.log('Express server listening on port ' + app.get('port'));
 	});
 });

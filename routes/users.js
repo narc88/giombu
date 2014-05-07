@@ -11,17 +11,6 @@ var CityModel = require('../models/city').CityModel;
 
 var util = require('../helpers/util');
 var encrypter = require('../helpers/encryption');
-// var io = require('socket.io').listen(2000);
-
-// io.sockets.on('connection', function (socket) {
-// 	console.log("emit")
-//     socket.emit('LoggedIn', {id : user._id});
-//     socket.on('LoggedInSocketId', function (user) {
-//         req.session.expose.socket_id = socket.id;
-//         console.log("Socket")
-//         console.log(req.session.expose.socket_id);
-//     });
-// });
 
 module.exports = function(app){
 		

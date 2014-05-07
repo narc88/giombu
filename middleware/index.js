@@ -1,7 +1,13 @@
 var path = require('path');
 var express = require('express');
-module.exports = function(app){
+var SessionSockets = require('session.socket.io');
+var sessionSockets;
 
+module.exports = function(app, io){
+
+	var secret_sauce = 'this_is_my_secret_sauce';
+	var sessionStore = new express.session.MemoryStore();
+	var cookieParser = express.cookieParser(secret_sauce);
 
 	// all environments
 	app.set('port', process.env.PORT || 3000);
@@ -14,8 +20,10 @@ module.exports = function(app){
 	app.use(express.methodOverride());
 	app.use(express.static(path.join(__dirname, '../public')));
 	app.set('photos',path.join(__dirname,'../public/photos/'));
-	app.use(express.cookieParser());
-	app.use(express.session({ secret: 'giombu-giombu-secret' }));
+	app.use(cookieParser);
+	app.use(express.session({
+		store :  sessionStore 
+	}));
 	app.use(express.bodyParser());
 	// expose session to views
 	app.use(function (req, res, next) {
@@ -31,5 +39,10 @@ module.exports = function(app){
 	if ('development' == app.get('env')) {
 		app.use(express.errorHandler());
 	}
+
+
+	//Socket IO
+	sessionSockets = new SessionSockets(io, sessionStore, cookieParser);
+	sessionSockets.on('connection', require('../socket'));
 
 }

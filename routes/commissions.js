@@ -71,7 +71,9 @@ module.exports = function(app){
 					commission_new.currency = deal.currency
 					commission_new.amount = (deal.promoter_percentage)/100*(deal.special_price)*(sale.coupons.length);
 					commission_new.save(function(err){
-						DealModel.update({"sales."+pos+".coupons.$.code":code}, {$set:{"sales."+pos+".coupons.$.status":"Redeemed"}});
+						var setstring = "sales."+pos+".coupons.$.status";
+						var querystring = "sales."+pos+".coupons.$.code"
+						DealModel.update({querystring:code}, {$set:{setstring:"Redeemed"}});
 					})
 				}	
 			})

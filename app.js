@@ -18,7 +18,8 @@ mongoose.connect("mongodb://giombu:giombu@oceanic.mongohq.com:10021/giombu", fun
 	require('./middleware')(app);
 	require('./routes')(app);
 	util.inherits(app, EventEmitter);
-	http.createServer(app).listen(app.get('port'), function(){
+	var io = require('socket.io').listen(app);
+	app.listen(app.get('port'), function(){
 	  console.log('Express server listening on port ' + app.get('port'));
 	});
 });

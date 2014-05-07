@@ -52,7 +52,7 @@ module.exports = function(app){
 	commissions(app);
 	news(app);
 	// error handlers
-	errors(app);
+	//errors(app);
 
 	//DEBUG!
 	require('./debug')(app);

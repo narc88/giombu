@@ -1,30 +1,17 @@
 .menu
-	a(href='/intranet/users/profile') 
-		#profile
-			.thumbnail 
-				-if (typeof user !== "undefined")
-					-if (typeof user.image === "undefined")
-						img(src="/images/mr_bean.jpg", class='img-thumbnail')
-					-else
-						img(class='img-thumbnail', src="/images/"+user.image[0].filename.toString())
-				-else
-					img(class='img-thumbnail', src="/images/mr_bean.jpg")
-			.data 
-				-if (!(typeof user === "undefined"))
-					p #{user.username} #{user.partner}
-					a(href='/users/edit/') Editar Perfil
+	include profile
 	ul(class="nav nav-pills nav-stacked")
 		li.nav-header Ofertas
 		li
-			a(href='/intranet/deals/list') Ver Activas
+			a(href='/deals') Ver Activas
 		li
-			a(href='/intranet/deals/list') Ver Próximas
+			a(href='/deals') Ver Próximas
 		li
 			a(href='/deals/create') Crear Oferta
 
 		li.nav-header Menu
 		li
-			a(href='/intranet/news') Noticias
+			a(href='/news') Noticias
 		//-if (!(typeof user.promoter === "undefined"))
 			li.nav-header Promotores
 			li

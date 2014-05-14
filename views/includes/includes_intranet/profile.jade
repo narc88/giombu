@@ -1,0 +1,14 @@
+a(href='/users/#{expose.user._id}') 
+	#profile
+		.thumbnail 
+			if (typeof expose.user !== "undefined")
+				if (typeof expose.user.image === "undefined")
+					img(src="/images/mr_bean.jpg", class='img-thumbnail')
+				else
+					img(class='img-thumbnail', src="/images/"+user.image[0].filename.toString())
+			else
+				img(class='img-thumbnail', src="/images/mr_bean.jpg")
+		.data 
+			if (!(typeof expose.user === "undefined"))
+				p #{expose.user.username} #{expose.user.partner}
+				a(href='/users/edit/#{expose.user._id}') Editar Perfil

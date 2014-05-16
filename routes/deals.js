@@ -20,7 +20,8 @@ var DealStatus = require('../models/deal').DealStatus;
 
 module.exports = function (app){
 
-	//Tenemos que agregar el filtro por franquicia por defecto, o seleccionada. Nico 21/04
+	//Tenemos que agregar el filtro por franquicia por defecto, o seleccionada. Nico 21/04 - Si. Benji 12/05
+	//REVISADO
 	app.get('/deals', function(req, res, next){
 		DealModel.find( {} ).sort("-created").exec(function(err, deals){
 			
@@ -35,7 +36,8 @@ module.exports = function (app){
 	});
 
 	//Llama a la vista de creacion de una nueva deal
-	app.get('/deals/create', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
+	//REVISADO
+	app.get('/intranet/deals/create', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
 		console.log('deals - create'.cyan.bold);
 		StoreModel.find( { creator : req.session.user._id })
 		.populate('franchisor')
@@ -54,7 +56,7 @@ module.exports = function (app){
 
 
 	//Agrega una nueva deal
-	app.post('/deals/add', function (req, res, next) {
+	app.post('/intranet/deals/add', function (req, res, next) {
 
 		var deal_new = req.body.deal;
 
@@ -91,7 +93,7 @@ module.exports = function (app){
 
 
 	//Muestra deals activos.
-	app.get('/deals/home', function(req, res, next){
+	app.get('/intranet/deals/home', function(req, res, next){
 		if(req.session.user){
 			if(req.session.user.selected_franchise){
 				DealModel.find( {} ).limit(10).where('franchises').in([req.session.user.selected_franchise._id]).sort("-created")
@@ -138,25 +140,6 @@ module.exports = function (app){
 	});
 
 
-	//Muestra la vista detallada de una deal en particular
-	app.get('/intranet/deals/view/:id', function(req, res, next){
-		DealModel.findById( req.params.id ).populate('franchises').populate('store').exec( function(err, deal){
-			if(!err){
-				if(deal){
-					console.log(deal);
-					res.render('deals/view', {title: 'Oferta', user: req.session.user, deal : deal});
-				}else{
-					console.log('deals - view - No se encontro el deal ( ' + req.body.deal_id +' )');
-					res.render('not_found', {title: 'Oferta', user: req.session.user});
-				}
-			}else{
-				console.log('deals - view - '.red.bold + err);
-				res.render('not_found', {title: 'Oferta', user: req.session.user});
-			}
-	  });
-	});
-
-
 	app.get('/intranet/deals/erase_image/:id/:image_id', function (req, res, next) {
 	    DealModel.update({_id: req.params.id}, 
 	        {$pull: {images: {_id: req.params.image_id}}}, {upsert: true}, function(err, deal){
@@ -192,26 +175,6 @@ module.exports = function (app){
 		});
 
 	});
-
-
-
-	//No se que hace esto?
-	exports.review = function(req, res, next){
-		DealModel.findById( req.params.id , function(err, deal){
-			if(!err){
-				if(deal){
-					console.log('deals - view - Se encontro el deal ( ' + req.params.id +' )');
-					res.render('deals/review', {title: 'Deal', user: req.session.user,deal : deal});
-				}else{
-					console.log('deals - view - No se encontro el deal ( ' + req.body.deal_id +' )');
-				}
-			}else{
-				console.log('deals - view - '.red.bold + err);
-			}
-	  });
-	}
-
-
 	
 
 	//Lista las deals
@@ -236,6 +199,7 @@ module.exports = function (app){
 
 
 	//Llama a la vista de edicion de una deal
+	//REVISADO
 	app.get('/intranet/deals/edit/:deal_id', function(req, res, next){
 		DealModel.findById( req.params.deal_id, function(err, deal){
 			if(err) throw err;
@@ -281,61 +245,44 @@ module.exports = function (app){
 
 
 	//Actualiza los campos de la deal
-	app.post('/deals/update', function(req, res, next){
-
-		console.log('deal - update'.cyan.bold);
-		console.log('deal - update - Busco el deal ( ' + req.body.deal._id +' )');
+	app.post('/intranet/deals/update', function(req, res, next){
 
 		DealModel.findById( req.body.deal._id , function(err, deal){
-			if(!err){
-				if(deal){
-					console.log('deal - update - Se encontro el deal ( ' + req.body.deal_id +' )');
-					
-					//Edicion del deal
-					//Hacer que solo se graben los campos editados
-					edited_deal = req.param('deal');
-					console.log(edited_deal);
-					console.log("editado")
-					//Tomo los datos del front-end y los formateo en los campos de formato date correspondiente
-					//luego elemino los campos que no son necesario y actualizo la deal
-					edited_deal.start_date = util.date_mongo(edited_deal.start_date, edited_deal.start_time);
-					delete edited_deal.start_time;
+			if(err) throw err;
 
-					edited_deal.end_date = util.date_mongo(edited_deal.end_date, edited_deal.end_time);
-					delete edited_deal.end_time;
+			if(deal){
+				
+				//Edicion del deal
+				//Hacer que solo se graben los campos editados
+				edited_deal = req.body.deal;
+				//Tomo los datos del front-end y los formateo en los campos de formato date correspondiente
+				//luego elemino los campos que no son necesario y actualizo la deal
+				edited_deal.start_date = util.date_mongo(edited_deal.start_date, edited_deal.start_time);
+				delete edited_deal.start_time;
 
-					edited_deal.start_redeem = util.date_mongo(edited_deal.start_redeem, '00:00');
-					edited_deal.end_redeem = util.date_mongo(edited_deal.end_redeem, '00:00');
+				edited_deal.end_date = util.date_mongo(edited_deal.end_date, edited_deal.end_time);
+				delete edited_deal.end_time;
+
+				edited_deal.start_redeem = util.date_mongo(edited_deal.start_redeem, '00:00');
+				edited_deal.end_redeem = util.date_mongo(edited_deal.end_redeem, '00:00');
 
 
-					delete edited_deal._id;
-					for (field in edited_deal){
-						if(edited_deal[field] != ''){
-							deal[field] = edited_deal[field];
-							console.log('deal - update - Edito el campo '+ field);
-						}
+				delete edited_deal._id;
+				
+				for (field in edited_deal){
+					if(edited_deal[field] != ''){
+						deal[field] = edited_deal[field];
+						console.log('deal - update - Edito el campo '+ field);
 					}
-
-					deal.save(function (err) {
-						if (!err) {
-							console.log('deal - update - Guardo una nueva deal');
-							console.log('deal - update - Redirecciono a deal/create');
-							res.render('deals/view', {title: 'deal View', user : req.session.user, deal : deal});
-						} else {
-							console.log('deal - update - '.red.bold + err);
-							console.log('deal - update - Redirecciono a /');
-							res.redirect('/');
-						}
-
-					});
-
-
-
-				}else{
-					console.log('deal - edit - No se encontro el deal ( ' + req.body.deal_id +' )');
 				}
+
+				deal.save(function (err) {
+					if (err) throw err;
+					res.render('deals/view', {title: 'deal View', user : req.session.user, deal : deal});
+				});
+
 			}else{
-				console.log('deal - edit - '.red.bold + err);
+				console.log('deal - edit - No se encontro el deal ( ' + req.body.deal_id +' )');
 			}
 
 	  });
@@ -345,7 +292,7 @@ module.exports = function (app){
 
 
 	//Elimina una deal
-	app.get('/deals/remove/:deal_id', function(req, res, next){
+	app.get('/intranet/deals/remove/:deal_id', function(req, res, next){
 
 		console.log('deals - remove'.cyan.bold);
 		console.log('deals - remove - Busco el deal ( ' + req.params.deal_id +' )');
@@ -387,7 +334,7 @@ module.exports = function (app){
 	});
 
 	//Muestra la vista detallada de una deal en particular
-	app.get('/deals/:id', function(req, res, next){
+	app.get('/intranet/deals/:id', function(req, res, next){
 		DealModel.findById( req.params.id )
 		.populate('store')
 		.exec( function(err, deal){

@@ -27,13 +27,13 @@ var errors = require('./errors');
 module.exports = function(app){
 
 	//Root
-	app.get('/', function(req, res){
+	/*app.get('/', function(req, res){
 
 		console.log('session');
 		console.log(req.session);
 
 		res.render('index', { title: 'Giombu' });
-	});
+	});*/
 
 	users(app);
 	promoters(app);

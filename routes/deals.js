@@ -93,49 +93,27 @@ module.exports = function (app){
 
 
 	//Muestra deals activos.
-	app.get('/intranet/deals/home', function(req, res, next){
-		if(req.session.user){
-			if(req.session.user.selected_franchise){
-				DealModel.find( {} ).limit(10).where('franchises').in([req.session.user.selected_franchise._id]).sort("-created")
-				.exec(function (err, deals) {
-					
-					  if (err) return handleError(err);
-					if(deals){
-						console.log('Filtrando');
-						var messagge = req.session.messagge;
-						delete req.session.messagge
-					  res.render('deals/home', {title: 'Ofertas', user:req.session.user, deals:deals, messagge:messagge});
-					}else{
-					  res.render('not_found', {title: 'Oferta no encontrada', user: req.session.user});
-					}
-				});
-			}else{
-				DealModel.find( {} ).limit(10).sort("-created")
-					.exec(function (err, deals) {
-						if (err) return handleError(err);
-						if(deals){
-							console.log('Sin franquicia'+deals.length);
-							var messagge = req.session.messagge;
-							delete req.session.messagge
-						  res.render('deals/home', {title: 'Ofertas', user:req.session.user, deals:deals, messagge:messagge});
-						}else{
-						  res.render('not_found', {title: 'Oferta no encontrada', user: req.session.user});
-						}
-					});
-			}
-		}else{
-			DealModel.find().limit(10).sort("-created")
+	app.get('/', function(req, res, next){
+		if(req.session.selected_franchise){
+			DealModel.find( {} ).limit(10).where('franchises').in([req.session.user.selected_franchise._id]).sort("-created")
 			.exec(function (err, deals) {
-				 if (err) return handleError(err);
-				if(deals){		
-					console.log('Deslogueado'+deals.length);
-					var messagge = req.session.messagge;
-					delete req.session.messagge
-				  res.render('deals/home', {title: 'Ofertas', user:req.session.user, deals:deals, messagge:messagge});
+				if (err) return handleError(err);
+				if(deals){
+				  res.render('deals/home', {title: 'Ofertas', deals:deals});
 				}else{
-				  res.render('not_found', {title: 'Oferta no encontrada', user: req.session.user});
+				  res.render('not_found', {title: 'No se encuentran ofertas'});
 				}
 			});
+		}else{
+			DealModel.find( {} ).limit(10).sort("-created")
+				.exec(function (err, deals) {
+					if (err) return handleError(err);
+					if(deals){
+					  res.render('deals/home', {title: 'Ofertas', deals:deals});
+					}else{
+					  res.render('not_found', {title: 'No se encuentran ofertas'});
+					}
+				});
 		}
 	});
 

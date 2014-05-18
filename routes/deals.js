@@ -23,7 +23,7 @@ module.exports = function (app){
 	//Tenemos que agregar el filtro por franquicia por defecto, o seleccionada. Nico 21/04 - Si. Benji 12/05
 	//REVISADO
 	app.get('/deals', function(req, res, next){
-		DealModel.find( {} ).sort("-created").exec(function(err, deals){
+		DealModel.find( {} ).sort("-created").populate("images").exec(function(err, deals){
 			
 			if(err) throw err;
 
@@ -54,6 +54,30 @@ module.exports = function (app){
 		});
 	});
 
+	//Muestra deals activos.
+	app.get('/', function(req, res, next){
+		if(req.session.selected_franchise){
+			DealModel.find( {} ).limit(10).where('franchises').populate("images").in([req.session.user.selected_franchise._id]).sort("-created")
+			.exec(function (err, deals) {
+				if (err) return handleError(err);
+				if(deals){
+				  res.render('deals/home', {title: 'Ofertas', deals:deals});
+				}else{
+				  res.render('not_found', {title: 'No se encuentran ofertas'});
+				}
+			});
+		}else{
+			DealModel.find( {} ).limit(10).sort("-created").populate("images")
+				.exec(function (err, deals) {
+					if (err) return handleError(err);
+					if(deals){
+					  res.render('deals/home', {title: 'Ofertas', deals:deals});
+					}else{
+					  res.render('not_found', {title: 'No se encuentran ofertas'});
+					}
+				});
+		}
+	});
 
 	//Agrega una nueva deal
 	app.post('/intranet/deals/add', function (req, res, next) {
@@ -92,30 +116,7 @@ module.exports = function (app){
 	});
 
 
-	//Muestra deals activos.
-	app.get('/', function(req, res, next){
-		if(req.session.selected_franchise){
-			DealModel.find( {} ).limit(10).where('franchises').in([req.session.user.selected_franchise._id]).sort("-created")
-			.exec(function (err, deals) {
-				if (err) return handleError(err);
-				if(deals){
-				  res.render('deals/home', {title: 'Ofertas', deals:deals});
-				}else{
-				  res.render('not_found', {title: 'No se encuentran ofertas'});
-				}
-			});
-		}else{
-			DealModel.find( {} ).limit(10).sort("-created")
-				.exec(function (err, deals) {
-					if (err) return handleError(err);
-					if(deals){
-					  res.render('deals/home', {title: 'Ofertas', deals:deals});
-					}else{
-					  res.render('not_found', {title: 'No se encuentran ofertas'});
-					}
-				});
-		}
-	});
+	
 
 
 	app.get('/intranet/deals/erase_image/:id/:image_id', function (req, res, next) {

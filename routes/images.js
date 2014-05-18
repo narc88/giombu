@@ -52,7 +52,7 @@ module.exports = function(app){
 		}
 	}
 
-	app.post('/images/upload/:param/:image_id', save_image(app.get('photos')));
+	app.post('/images/upload/:param/:elem_id', save_image(app.get('photos')));
 
 	var delete_image = function(dir){
 		return function(req,res){

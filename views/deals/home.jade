@@ -8,8 +8,8 @@ block content
 			-var param = 'deals'
 			include ../partials/images/carousel
 			.other_deals
-				-for (var i = 1; i < deals.length - 1; i++)
-					-var deal = deals[i]
+				-for (var i = 0; i < 10 - 1; i++)
+					-var deal = deals[0]
 					include ../partials/deals/deal
 		else
 			p No hay ofertas de esta categoría

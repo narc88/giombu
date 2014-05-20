@@ -358,6 +358,38 @@ module.exports = function (app){
 		});
 	});
 
+	app.get('/deals/:id', function(req, res, next){
+		DealModel.findById( req.params.id )
+		.populate('store').populate("images")
+		.exec( function(err, deal){
+			if(err) throw err;
+			if(deal){
+				DealModel.find()
+				.nor([{ "_id":req.params.id}])
+				.populate('store').populate("images")
+				.exec( function(err, deals){
+					if(err) throw err;
+					QuestionModel.find({'deal':deal._id})
+					.populate('user')
+					.populate('deal')
+					.exec( function(err, questions){
+						if(err) throw err;
+						res.render('deals/show', {
+							title 			: 'Oferta', 
+							deal  			: deal, 
+							deals 			: deals, 
+							questions 		: questions
+						});
+					});
+				});
+			}else{
+				console.log('No se encontro el deal ( ' + req.body.deal_id +' )');
+				res.render('not_found', {title: 'Oferta', user: req.session.user});
+			}
+
+		});
+	});
+
 
 
 

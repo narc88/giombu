@@ -6,6 +6,8 @@ block content
 			-var images = deals[0].images
 			-var id = deals[0]._id
 			-var param = 'deals'
+			-var title = deals[0].title
+			-var description = deals[0].characteristics
 			include ../partials/images/carousel
 			.other_deals
 				-for (var i = 0; i < 10 - 1; i++)

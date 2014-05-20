@@ -11,10 +11,15 @@ div(id="carousel#{id}", class="carousel slide", data-ride="carousel")
 			-if (i == 0)
 				.item.active
 					img(src="/photos/#{param}/#{image.filename}" , alt="#{image.filename}")
+				.carousel-caption
+					h3 #{title}
+					p #{description}
 			-else
 				.item
 					img(src="/photos/#{param}/#{image.filename}" , alt="#{image.filename}")
 				.carousel-caption
+					h3 #{title}
+					p #{description}
 	a(class="left carousel-control", href="#carousel#{id}", data-slide="prev")
 		span(class="glyphicon glyphicon-chevron-left")
 	a(class="right carousel-control", href="#carousel#{id}", data-slide="next")

@@ -6,10 +6,12 @@ block content
 			-var images = deals[0].images
 			-var id = deals[0]._id
 			-var param = 'deals'
+			-var title = deals[0].title
+			-var description = deals[0].characteristics
 			include ../partials/images/carousel
 			.other_deals
-				-for (var i = 1; i < deals.length - 1; i++)
-					-var deal = deals[i]
+				-for (var i = 0; i < 10 - 1; i++)
+					-var deal = deals[0]
 					include ../partials/deals/deal
 		else
 			p No hay ofertas de esta categoría

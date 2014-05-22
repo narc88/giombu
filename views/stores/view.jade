@@ -36,19 +36,13 @@ block content
 				button(class="close", data-dismiss="modal", aria-hidden="true") &times
 				h4 Comisiones
 			.modal-body
-				//- .stores_comisiones
-				//- 	a(href="/intranet/users/view/#{store.branches[0].partner._id}")  #{store.branches[0].partner.username}
-				//- 	table.table_commissions
-				//- 		th Cantidad 
-				//- 		th Fecha Creacion
-				//- 		-each commission in store.branches[0].partner.partner_commissions
-				//- 			a(href="/deals/#{commission.deal}")
-				//- 					tr
-				//- 						td
-				//- 							p #{commission.amount}
-				//- 						td 
-				//- 							p #{commission.created}
-
+		-var route_name = "stores"
+		-var get_id = store._id
+		include ../includes/image_upload
+		-for (var i = store.images.length - 1; i >= 0; i--)
+			-var image = store.images[i]
+			-var param ="stores"
+			include ../partials/store/image_list
 
 
 

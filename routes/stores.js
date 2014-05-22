@@ -155,30 +155,22 @@ module.exports = function(app){
 	});
 
 
-	app.get('/stores/view/:id', function(req, res, next){
-
-		console.log('store - view'.cyan.bold);
-		console.log('store - view - Busco el store ( ' + req.params.id +' )');
-
-		StoreModel.findById( req.params.id ).exec(function(err, store){
+	app.get('/stores/:id', function(req, res, next){
+		StoreModel.findById( req.params.id ).populate("images").exec(function(err, store){
 			if(!err){
 				if(store){
 					var callback = function(){
-						res.render('stores/view', {title: 'store', store : store, user:req.session.user});
+						res.render('stores/view', {title: 'store', store : store});
 					}
-					console.log('store - view - Se encontro el store ( ' + req.params.id +' )');
 					StoreModel.populate(store, {
 						path: 'branches.partner'}
 						, callback)
-
-
 				}else{
 					console.log('store - view - No se encontro el store ( ' + req.params.id +' )');
 				}
 			}else{
 				console.log('store - view - '.red.bold + err);
 			}
-
 		});
 	});
 

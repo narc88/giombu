@@ -6,8 +6,8 @@ var FranchiseSchema = new mongoose.Schema({
 	is_default			: { type: Boolean },
 	timezone			: { type: Number},
 	franchisor			: { type: mongoose.Schema.ObjectId, ref: 'Franchisor' },
-	created    		    :  {type: Date, default: Date.now },
-	modified			:  {type: Date, default: Date.now }	
+	created    		    : {type: Date, default: Date.now },
+	modified			: {type: Date, default: Date.now }	
 });	
 
 exports.FranchiseModel = mongoose.model('Franchise', FranchiseSchema);

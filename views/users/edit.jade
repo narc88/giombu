@@ -6,28 +6,29 @@ block content
 	h3 Editar mi perfil
 	.form_edit_profile
 		form(method='post',id="users_edit", action='/users/update/')
+			input(name='user[_id]', type="hidden", , value='#{user._id}')
 			label Nombre de Usuario:
-				input(name='username', type='text', value='#{user.username}' ,class="required") 
+				input(name='user[username]', type='text', value='#{user.username}' ,class="required") 
 			label Nombre completo:
-				input(name='name', type='text', value='#{user.name}' ,class="required") 
+				input(name='user[name]', type='text', value='#{user.name}' ,class="required") 
 			label Apellido(s):
-				input(name='lname', type='text', value='#{user.lname}' ,class="required") 
+				input(name='user[lname]', type='text', value='#{user.lname}' ,class="required") 
 			label Email:
-				input(name='email', type='text', value='#{user.email}'  ,class="required email") 
+				input(name='user[email]', type='text', value='#{user.email}'  ,class="required email") 
 			label Phone:
-				input(name='phone', type='text', value='#{user.phone}')
+				input(name='user[phone]', type='text', value='#{user.phone}')
 			label Cell Phone:
-				input(name='mobile', type='text', value='#{user.mobile}') 
+				input(name='user[mobile]', type='text', value='#{user.mobile}') 
 			label Direccion: 
-				input(name='address', type='text', value='#{user.address}') 
+				input(name='user[address]', type='text', value='#{user.address}') 
 			label Pais:
-				input(name='country', type='text', value='#{user.country}') 
+				input(name='user[country]', type='text', value='#{user.country}') 
 			label Provincia:
-				input(name='state', type='text', value='#{user.state}')
+				input(name='user[state]', type='text', value='#{user.state}')
 			label Ciudad:
-				input(name='city', type='text', value='#{user.city}' ,class="required")
+				input(name='user[city]', type='text', value='#{user.city}' ,class="required")
 			label Zip:
-				input(name='zip', type='text', value='#{user.zip}') 
+				input(name='user[zip]', type='text', value='#{user.zip}') 
 			br
 			input.enviar(name='submit', type='submit')
 			hr

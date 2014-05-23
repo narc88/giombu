@@ -24,18 +24,41 @@ var DealSchema = new mongoose.Schema({
 	promoter_percentage	: { type: Number, required: true, min:0, max:99 },
 	status				: { type: String },
 	shipping_cost		: { type: Number},
-	store   			: { type: mongoose.Schema.ObjectId, ref: 'Store' },
-	seller   			: { type: mongoose.Schema.ObjectId, ref: 'Seller' },
-	franchises  		: [{ type: mongoose.Schema.ObjectId, ref: 'Franchise' }],
+	branches   			: [{ type: mongoose.Schema.ObjectId, ref: 'Branch' }],
+	seller   			: { type: mongoose.Schema.ObjectId, ref: 'User' },
+	// franchises  		: [{ type: mongoose.Schema.ObjectId, ref: 'Franchise' }],
+	store				: { type: mongoose.Schema.ObjectId, ref: 'Store' },
 	currency	   		: { type: mongoose.Schema.ObjectId, ref: 'Currency' },
 	//Peso para ordenarlas
 	weight				: { type: Number, default: 10 },
 	//Compras realizadas
 	sales				: [SaleSchema],
 	//Imagenes
-	images 				: [ImageSchema],
+	images 				: [{ type: mongoose.Schema.ObjectId, ref: 'Image' }],
 	created    		    : { type: Date, default: Date.now },
 	modified        	: { type: Date, default: Date.now }
 })
 DealSchema.set('versionKey', false);
 exports.DealModel = mongoose.model('Deal', DealSchema);
+
+
+exports.DealStatus = (function(){
+	var draft = 'draft';
+	var active = 'active';
+	var closed = 'closed';
+
+	return{
+		list 	 	: function(){
+			return [draft, active, closed];
+		},
+		getDraft 	: function(){
+			return draft;
+		},
+		getActive 	: function(){
+			return active;
+		},
+		getClosed 	: function(){
+			return closed;
+		}
+	}
+})();

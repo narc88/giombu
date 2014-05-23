@@ -1,0 +1,9 @@
+.col-sm-4.col-md-3
+	.thumbnail
+		img(src="/stores/#{store.images[0].filename}")
+		.caption
+			h3 #{store.name} 
+			p #{store.about} 
+			p #{store.email} 
+			p 
+				a(class="btn btn-primary", role="button", href="/stores/{store._id}")

@@ -1,4 +1,4 @@
-
+var UserRoles = require('../models/user').UserRoles;
 
 exports.user = function (req, res, next) {
 	if (!req.session.user) {
@@ -9,47 +9,67 @@ exports.user = function (req, res, next) {
 }
 
 exports.promoter = function (req, res, next) {
-	if (!req.session.user.promoter) {
-		res.render('error');
+	var index = req.session.user.roles.indexOf(UserRoles.getPromoter());
+	if (index == -1) {
+		res.render('error', {
+			description : 'El usuario logueado no es promotor'
+		});
 	} else {
 		next();
 	}
 }
 
 exports.seller = function (req, res, next) {
-	if (!req.session.user.seller) {
-		res.render('error');
+		var index = req.session.user.roles.indexOf(UserRoles.getSeller());
+	if (index == -1) {
+		res.render('error', {
+			description : 'El usuario logueado no es vendedor'
+		});
 	} else {
 		next();
 	}
 }
 
 exports.partner = function (req, res, next) {
-	if (!req.session.user.partner) {
-		res.render('error');
+
+	var index = req.session.user.roles.indexOf(UserRoles.getPartner());
+	if (index == -1) {
+		res.render('error', {
+			description : 'El usuario logueado no es socio'
+		});
 	} else {
 		next();
 	}
 }
+
 exports.member = function (req, res, next) {
-	if (!util.has_role("member",req.session.user.roles)) {
-		res.render('error');
+	var index = req.session.user.roles.indexOf(UserRoles.getMember());
+	if (index == -1) {
+		res.render('error', {
+			description : 'El usuario logueado no es miembro'
+		});
 	} else {
 		next();
 	}
 }
 
 exports.generalAdministrator = function (req, res, next) {
-	if (!util.has_role("generaladministrator",req.session.user.roles)) {
-		res.render('error');
+	var index = req.session.user.roles.indexOf(UserRoles.getGeneralAdministrator());
+	if (index == -1) {
+		res.render('error', {
+			description : 'El usuario logueado no es Administrador General'
+		});
 	} else {
 		next();
 	}
 }
 
 exports.franchisorAdministrator = function (req, res, next) {
-	if (!util.has_role("franchisoradministrator",req.session.user.roles)) {
-		res.render('error');
+	var index = req.session.user.roles.indexOf(UserRoles.getFranchisorAdministrator());
+	if (index == -1) {
+		res.render('error', {
+			description : 'El usuario logueado no es Administrador de la Franquicia'
+		});
 	} else {
 		next();
 	}

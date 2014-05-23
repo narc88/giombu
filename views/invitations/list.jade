@@ -1,0 +1,84 @@
+extends ../layout
+
+block content
+	h3 Invitaciones
+	table.table
+		tr
+			td
+				h5 Nombre
+			td
+				h5 Email
+			td
+				h5 Respuesta
+			td
+		-if(invitations)
+			-each invitation in invitations
+				tr
+					td
+						a(href="/invitations/view/#{invitation._id}")
+							p #{invitation.name}
+					td
+						a(href="/invitations/view/#{invitation._id}")
+							p #{invitation.email}
+					td
+					
+						a(href="/invitations/view/#{invitation._id}")
+							p #{invitation.accepted_date}
+					
+						a(href="/invitations/view/#{invitation._id}")
+							p #{invitation.declined_date}
+					
+					td.span1
+						a(href="/invitations/edit/#{invitation._id}", rel="tooltip", title="Editar").btn.btn-mini
+							i.icon-pencil
+		-else
+			p No hay invitaciones
+	a(data-toggle="modal", href="#myModal") Invita a Giombu 	
+	
+	#myModal.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel', aria-hidden='true')
+		.modal-header
+			button(class="close", data-dismiss="modal", aria-hidden="true") &times
+			h4 Invita a Giombu
+		.modal-body
+			-if(typeof messagge !== "undefined")
+				.alert.alert #{messagge}
+			form(method='post',id="invitations_create" ,action='/invitations/add').form_create_inv
+				table 
+					tr 
+						td 
+							label Nombre:
+						td 
+							input(name='invitation[name]', type='text' ,class="required") 
+					tr
+						td
+							label Email:
+						td 
+							input(name='invitation[email]', type='text' ,class="required") 
+					tr
+						td 
+							label Asunto:
+						td 
+							textarea(name='invitation[subject]', type='text' ,class="required") 
+					tr
+						td 
+							label Cuerpo:
+						td
+							textarea(name='invitation[body]', type='text' ,class="required") 
+					tr
+						td 
+							label Tipo de Invitacion:
+						td 
+							select(name='invitation[invitation_type]', type='text') 
+								option(value='user') Usuario
+								option(value='promoter') Promotor
+								option(value='seller') Vendedor
+					tr
+						td
+						td 
+							button.btn.btn-primary(name='submit', type='submit') Invitar
+
+
+
+
+
+//	a(href='/intranet/invitations/create') Invita a Giombu

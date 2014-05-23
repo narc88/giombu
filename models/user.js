@@ -23,25 +23,62 @@ var UserSchema = new mongoose.Schema({
 	phone					: { type: String},
 	mobile					: { type: String},
 	address					: { type: String},
-	city					: { type: String},
-	country					: { type: String},
-	state					: { type: String},
+	city					: { type: mongoose.Schema.ObjectId, ref: 'City' },
 	zip						: { type: String},
 	created    			    : {type: Date, default: Date.now },
 	modified				: {type: Date, default: Date.now },
-	promoter_id 			: { type: mongoose.Schema.ObjectId, ref: 'User' },
+	promoter 				: { type: mongoose.Schema.ObjectId, ref: 'User' },
 	level					: { type: mongoose.Schema.ObjectId, ref: 'Level' },
-	//level 					: { type: Number, default: 0},
 	//Relacionados
 	 invitation				: [InvitationSchema],
-	 image 					: [ImageSchema],
-	 seller					: Boolean,
+	 images 				: [{ type: mongoose.Schema.ObjectId, ref: 'Image' }],
 	 promoter 				: [PromoterSchema],
 	 roles 					: [{type:String}],
-	 partner 				: Boolean,
-	 franchisor			: [{ type: mongoose.Schema.ObjectId, ref: 'Franchisor' }],
+	 franchisor				: [{ type: mongoose.Schema.ObjectId, ref: 'Franchisor' }],
 	//Verificar estos campos
 });
 
 UserSchema.set('versionKey', false);
 exports.UserModel = mongoose.model('User', UserSchema);
+
+
+exports.UserRoles = (function(){
+	var admin = 'admin';
+	var user = 'user';
+	var member = 'member';
+	var seller = 'seller';
+	var partner = 'partner';
+	var promoter = 'promoter';
+	var generalAdministrator = 'generalAdministrator';
+	var franchisorAdministrator = 'franchisorAdministratAr';
+
+	return{
+		list 		: function(){
+			return [admin, user, member, seller, partner, promoter, generalAdministrator, franchisorAdministrator];
+		},
+		getAdmin 	: function(){
+			return admin;
+		},
+		getUser 	: function(){
+			return user;
+		},
+		getMember 	: function(){
+			return member;
+		},
+		getSeller 	: function(){
+			return seller;
+		},
+		getPromoter 	: function(){
+			return promoter;
+		},
+		getPartner 	: function(){
+			return partner;
+		},
+		getGeneralAdministrator 	: function(){
+			return generalAdministrator;
+		},
+		getFranchisorAdministrator 	: function(){
+			return franchisorAdministrator;
+		}
+	}
+})();

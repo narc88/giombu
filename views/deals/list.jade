@@ -1,0 +1,16 @@
+extends ../layout
+
+block content
+	.span9
+		h3 Lista de Ofertas
+		table.table_deal_list
+			-each deal in deals
+					.media
+						.pull-left(href="#")
+							a(href="/deals/#{deal._id}", rel="tooltip")
+								img(class="media-object", src="/img/check.png", style="width:100px" , alt="Just a Placeholder")
+						.media-body
+							h4.media-heading 
+								a(href="/deals/#{deal._id}", rel="tooltip") #{deal.title}
+							.media-body
+								p #{deal.characteristics}

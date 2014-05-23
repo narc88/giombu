@@ -1,0 +1,67 @@
+// my-template.jade
+extends ../home
+
+block content
+		-var images = deal.images
+		-var id = deal._id
+		-var param = 'deals'
+		-var title = deal.title
+		-var description = deal.characteristics
+		include ../partials/images/carousel
+		table.table
+			tr
+				td Titulo:
+				td #{deal.title}
+			tr
+				td Subtitulo:
+				td #{deal.tagline}
+			tr
+				td Link:
+				td #{deal.slug}
+			tr
+				td Caracteristicas:
+				td #{deal.characteristics}
+			tr
+				td Condiciones:
+				td #{deal.conditions}
+
+		br
+		h3 Precios
+
+		table.table
+			tr
+				td Precio original:
+				td $ #{deal.price} 
+			tr
+				td Precio Final:
+				td $ #{deal.special_price} 
+			tr
+				td Descuento:
+				td $ #{deal.discount} 
+
+		br
+		h3 Fechas
+
+		table.table
+			tr
+				td Inicio de la oferta:
+				td #{deal.start_date}
+			tr
+				td Fin de la oferta:
+				td #{deal.end_date}
+			tr
+				td Inicio de canje:
+				td #{deal.start_redeem}
+			tr
+				td Fin de canje:
+				td #{deal.end_redeem}
+
+	
+			-var store = deal.store 
+			include ../partials/store/store
+			tr
+				td Vendedor:
+				td #{deal.seller}
+			tr
+				td Franquiciante:
+				td #{deal.franchisor}

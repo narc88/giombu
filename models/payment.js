@@ -9,7 +9,7 @@ var PaymentSchema = new mongoose.Schema({
 	user				: { type: mongoose.Schema.ObjectId, ref: 'User'},
 	bank_account		: { type: mongoose.Schema.ObjectId, ref: 'BankAccount'},
 	currency			: { type: mongoose.Schema.ObjectId, ref: 'Currency'},
-	commissions			: [CommissionSchema]
+	commissions			: [{ type: mongoose.Schema.ObjectId, ref: 'Commissions'}],
 	created				: { type: Date, default:Date.now },
 	modified			: { type: Date, default:Date.now}
 });

@@ -11,3 +11,7 @@ var LevelSchema =  new mongoose.Schema({
 })
 
 exports.LevelModel = mongoose.model('Level', LevelSchema);
+
+exports.MAX_LEVEL = 10;
+
+exports.MIN_LEVEL = 1;

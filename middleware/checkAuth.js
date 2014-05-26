@@ -2,7 +2,8 @@ var UserRoles = require('../models/user').UserRoles;
 
 exports.user = function (req, res, next) {
 	if (!req.session.user) {
-		res.render('users/login');
+		console.log('ERROR - user not logged in');
+		res.redirect('/');
 	} else {
 		next();
 	}

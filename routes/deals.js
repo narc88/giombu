@@ -35,6 +35,22 @@ module.exports = function (app){
 	  	});
 	});
 
+
+	//Esta vista deberia mostrar todas las deals relacionadas con el user
+	//tanto si es seller partner o el creador de la deal
+	app.get('/intranet/deals', CheckAuth.user, function(req, res, next){
+		DealModel.find( {} ).sort("-created").populate("images").exec(function(err, deals){
+			
+			if(err) throw err;
+
+			if(deals.length > 0){
+				res.render('deals/list', {title: 'Lista de ofertas', deals : deals});
+			}else{
+				res.render('not_found', {title: 'Oferta'});
+			}
+	  	});
+	});
+
 	//Llama a la vista de creacion de una nueva deal
 	//REVISADO
 	app.get('/intranet/deals/create', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
@@ -179,7 +195,7 @@ module.exports = function (app){
 
 	//Llama a la vista de edicion de una deal
 	//REVISADO
-	app.get('/intranet/deals/edit/:deal_id', function(req, res, next){
+	app.get('/intranet/deals/edit/:deal_id', CheckAuth.user,  CheckAuth.seller, function(req, res, next){
 		DealModel.findById( req.params.deal_id, function(err, deal){
 			if(err) throw err;
 			if(deal){
@@ -224,7 +240,7 @@ module.exports = function (app){
 
 
 	//Actualiza los campos de la deal
-	app.post('/intranet/deals/update', function(req, res, next){
+	app.post('/intranet/deals/update', CheckAuth.user, CheckAuth.seller, function(req, res, next){
 
 		DealModel.findById( req.body.deal._id , function(err, deal){
 			if(err) throw err;
@@ -257,7 +273,7 @@ module.exports = function (app){
 
 				deal.save(function (err) {
 					if (err) throw err;
-					res.render('deals/view', {title: 'deal View', user : req.session.user, deal : deal});
+					res.redirect('/intranet/deals/' + deal._id);
 				});
 
 			}else{
@@ -313,7 +329,7 @@ module.exports = function (app){
 	});
 
 	//Muestra la vista detallada de una deal en particular
-	app.get('/intranet/deals/:id', function(req, res, next){
+	app.get('/intranet/deals/:id', CheckAuth.user,  CheckAuth.seller, function(req, res, next){
 		DealModel.findById( req.params.id )
 		.populate('store').populate("images")
 		.exec( function(err, deal){

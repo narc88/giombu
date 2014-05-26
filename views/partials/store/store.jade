@@ -1,9 +1,8 @@
-.col-sm-4.col-md-3
+.col-sm-3
 	.thumbnail
-		img(src="/stores/#{store.images[0].filename}")
+		img(src="/photos/stores/#{store.images[0].filename}")
 		.caption
 			h3 #{store.name} 
 			p #{store.about} 
 			p #{store.email} 
-			p 
-				a(class="btn btn-primary", role="button", href="/stores/{store._id}")
+			a(class="btn btn-primary", role="button", href="/stores/#{store._id}")

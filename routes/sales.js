@@ -13,7 +13,7 @@ var PDFDocument = require('pdfkit');
 module.exports = function(app){
 
 	app.get('/sales/checkout/:id', function (req, res, next) {
-		DealModel.findById( req.params.id , function(err, deal){
+		DealModel.findById( req.params.id ).populate("images").exec(function(err, deal){
 			if(!err){
 				if(deal){
 				 var list = new Array() 
@@ -57,11 +57,7 @@ module.exports = function(app){
 					//UN request a alguna url que responda con un json de confirmacion, nada mas.
 					deal.sales.push(sale_new);
 					deal.save(function (err) {
-							if(app.emit("sale", deal)){
-								res.send("Emitido")
-							}else{
-								res.send("No emitido")
-							}
+							app.emit("sale", deal, req.session.user, sale_new)
 						});						
 								
 				 }else{

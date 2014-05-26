@@ -8,6 +8,7 @@ block content
 		-var title = deal.title
 		-var description = deal.characteristics
 		include ../partials/images/carousel
+		include ../partials/deals/checkout_link
 		table.table
 			tr
 				td Titulo:
@@ -55,13 +56,5 @@ block content
 			tr
 				td Fin de canje:
 				td #{deal.end_redeem}
-
-	
-			-var store = deal.store 
-			include ../partials/store/store
-			tr
-				td Vendedor:
-				td #{deal.seller}
-			tr
-				td Franquiciante:
-				td #{deal.franchisor}
+	-var store = deal.store 
+	include ../partials/store/store

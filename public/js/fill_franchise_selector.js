@@ -13,7 +13,7 @@ $(document).ready(function($){
     },
             
        error:function (xhr, ajaxOptions, thrownError) {
-        alert(thrownError);
+        //alert(thrownError);
       }
     
     

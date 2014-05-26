@@ -125,7 +125,7 @@ module.exports = function (app){
 
 			if (err) throw err;
 
-			res.redirect('/intranet/deals/view/' + deal._id);
+			res.redirect('/intranet/deals/' + deal._id);
 
 		});
 
@@ -289,32 +289,19 @@ module.exports = function (app){
 	//Elimina una deal
 	app.get('/intranet/deals/remove/:deal_id', function(req, res, next){
 
-		console.log('deals - remove'.cyan.bold);
-		console.log('deals - remove - Busco el deal ( ' + req.params.deal_id +' )');
-
-		DealModel.findById( req.body.deal_id , function(err, deal){
-			if(!err){
-				if(deal){
-					console.log('deals - remove - Se encontro el deal ( ' + req.params.deal_id +' )');
-					//Elimino el deal
-					deal.remove(function(err){
-						if(!err){
-							console.log('deals - remove - Se elimina el deal ( ' + req.params.deal_id +' )');
-							res.redirect('/');
-						}else{
-							console.log('deals - remove - '.red.bold + err);
-							res.redirect('/deals/list');
-						}
-					})
-				}else{
-					console.log('deals - remove - No se encontro el deal ( ' + req.params.deal_id +' )');
-					res.redirect('/deals/list');
-				}
+		DealModel.findById( req.params.deal_id , function(err, deal){
+			if(!err) throw err;
+			if(deal){
+				//Elimino el deal
+				deal.remove(function(err){
+					if(!err) throw err;
+					res.redirect('/intranet/deals');
+				});
 			}else{
-				console.log('deals - remove - '.red.bold + err);
-				res.redirect('/');
+				console.log('deals - remove - No se encontro el deal ( ' + req.params.deal_id +' )');
+				res.redirect('/intranet/deals');
 			}
-	  });
+		});
 
 	});
 

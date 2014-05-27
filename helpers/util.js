@@ -64,3 +64,9 @@ exports.has_role = function(value, array){
 	}
 	return false;
 }
+
+//Verifica si la cadena id es una candidata correcta para ser un ObjectId
+//retorna true en caso afirmativo y false en cualquier otro caso
+exports.checkObjectId = function(id){
+	return id.match(/^[0-9a-fA-F]{24}$/);
+}

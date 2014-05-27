@@ -39,7 +39,7 @@ module.exports = function (app){
 
 	//Esta vista deberia mostrar todas las deals relacionadas con el user
 	//tanto si es seller partner o el creador de la deal
-	app.get('/intranet/deals', CheckAuth.user, function(req, res, next){
+	app.get('/deals', CheckAuth.user, function(req, res, next){
 		DealModel.find( {} ).sort("-created").populate("images").exec(function(err, deals){
 			
 			if(err) throw err;
@@ -54,7 +54,7 @@ module.exports = function (app){
 
 	//Llama a la vista de creacion de una nueva deal
 	//REVISADO
-	app.get('/intranet/deals/create', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
+	app.get('/deals/create', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
 		console.log('deals - create'.cyan.bold);
 		StoreModel.find( { creator : req.session.user._id })
 		.populate('franchisor')
@@ -97,7 +97,7 @@ module.exports = function (app){
 	});
 
 	//Agrega una nueva deal
-	app.post('/intranet/deals/add', function (req, res, next) {
+	app.post('/deals/add', function (req, res, next) {
 
 		var deal_new = req.body.deal;
 
@@ -126,7 +126,7 @@ module.exports = function (app){
 
 			if (err) throw err;
 
-			res.redirect('/intranet/deals/' + deal._id);
+			res.redirect('/deals/' + deal._id);
 
 		});
 
@@ -136,17 +136,17 @@ module.exports = function (app){
 	
 
 
-	app.get('/intranet/deals/erase_image/:id/:image_id', function (req, res, next) {
+	app.get('/deals/erase_image/:id/:image_id', function (req, res, next) {
 	    DealModel.update({_id: req.params.id}, 
 	        {$pull: {images: {_id: req.params.image_id}}}, {upsert: true}, function(err, deal){
 	        	console.log(err);
-	        	res.redirect('/intranet/deals/view/' + req.params.id);
+	        	res.redirect('/deals/view/' + req.params.id);
 	        }
 	    );
 	});
 
 
-	app.get('/intranet/deals/set_as_principal/:id/:image_id', function (req, res, next) {
+	app.get('/deals/set_as_principal/:id/:image_id', function (req, res, next) {
 		DealModel.findOne().where('_id').equals(req.params.id).exec(function (err, deal) {
 	 	 if(!err){
 				if(deal){
@@ -167,7 +167,7 @@ module.exports = function (app){
 			}
 		});
 		DealModel.update({_id:req.params.id,'images._id':req.params.image_id},{$set:{'images.$.default':true}},{upsert: true}, function(err){        	
-			res.redirect('/intranet/deals/view/' + req.params.id);
+			res.redirect('/deals/view/' + req.params.id);
 		});
 
 	});
@@ -196,7 +196,7 @@ module.exports = function (app){
 
 	//Llama a la vista de edicion de una deal
 	//REVISADO
-	app.get('/intranet/deals/edit/:deal_id', CheckAuth.user,  CheckAuth.seller, function(req, res, next){
+	app.get('/deals/edit/:deal_id', CheckAuth.user,  CheckAuth.seller, function(req, res, next){
 		DealModel.findById( req.params.deal_id, function(err, deal){
 			if(err) throw err;
 			if(deal){
@@ -241,7 +241,7 @@ module.exports = function (app){
 
 
 	//Actualiza los campos de la deal
-	app.post('/intranet/deals/update', CheckAuth.user, CheckAuth.seller, function(req, res, next){
+	app.post('/deals/update', CheckAuth.user, CheckAuth.seller, function(req, res, next){
 
 		DealModel.findById( req.body.deal._id , function(err, deal){
 			if(err) throw err;
@@ -274,7 +274,7 @@ module.exports = function (app){
 
 				deal.save(function (err) {
 					if (err) throw err;
-					res.redirect('/intranet/deals/' + deal._id);
+					res.redirect('/deals/' + deal._id);
 				});
 
 			}else{
@@ -288,7 +288,7 @@ module.exports = function (app){
 
 
 	//Elimina una deal
-	app.get('/intranet/deals/remove/:deal_id', function(req, res, next){
+	app.get('/deals/remove/:deal_id', function(req, res, next){
 
 		DealModel.findById( req.params.deal_id , function(err, deal){
 			if(!err) throw err;
@@ -296,11 +296,11 @@ module.exports = function (app){
 				//Elimino el deal
 				deal.remove(function(err){
 					if(!err) throw err;
-					res.redirect('/intranet/deals');
+					res.redirect('/deals');
 				});
 			}else{
 				console.log('deals - remove - No se encontro el deal ( ' + req.params.deal_id +' )');
-				res.redirect('/intranet/deals');
+				res.redirect('/deals');
 			}
 		});
 
@@ -308,7 +308,7 @@ module.exports = function (app){
 
 
 	//Arma el menu de admin y redirecciona
-	app.get('/intranet/deals/admin', function(req, res, next){
+	app.get('/deals/admin', function(req, res, next){
 		res.render('deals/admin', {
 			title : 'Lista de deals activos',
 			user: req.session.user
@@ -317,7 +317,7 @@ module.exports = function (app){
 	});
 
 	//Muestra la vista detallada de una deal en particular
-	app.get('/intranet/deals/:id', CheckAuth.user,  CheckAuth.seller, function(req, res, next){
+	app.get('/deals/:id', CheckAuth.user,  CheckAuth.seller, function(req, res, next){
 		DealModel.findById( req.params.id )
 		.populate('store').populate("images")
 		.exec( function(err, deal){

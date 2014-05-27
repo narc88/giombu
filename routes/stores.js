@@ -5,6 +5,8 @@ var BranchModel = require('../models/branch').BranchModel;
 var CheckAuth = require('../middleware/checkAuth');
 var FranchisorModel = require('../models/franchisor').FranchisorModel;
 var CountryModel = require('../models/country').CountryModel;
+var Util = require('../helpers/util');
+var _ = require('underscore');
 // var Encrypter = require('./encryption_controller');
 
 var createStoreBranch = function(req, res, message){
@@ -22,9 +24,13 @@ var createStoreBranch = function(req, res, message){
 		});
 }
 
+var goHome = function(res){
+	res.redirect('/stores');
+};
+
 module.exports = function(app){
 
-	app.get('/stores', function(req, res, next){
+	app.get('/stores', CheckAuth.user, function(req, res, next){
 		StoreModel.find({}).exec(function(err, stores){
 			if(!err){
 				if(stores){
@@ -39,17 +45,18 @@ module.exports = function(app){
 		});
 	});
 
-	app.get('/stores/create_store_branch', CheckAuth.user, CheckAuth.seller,function (req, res, next) {
+
+
+
+	app.get('/stores/create_store_branch', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
 		createStoreBranch(req, res);
 	});
 
 
+
 	app.post('/stores/add_store_branch', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
-
-
 		//TODO add the Franchisor to the Store
 		//and add the Franchise adn City to the Branch
-
 		UserModel.findOne({ username : req.body.branch.partner }, function(err, partner){
 
 			if (err) throw err;
@@ -93,52 +100,59 @@ module.exports = function(app){
 					res.redirect('/stores/view/' + store._id);
 					
 				}
-
-				
 			});
-
 		});
-
 	});
 
 
-	app.get('/stores/edit/:id', function (req, res, next) {
-		StoreModel.findById( req.params.id , function(err, user){
-			if(!err){
-				if(user){
-					res.render('stores/edit', {title: 'Editar Store', user : user});
+	app.get('/stores/edit/:id', CheckAuth.user, function (req, res, next) {
+		if(Util.checkObjectId(req.params.id)){
+
+			StoreModel.findById( req.params.id)
+			.populate('franchisor')
+			.exec(function(err, store){
+				if(err) throw err;
+				if(store){
+					var options = {
+						path	: 'country'
+					};
+
+					FranchisorModel.populate(store.franchisor, options , function(err, franchisor){
+						if(err) throw err;
+						res.render('stores/edit', {
+							title			: 'Editar Store',
+							store 			: store,
+							franchisor 		: franchisor});
+					});
+
 				}else{
-					console.log('Usuario no encontrado, cualquiera el error');
+					goHome(res);
 				}
-			}else{
-				console.log('No lo encontre');
-			}
-		});
+			});
+
+		}else{
+			goHome(res);
+		}
 	});
 
 
-	app.post('/stores/update/:id', function (req, res, next) {
-		var store_new = new StoreModel();
-		StoreModel.findById( req.params.id , function(err, user){
-			store_new = user;
-			store_new.name = req.body.name
-			store_new.about = req.body.about
-			store_new.email = req.body.email
-			store_new.save(function(err){
-				if(!err){
-					console.log(store_new);
-				} else {
-					console.log("Error: - " + err);
-				}
-				res.render('users/welcome');
+	app.post('/stores/update', function (req, res, next) {
+
+		StoreModel.findById( req.body.store_id , function(err, store){
+			_.extend(store, req.body.store);
+
+			store.save(function(err){
+				if(err) throw err;
+				console.log(store);
+				res.redirect('/stores/' + store._id);
 			});
 		});
-		res.render('users/welcome', {title: 'Cargar Oferta'});
+
 	});
 
 
 	//Devuelve la lista de stores filtrando por el franquiciante
-	app.get('/intranet/stores/list', function (req, res, next) {
+	app.get('/stores/list', function (req, res, next) {
 		console.log("Lista de stores")
 		StoreModel.find( /*req.params.franchisor_id*/ {} ).exec( function(err, stores){
 			if(!err){
@@ -155,46 +169,7 @@ module.exports = function(app){
 	});
 
 
-	app.get('/stores/:id', function(req, res, next){
-		StoreModel.findById( req.params.id ).populate("images").exec(function(err, store){
-			if(!err){
-				if(store){
-					var callback = function(){
-						res.render('stores/view', {title: 'store', store : store});
-					}
-					StoreModel.populate(store, {
-						path: 'branches.partner'}
-						, callback)
-				}else{
-					console.log('store - view - No se encontro el store ( ' + req.params.id +' )');
-				}
-			}else{
-				console.log('store - view - '.red.bold + err);
-			}
-		});
-	});
-
-
-	//ESTA FUNCION NO TENIA REFERENCIAS EN EL PROYECTO ANTERIOR
-	exports.add_store = function (req, res, next) {
-		var store_new = new StoreModel();
-		store_new.name = req.body.name
-		store_new.about = req.body.about
-		store_new.email = req.body.email
-
-		store_new.save(function(err){
-			if(!err){
-				console.log(store_new);
-			} else {
-				console.log("Error: - " + err);
-			}
-			res.redirect('store/welcome');
-		});
-		res.render('store/welcome', {title: 'Cargar Oferta'});
-	}
-
-
-	app.get('/intranet/stores/assign_partner/:id', function(req, res, next){
+	app.get('/stores/assign_partner/:id', function(req, res, next){
 		StoreModel.findById( req.params.id ).exec( function(err, store){
 			if(!err){
 				if(store){
@@ -210,7 +185,7 @@ module.exports = function(app){
 	});
 
 
-	app.post('/intranet/stores/assign_partner_save', function(req, res, next){
+	app.post('/stores/assign_partner_save', function(req, res, next){
 		StoreModel.findById( req.body.store_id ).exec( function(err, store){
 			if(!err){
 				if(store && req.body.partner_id){
@@ -259,5 +234,27 @@ module.exports = function(app){
 
 		});
 	});
+
+
+
+	app.get('/stores/:id', CheckAuth.user, function(req, res, next){
+
+		if(Util.checkObjectId(req.params.id)){
+			StoreModel.findById( req.params.id )
+			.populate('images')
+			.populate('branches.partner')
+			.exec(function(err, store){
+				if(err) throw err;
+				if(store){
+					res.render('stores/view', {title: 'store', store : store});
+				}else{
+					goHome(res);
+				}
+			});
+		}else{
+			goHome(res);
+		}
+	});
+
 
 }

@@ -9,7 +9,7 @@ block content
 	.col-md-8
 	h3 Cargar oferta
 	br
-	form(method='post', id="deal_create", action='/intranet/deals/update').form-horizontal
+	form(method='post', id="deal_create", action='/deals/update').form-horizontal
 		input(name='deal[_id]', type='hidden', value='#{deal._id}')
 		.form-group
 			label.col-md-4.control-label Titulo:

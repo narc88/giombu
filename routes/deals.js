@@ -5,6 +5,7 @@ var CurrencyModel = require('../models/currency').CurrencyModel;
 var Franchisor = require('./franchisors');
 var FranchisorModel = require('../models/franchisor').FranchisorModel;
 var FranchiseModel = require('../models/franchise').FranchiseModel;
+var ImageModel = require('../models/image').ImageModel;
 var colors = require('colors');
 var util = require('../helpers/util');
 var mongoose = require('mongoose');
@@ -363,7 +364,7 @@ module.exports = function (app){
 
 	app.get('/deals/:id', function(req, res, next){
 		DealModel.findById( req.params.id )
-		.populate('store').populate("images")
+		.populate('store').populate("images").populate("store")
 		.exec( function(err, deal){
 			if(err) throw err;
 			if(deal){
@@ -377,12 +378,15 @@ module.exports = function (app){
 					.populate('deal')
 					.exec( function(err, questions){
 						if(err) throw err;
-						res.render('deals/show', {
-							title 			: 'Oferta', 
-							deal  			: deal, 
-							deals 			: deals, 
-							questions 		: questions
-						});
+						var callback = function(){
+							res.render('deals/show', {
+								title 			: 'Oferta', 
+								deal  			: deal, 
+								deals 			: deals, 
+								questions 		: questions
+							});
+						}
+						ImageModel.populate(deal, {path: 'store.images'}, callback)
 					});
 				});
 			}else{

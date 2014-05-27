@@ -1,0 +1,71 @@
+extends ../layout
+
+block content
+	.col-md-9
+		h3 Datos del comercio
+
+		a(href="/stores/#{store._id}/branches/edit/#{branch._id}").btn.btn-default Editar
+		a(href="/stores/#{store._id}/branches/remove/#{branch._id}").btn.btn-danger Eliminar
+		br
+		br
+		table.table
+			tr
+				td
+					| Name
+				td
+					| #{branch.name}
+			tr
+				td
+					| address
+				td
+					| #{branch.address}
+			tr
+				td
+					| zip
+				td
+					| #{branch.zip}
+			tr
+				td
+					| email
+				td
+					| #{branch.email}
+			tr
+				td
+					| phone
+				td
+					| #{branch.phone}
+			tr
+				td
+					| created
+				td
+					| #{branch.created}
+			tr
+				td
+					| modified
+				td
+					| #{branch.modified}
+			tr
+				td
+					| franchise
+				td
+					| #{branch.franchise.name}
+			tr
+				td
+					| partner
+				td
+					| #{branch.partner.name}
+			tr
+				td
+					| fanpage
+				td
+					| #{branch.fanpage}
+			tr
+				td
+					| website
+				td
+					| #{branch.website}
+			tr
+				td
+					| twitter
+				td
+					| #{branch.twitter}

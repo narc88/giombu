@@ -45,6 +45,24 @@ module.exports = function(app){
 	});
 
 
+	//Esta llamada solo tiene como finalidad facilitar el testing
+	//no debe existir en el ambiente de produccion
+	app.get('/stores/restore', function(req, res, next){
+
+		StoreModel.find({}, function(err, stores){
+			if(err) throw err;
+			stores.forEach(function(store){
+				store.status = 'active';
+				store.save(function(err){
+					if (err) throw err;
+				});
+			});
+
+			goHome(res);
+		});
+	});
+
+
 
 
 	app.get('/stores/create_store_branch', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
@@ -165,24 +183,6 @@ module.exports = function(app){
 	});
 
 
-	//Devuelve la lista de stores filtrando por el franquiciante
-	app.get('/stores/list', function (req, res, next) {
-
-		StoreModel.find( /*req.params.franchisor_id*/ {} ).exec( function(err, stores){
-			if(!err){
-				if(stores){
-					console.log(stores)
-					res.render('stores/list', {title: 'Tiendas', stores : stores, user:req.session.user});
-				}else{
-					console.log('Esta franquiciante no tiene stores');
-				}
-			}else{
-				console.log('No lo encontre');
-			}
-		});
-	});
-
-
 	app.get('/stores/assign_partner/:id', function(req, res, next){
 		StoreModel.findById( req.params.id ).exec( function(err, store){
 			if(!err){
@@ -247,6 +247,41 @@ module.exports = function(app){
 			}
 
 		});
+	});
+
+
+	app.get('/stores/:store_id/branches/:branch_id', CheckAuth.user, function(req, res){
+
+		if(Util.checkObjectId(req.params.store_id) && Util.checkObjectId(req.params.store_id)){
+
+			StoreModel.findById(req.params.store_id)
+			.populate('branches.franchise')
+			.populate('branches.partner')
+			.exec(function(err, store){
+
+				if(err) throw err;
+				if(store){
+					var branch = _.find(store.branches, function(branch){
+						return branch._id == req.params.branch_id;
+					});
+
+					if(branch){
+						res.render('branches/view', {
+							title 		: 'Detalles de la sucursal',
+							branch 		: branch,
+							store 		: store
+						});
+					}else{
+						goHome(res);
+					}
+				}else{
+					goHome(res);
+				}
+			});
+			
+		}else{
+			goHome(res);
+		}
 	});
 
 

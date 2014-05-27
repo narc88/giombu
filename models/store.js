@@ -14,7 +14,8 @@ var StoreSchema = new mongoose.Schema({
 	images 				: [{ type: mongoose.Schema.ObjectId, ref: 'Image' }],
 	branches			: [BranchSchema],
 	created    			: {type: Date, default: Date.now },
-	modified			: {type: Date, default: Date.now }
+	modified			: {type: Date, default: Date.now },
+	status				: {type: String, enum: ['active', 'deleted'], default: 'active'}
 });
 StoreSchema.set('versionKey', false);
 exports.StoreModel = mongoose.model('Store', StoreSchema);

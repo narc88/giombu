@@ -30,18 +30,17 @@ var goHome = function(res){
 
 module.exports = function(app){
 
-	app.get('/stores', CheckAuth.user, function(req, res, next){
-		StoreModel.find({}).exec(function(err, stores){
-			if(!err){
-				if(stores){
-						res.render('stores/list', {title: 'Stores', stores : stores});
-				}else{
-					console.log('store - view - No se encontro el store ( ' + req.params.id +' )');
-				}
-			}else{
-				console.log('store - view - '.red.bold + err);
-			}
 
+	app.get('/stores', CheckAuth.user, function(req, res, next){
+
+		var query = {
+			status 		: 'active',
+			creator 	: req.session.user._id
+		};
+
+		StoreModel.find(query, function(err, stores){
+			if(err) throw err;
+			res.render('stores/list', {title: 'Stores', stores : stores});
 		});
 	});
 
@@ -136,6 +135,21 @@ module.exports = function(app){
 	});
 
 
+	app.get('/stores/remove/:id', CheckAuth.user, function(req, res, next){
+		if(Util.checkObjectId(req.params.id)){
+			StoreModel.findById(req.params.id, function(err, store){
+				store.status = 'deleted';
+				store.save(function(err){
+					if (err) throw err;
+					goHome(res);
+				});
+			});
+		}else{
+			goHome(res);
+		}
+	});
+
+
 	app.post('/stores/update', function (req, res, next) {
 
 		StoreModel.findById( req.body.store_id , function(err, store){
@@ -153,7 +167,7 @@ module.exports = function(app){
 
 	//Devuelve la lista de stores filtrando por el franquiciante
 	app.get('/stores/list', function (req, res, next) {
-		console.log("Lista de stores")
+
 		StoreModel.find( /*req.params.franchisor_id*/ {} ).exec( function(err, stores){
 			if(!err){
 				if(stores){

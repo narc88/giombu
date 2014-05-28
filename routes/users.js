@@ -231,6 +231,18 @@ module.exports = function(app){
 
 	}
 
+	app.get('/users/validate/:username', function(req, res){
+		UserModel.findOne( { username : req.params.username }, function(err, user){
+			if (err) throw err;
+			
+			if(user){
+				res.json(true);
+			}else{
+				res.json(false);
+			}
+		});
+	});
+		
 
 
 	//Esta llamada es muy general es por eso que debe ir a lo ultimo.

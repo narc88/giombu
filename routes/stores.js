@@ -5,6 +5,8 @@ var BranchModel = require('../models/branch').BranchModel;
 var CheckAuth = require('../middleware/checkAuth');
 var FranchisorModel = require('../models/franchisor').FranchisorModel;
 var CountryModel = require('../models/country').CountryModel;
+var StateModel = require('../models/state').StateModel;
+var FranchiseModel = require('../models/franchise').FranchiseModel;
 var Util = require('../helpers/util');
 var _ = require('underscore');
 // var Encrypter = require('./encryption_controller');
@@ -72,7 +74,6 @@ module.exports = function(app){
 
 
 	app.post('/stores/add_store_branch', CheckAuth.user, CheckAuth.seller, function (req, res, next) {
-		//TODO add the Franchisor to the Store
 		//and add the Franchise adn City to the Branch
 		UserModel.findOne({ username : req.body.branch.partner }, function(err, partner){
 
@@ -247,6 +248,69 @@ module.exports = function(app){
 			}
 
 		});
+	});
+
+
+
+
+	app.get('/stores/:store_id/branches/create', CheckAuth.user, CheckAuth.seller, function(req, res){
+		if(Util.checkObjectId(req.params.store_id)){
+			StoreModel.findById(req.params.store_id)
+			.populate('franchisor')
+			.exec(function(err, store){
+				if(store){
+					StateModel.find({ country : store.franchisor.country}, function(err, states){
+						if (err) throw err;
+						FranchiseModel.find( { franchisor : store.franchisor._id }, function(err, franchises){
+							if (err) throw err;
+							res.render('branches/create', {
+								title 		: 'Crear sucursal',
+								store 		: store,
+								states		: states,
+								franchises 	: franchises
+							});
+						});
+
+					});
+				}else{
+					goHome(res);
+				}
+			});
+		}else{
+			goHome(res);
+		}
+	});
+
+	app.post('/stores/:store_id/branches/create', CheckAuth.user, CheckAuth.seller, function(req, res){
+
+		if(Util.checkObjectId(req.params.store_id)){
+
+			StoreModel.findById(req.params.store_id, function(err, store){
+
+				if(store){
+					UserModel.findOne( { username : req.body.partner_username}, function(err, partner){
+						if (err) throw err;
+
+						var branch = new BranchModel(req.body.branch);
+						branch.partner = partner._id;
+						store.branches.push(branch);
+						store.save(function(err){
+							if (err) throw err;
+							res.redirect('/stores/' + store._id + '/branches/' + branch._id);
+						});
+					});
+
+					
+
+				}else{
+					goHome(res);
+				}
+
+			});
+
+		}else{
+			goHome(res);
+		}
 	});
 
 

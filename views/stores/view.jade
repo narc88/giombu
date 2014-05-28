@@ -45,8 +45,13 @@ block content
 			-var param ="stores"
 			include ../partials/store/image_list
 		.col-md-10
+			h4 Sucursales
+			a(href="/stores/#{store._id}/branches/create").btn.btn-default Crear sucursal
+			br
+			br
 			-each branch in store.branches
 				a(href="/stores/#{store._id}/branches/#{branch._id}") #{branch.name}
+				br
 
 
 

@@ -3,12 +3,14 @@ extends ../layout
 
 block content
 	.col-md-5
-		form(method='post', id="form_create_branch", action='/stores/#{store._id}/branches/edit/#{branch._id}').form-horizontal
+		form(method="post", id="form_create_branch", action="/stores/branches/update").form-horizontal
 			h4 Informacion de la Sucursal
+			input(name="store_id", type="hidden", value="#{store._id}")
+			input(name="branch_id", type="hidden", value="#{branch._id}")
 			.form-group
 				label.col-md-4 name
 				.col-md-8
-					input(name='branch[name]', type='text', value="#{branch.name}").form-control.input-sm.required
+					input(name="branch[name]", type="text", value="#{branch.name}").form-control.input-sm.required
 			.form-group
 				label.col-md-4 state
 				.col-md-8
@@ -24,36 +26,36 @@ block content
 			.form-group
 				label.col-md-4 address
 				.col-md-8
-					input(name='branch[address]', type='text', value="#{branch.address}").form-control.input-sm.required
+					input(name="branch[address]", type="text", value="#{branch.address}").form-control.input-sm.required
 			.form-group
 				label.col-md-4 zip
 				.col-md-8
-					input(name='branch[zip]', type='text', value="#{branch.zip}").form-control.input-sm
+					input(name="branch[zip]", type="text", value="#{branch.zip}").form-control.input-sm
 			.form-group
 				label.col-md-4 phone
 				.col-md-8
-					input(name='branch[phone]', type='text', value="#{branch.phone}").form-control.input-sm
+					input(name="branch[phone]", type="text", value="#{branch.phone}").form-control.input-sm
 			.form-group
 				label.col-md-4 email
 				.col-md-8
-					input(name='branch[email]', type='text', value="#{branch.email}").form-control.input-sm.required.email
+					input(name="branch[email]", type="text", value="#{branch.email}").form-control.input-sm.required.email
 			.form-group
 				label.col-md-4 website
 				.col-md-8
-					input(name='branch[website]', type='text', value="#{branch.website}").form-control.input-sm
+					input(name="branch[website]", type="text", value="#{branch.website}").form-control.input-sm
 			.form-group
 				label.col-md-4 fanpage
 				.col-md-8
-					input(name='branch[fanpage]', type='text', value="#{branch.fanpage}").form-control.input-sm
+					input(name="branch[fanpage]", type="text", value="#{branch.fanpage}").form-control.input-sm
 			.form-group
 				label.col-md-4 twitter
 				.col-md-8
-					input(name='branch[twitter]', type='text', value="#{branch.twitter}").form-control.input-sm
+					input(name="branch[twitter]", type="text", value="#{branch.twitter}").form-control.input-sm
 			.form-group#validate-user.has-feedback
 				label.col-md-4 Usuario que tiene la sucursal asignada: 
 				.col-md-8
-					input(type='text', name="partner_username", id='branch_partner', placeholder="Usuario", value="#{branch.partner.username}").form-control.input-sm
+					input(type="text", name="partner_username", id="branch_partner", placeholder="Usuario", value="#{branch.partner.username}").form-control.input-sm
 					span(class="glyphicon glyphicon-ok form-control-feedback" id="check-icon")
 			.form-group
-				button(type='submit' id='submit_btn').btn.btn-default Save
+				button(type="submit" id="submit_btn").btn.btn-default Save
 	script(type="text/javascript" src="/js/branches/create.js")

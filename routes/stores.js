@@ -353,6 +353,84 @@ module.exports = function(app){
 		});
 	});
 
+	app.post('/stores/branches/update', CheckAuth.user, CheckAuth.seller, function(req, res){
+
+		if(!Util.checkObjectId(req.body.store_id) || !Util.checkObjectId(req.body.branch_id)){
+			goHome(res);
+			return;
+		}
+
+		StoreModel.findById(req.body.store_id)
+		.populate('branches.franchise')
+		.populate('branches.partner')
+		.populate('branches.city')
+		.exec(function(err, store){
+
+			if(!store){
+				goHome(res);
+				return;
+			}
+
+			var branch = _.find(store.branches, function(branch){
+				return branch._id == req.body.branch_id;
+			});
+
+			if (!branch) {
+				goHome(res);
+				return;
+			}
+
+			_.extend(branch, req.body.branch);
+
+			store.save(function(err){
+				if (err) throw err;
+				res.redirect('/stores/' + store._id + '/branches/' + branch._id );
+			});
+
+		});
+	});
+
+	app.get('/stores/:store_id/branches/remove/:branch_id', CheckAuth.user, CheckAuth.seller, function(req, res){
+
+		if(!Util.checkObjectId(req.params.store_id) || !Util.checkObjectId(req.params.branch_id)){
+			goHome(res);
+			return;
+		}
+
+		StoreModel.findById(req.params.store_id, function(err, store){
+			if (err) throw err;
+			if(!store){
+				goHome(res);
+				return;
+			}
+
+			var branch = _.find(store.branches, function(branch){
+				return branch._id == req.params.branch_id;
+			});
+
+			if(!branch){
+				goHome(res);
+				return;
+			}
+
+			var index = store.branches.indexOf(branch);
+			if(index == -1 ){
+				goHome(res);
+				return;
+			}
+
+			store.branches.splice(index, 1);
+			store.save(function(err){
+				if (err) throw err;
+				res.redirect('/stores/' + store._id);
+			});
+
+
+		});
+
+
+	});
+
 
 	app.get('/stores/:store_id/branches/:branch_id', CheckAuth.user, function(req, res){
 
@@ -364,6 +442,7 @@ module.exports = function(app){
 		StoreModel.findById(req.params.store_id)
 		.populate('branches.franchise')
 		.populate('branches.partner')
+		.populate('branches.city')
 		.exec(function(err, store){
 
 			if(err) throw err;
@@ -381,11 +460,19 @@ module.exports = function(app){
 				return;
 			}
 
-			res.render('branches/view', {
-				title 		: 'Detalles de la sucursal',
-				branch 		: branch,
-				store 		: store
+			var options = {
+				path : 'state'
+			}
+			CityModel.populate(branch.city, options, function(err, city){
+				if (err) throw err;
+				console.log(branch);
+				res.render('branches/view', {
+					title 		: 'Detalles de la sucursal',
+					branch 		: branch,
+					store 		: store
+				});
 			});
+
 		});
 			
 

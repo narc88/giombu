@@ -124,48 +124,47 @@ module.exports = function(app){
 
 
 	app.get('/stores/edit/:id', CheckAuth.user, function (req, res, next) {
-		if(Util.checkObjectId(req.params.id)){
-
-			StoreModel.findById( req.params.id)
-			.populate('franchisor')
-			.exec(function(err, store){
-				if(err) throw err;
-				if(store){
-					var options = {
-						path	: 'country'
-					};
-
-					FranchisorModel.populate(store.franchisor, options , function(err, franchisor){
-						if(err) throw err;
-						res.render('stores/edit', {
-							title			: 'Editar Store',
-							store 			: store,
-							franchisor 		: franchisor});
-					});
-
-				}else{
-					goHome(res);
-				}
-			});
-
-		}else{
+		if(!Util.checkObjectId(req.params.id)){
 			goHome(res);
+			return;
 		}
+
+		StoreModel.findById( req.params.id)
+		.populate('franchisor')
+		.exec(function(err, store){
+			if(err) throw err;
+			if(!store){
+				goHome(res);
+				return;
+			}
+			var options = {
+				path	: 'country'
+			};
+
+			FranchisorModel.populate(store.franchisor, options , function(err, franchisor){
+				if(err) throw err;
+				res.render('stores/edit', {
+					title			: 'Editar Store',
+					store 			: store,
+					franchisor 		: franchisor});
+			});
+		});
 	});
 
 
 	app.get('/stores/remove/:id', CheckAuth.user, function(req, res, next){
-		if(Util.checkObjectId(req.params.id)){
-			StoreModel.findById(req.params.id, function(err, store){
-				store.status = 'deleted';
-				store.save(function(err){
-					if (err) throw err;
-					goHome(res);
-				});
-			});
-		}else{
+		if(!Util.checkObjectId(req.params.id)){
 			goHome(res);
+			return;
 		}
+
+		StoreModel.findById(req.params.id, function(err, store){
+			store.status = 'deleted';
+			store.save(function(err){
+				if (err) throw err;
+				goHome(res);
+			});
+		});
 	});
 
 
@@ -254,119 +253,147 @@ module.exports = function(app){
 
 
 	app.get('/stores/:store_id/branches/create', CheckAuth.user, CheckAuth.seller, function(req, res){
-		if(Util.checkObjectId(req.params.store_id)){
-			StoreModel.findById(req.params.store_id)
-			.populate('franchisor')
-			.exec(function(err, store){
-				if(store){
-					StateModel.find({ country : store.franchisor.country}, function(err, states){
-						if (err) throw err;
-						FranchiseModel.find( { franchisor : store.franchisor._id }, function(err, franchises){
-							if (err) throw err;
-							res.render('branches/create', {
-								title 		: 'Crear sucursal',
-								store 		: store,
-								states		: states,
-								franchises 	: franchises
-							});
-						});
-
-					});
-				}else{
-					goHome(res);
-				}
-			});
-		}else{
+		if(!Util.checkObjectId(req.params.store_id)){
 			goHome(res);
+			return;
 		}
+		StoreModel.findById(req.params.store_id)
+		.populate('franchisor')
+		.exec(function(err, store){
+			if(!store){
+				goHome(res);
+				return;
+			}
+			StateModel.find({ country : store.franchisor.country}, function(err, states){
+				if (err) throw err;
+				FranchiseModel.find( { franchisor : store.franchisor._id }, function(err, franchises){
+					if (err) throw err;
+					res.render('branches/create', {
+						title 		: 'Crear sucursal',
+						store 		: store,
+						states		: states,
+						franchises 	: franchises
+					});
+				});
+			});
+		});
 	});
 
 	app.post('/stores/:store_id/branches/create', CheckAuth.user, CheckAuth.seller, function(req, res){
 
-		if(Util.checkObjectId(req.params.store_id)){
+		if(!Util.checkObjectId(req.params.store_id)){
+			goHome(res);
+			return;
+		}
 
-			StoreModel.findById(req.params.store_id, function(err, store){
+		StoreModel.findById(req.params.store_id, function(err, store){
 
-				if(store){
-					UserModel.findOne( { username : req.body.partner_username}, function(err, partner){
-						if (err) throw err;
+			if(!store){
+				goHome(res);
+				return;
+			}
 
-						var branch = new BranchModel(req.body.branch);
-						branch.partner = partner._id;
-						store.branches.push(branch);
-						store.save(function(err){
-							if (err) throw err;
-							res.redirect('/stores/' + store._id + '/branches/' + branch._id);
-						});
-					});
+			UserModel.findOne( { username : req.body.partner_username}, function(err, partner){
+				if (err) throw err;
 
-					
+				var branch = new BranchModel(req.body.branch);
+				branch.partner = partner._id;
+				store.branches.push(branch);
+				store.save(function(err){
+					if (err) throw err;
+					res.redirect('/stores/' + store._id + '/branches/' + branch._id);
+				});
+			});
+		});
+	});
 
-				}else{
-					goHome(res);
-				}
+	app.post('/stores/:store_id/branches/edit/:branch_id', CheckAuth.user, CheckAuth.seller, function(req, res){
 
+		if(!Util.checkObjectId(req.params.store_id) || !Util.checkObjectId(req.params.branch_id)){
+			goHome(res);
+			return;
+		}
+
+		StoreModel.findById(req.params.store_id, function(err, store){
+
+			if(!store){
+				goHome(res);
+				return;
+			}
+
+			var branch = _.find(store.branches, function(branch){
+				return branch._id == req.params.branch_id;
 			});
 
-		}else{
-			goHome(res);
-		}
+			if (!branch) {
+				goHome(res);
+				return;
+			}
+
+
+
+		});
 	});
 
 
 	app.get('/stores/:store_id/branches/:branch_id', CheckAuth.user, function(req, res){
 
-		if(Util.checkObjectId(req.params.store_id) && Util.checkObjectId(req.params.store_id)){
-
-			StoreModel.findById(req.params.store_id)
-			.populate('branches.franchise')
-			.populate('branches.partner')
-			.exec(function(err, store){
-
-				if(err) throw err;
-				if(store){
-					var branch = _.find(store.branches, function(branch){
-						return branch._id == req.params.branch_id;
-					});
-
-					if(branch){
-						res.render('branches/view', {
-							title 		: 'Detalles de la sucursal',
-							branch 		: branch,
-							store 		: store
-						});
-					}else{
-						goHome(res);
-					}
-				}else{
-					goHome(res);
-				}
-			});
-			
-		}else{
+		if(!Util.checkObjectId(req.params.store_id) || !Util.checkObjectId(req.params.store_id)){
 			goHome(res);
+			return;
 		}
+
+		StoreModel.findById(req.params.store_id)
+		.populate('branches.franchise')
+		.populate('branches.partner')
+		.exec(function(err, store){
+
+			if(err) throw err;
+			if(!store){
+				goHome(res);
+				return;
+			}
+
+			var branch = _.find(store.branches, function(branch){
+				return branch._id == req.params.branch_id;
+			});
+
+			if(!branch){
+				goHome(res);
+				return;
+			}
+
+			res.render('branches/view', {
+				title 		: 'Detalles de la sucursal',
+				branch 		: branch,
+				store 		: store
+			});
+		});
+			
+
 	});
 
 
 
 	app.get('/stores/:id', CheckAuth.user, function(req, res, next){
 
-		if(Util.checkObjectId(req.params.id)){
-			StoreModel.findById( req.params.id )
-			.populate('images')
-			.populate('branches.partner')
-			.exec(function(err, store){
-				if(err) throw err;
-				if(store){
-					res.render('stores/view', {title: 'store', store : store});
-				}else{
-					goHome(res);
-				}
-			});
-		}else{
+		if(!Util.checkObjectId(req.params.id)){
 			goHome(res);
+			return;
 		}
+		
+		StoreModel.findById( req.params.id )
+		.populate('images')
+		.populate('branches.partner')
+		.exec(function(err, store){
+			if(err) throw err;
+			if(!store){
+				goHome(res);
+				return;
+			}
+			res.render('stores/view', {title: 'store', store : store});
+
+		});
 	});
 
 

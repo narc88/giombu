@@ -314,7 +314,10 @@ module.exports = function(app){
 			return;
 		}
 
-		StoreModel.findById(req.params.store_id, function(err, store){
+		StoreModel.findById(req.params.store_id)
+		.populate('branches.franchise')
+		.populate('branches.partner')
+		.exec(function(err, store){
 
 			if(!store){
 				goHome(res);
@@ -329,6 +332,17 @@ module.exports = function(app){
 				goHome(res);
 				return;
 			}
+			var options = {
+				path : 'state'
+			}
+			BranchModel.populate(branch, options, function(err, branch){
+				if (err) throw err;
+				res.render('branches/edit', {
+					title 		: 'Editar sucursal',
+					branch 		: branch,
+					store 		: store
+				});
+			});
 
 
 
@@ -381,7 +395,7 @@ module.exports = function(app){
 			goHome(res);
 			return;
 		}
-		
+
 		StoreModel.findById( req.params.id )
 		.populate('images')
 		.populate('branches.partner')

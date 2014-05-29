@@ -16,15 +16,9 @@ block content
 						-each state in states
 							option(value="#{state._id}") #{state.name}
 			.form-group
-				label.col-md-4 city
-				.col-md-8
-					select(name="branch[city]", id="city_selector").form-control.input-sm
-			.form-group
 				label.col-md-4 franchise
 				.col-md-8
-					select(name="branch[franchise]", id="franchise_selector").form-control.input-sm
-						-each franchise in franchises
-							option(value="#{franchise._id}") #{franchise.name}
+					input(type="text", value="#{branch.franchise.name}" disable).form-control.input-sm
 			.form-group
 				label.col-md-4 address
 				.col-md-8

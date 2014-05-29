@@ -55,6 +55,7 @@
 	});
 
 	$('#state_selector').trigger('change');
+	validateUser();
 })();
 
 

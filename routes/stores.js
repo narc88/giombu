@@ -7,6 +7,7 @@ var FranchisorModel = require('../models/franchisor').FranchisorModel;
 var CountryModel = require('../models/country').CountryModel;
 var StateModel = require('../models/state').StateModel;
 var FranchiseModel = require('../models/franchise').FranchiseModel;
+var CityModel = require('../models/city').CityModel;
 var Util = require('../helpers/util');
 var _ = require('underscore');
 // var Encrypter = require('./encryption_controller');
@@ -307,7 +308,7 @@ module.exports = function(app){
 		});
 	});
 
-	app.post('/stores/:store_id/branches/edit/:branch_id', CheckAuth.user, CheckAuth.seller, function(req, res){
+	app.get('/stores/:store_id/branches/edit/:branch_id', CheckAuth.user, CheckAuth.seller, function(req, res){
 
 		if(!Util.checkObjectId(req.params.store_id) || !Util.checkObjectId(req.params.branch_id)){
 			goHome(res);
@@ -317,6 +318,7 @@ module.exports = function(app){
 		StoreModel.findById(req.params.store_id)
 		.populate('branches.franchise')
 		.populate('branches.partner')
+		.populate('branches.city')
 		.exec(function(err, store){
 
 			if(!store){
@@ -335,12 +337,14 @@ module.exports = function(app){
 			var options = {
 				path : 'state'
 			}
-			BranchModel.populate(branch, options, function(err, branch){
+			CityModel.populate(branch.city, options, function(err, city){
 				if (err) throw err;
+				console.log(branch);
 				res.render('branches/edit', {
 					title 		: 'Editar sucursal',
 					branch 		: branch,
-					store 		: store
+					store 		: store,
+					city 		: city
 				});
 			});
 

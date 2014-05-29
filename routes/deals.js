@@ -316,8 +316,10 @@ module.exports = function (app){
 
 	});
 
-	//Muestra la vista detallada de una deal en particular
-	app.get('/deals/:id', CheckAuth.user,  CheckAuth.seller, function(req, res, next){
+	//Muestra la vista detallada de una deal en particular 
+	//(La ruta deberia ser distinta sino siempre te va a querer comprobar como logueado)
+	//Le puse review para diferenciarlo solamente... Me parece que no nos deberiamos preocupar en demasia. NICO.
+	app.get('/deals/review/:id', CheckAuth.user,  CheckAuth.seller, function(req, res, next){
 		DealModel.findById( req.params.id )
 		.populate('store').populate("images")
 		.exec( function(err, deal){

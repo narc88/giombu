@@ -58,8 +58,8 @@ module.exports = function(app){
 					deal.sales.push(sale_new);
 					deal.save(function (err) {
 							app.emit("sale", deal, req.session.user, sale_new)
-						});						
-								
+						});
+					res.redirect('/sales/'+sale_new._id);	
 				 }else{
 					console.log('No encontro el deal en buy.')
 				}
@@ -72,15 +72,18 @@ module.exports = function(app){
 	
 	/**
 		 * Lista de ventas realizadas.
-		 *
+		 * @id del la venta, no de la oferta
 		 * @return void
 		 * @author Nicolas Ronchi
 	**/
 	app.get('/sales/:id', function (req, res, next) {
-		DealModel.findById( req.params.id , function(err, deal){
+		console.log("aaa")
+		DealModel.findOne({"sales._id" :req.params.id}).exec(function(err, deal){
+			console.log(deal)
+			console.log(err)
 			if(!err){
 				if(deal){
-					res.render('sales/list', {title: 'Detalle de ventas de la oferta', deal : deal, user:req.session.user});
+					res.render('sales/view', {title: 'Detalle de venta', deal : deal, id:req.params.id});
 				}else{
 				 // res.render('sales/checkout', {title: 'Error'});
 				}

@@ -8,13 +8,17 @@ block content
 			.form-group
 				label.col-md-4 name
 				.col-md-8
-					input(name='branch[name]', type='text' ,class="required").form-control.input-sm
+					input(name='branch[name]', type='text').form-control.input-sm.required
 			.form-group
 				label.col-md-4 state
 				.col-md-8
 					select(name="branch[state]", id="state_selector").form-control.input-sm
 						-each state in states
 							option(value="#{state._id}") #{state.name}
+			.form-group
+				label.col-md-4 city
+				.col-md-8
+					select(name="branch[city]", id="city_selector").form-control.input-sm
 			.form-group
 				label.col-md-4 franchise
 				.col-md-8
@@ -24,7 +28,7 @@ block content
 			.form-group
 				label.col-md-4 address
 				.col-md-8
-					input(name='branch[address]', type='text' ,class="required").form-control.input-sm
+					input(name='branch[address]', type='text').form-control.input-sm.required
 			.form-group
 				label.col-md-4 zip
 				.col-md-8
@@ -36,7 +40,7 @@ block content
 			.form-group
 				label.col-md-4 email
 				.col-md-8
-					input(name='branch[email]', type='text' ,class="required email").form-control.input-sm
+					input(name='branch[email]', type='text').form-control.input-sm.required.email
 			.form-group
 				label.col-md-4 website
 				.col-md-8

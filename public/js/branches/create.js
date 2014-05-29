@@ -6,7 +6,7 @@
 	var checkIcon = $('#check-icon');
 	var isUserValid = false;
 	checkIcon.hide();
-	var validateUser = function(){
+	function validateUser(){
 		isUserValid = false;
 		$.ajax({
 			type 		: 'GET',
@@ -33,6 +33,29 @@
 	$('#form_create_branch').submit(function(){
 		return isUserValid;
 	});
+
+
+	$('#state_selector').change(function(element){
+
+		$.ajax({
+			type 		: 'GET',
+			url 		: '/states/cities/' + $('#state_selector').val(),
+			success 	: function(cities){
+				$('#city_selector').empty();
+				for (var i = cities.length - 1; i >= 0; i--) {
+					$('#city_selector').append(
+						'<option value="' + cities[i]._id + '" >' + cities[i].name + '</option>'
+						);
+				};
+			},
+			error 		: function(jqXHR, textStatus, errorThrown ){
+					console.log('AJAX cities - ' + textStatus + ' - ' + errorThrown);
+				}
+		});
+	});
+
+	$('#state_selector').trigger('change');
+	validateUser();
 })();
 
 

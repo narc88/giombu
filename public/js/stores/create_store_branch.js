@@ -11,7 +11,8 @@
 							$('#state_selector').append(
 								'<option value="' + states[i]._id + '" >' + states[i].name + '</option>'
 								);
-						};			
+						}
+						$('#state_selector').trigger('change');			
 					},
 			error   : function(jqXHR, textStatus, errorThrown ){
 				console.log('AJAX states - ' + textStatus + ' - ' + errorThrown);
@@ -28,7 +29,7 @@
 							$('#franchisor_selector').append(
 								'<option value="' + franchisors[i]._id + '" >' + franchisors[i].name + '</option>'
 								);
-						};
+						}
 						$('#franchisor_selector').trigger('change');
 					},
 			error   : function(jqXHR, textStatus, errorThrown ){
@@ -52,7 +53,7 @@
 							$('#franchise_selector').append(
 								'<option value="' + franchises[i]._id + '" >' + franchises[i].name + '</option>'
 								);
-						};			
+						}		
 					},
 			error   : function(jqXHR, textStatus, errorThrown ){
 				console.log('AJAX franchises - ' + textStatus + ' - ' + errorThrown);
@@ -60,6 +61,26 @@
 		});
 
 
+	});
+
+
+	$('#state_selector').change(function(element){
+
+		$.ajax({
+			type 		: 'GET',
+			url 		: '/states/cities/' + $('#state_selector').val(),
+			success 	: function(cities){
+				$('#city_selector').empty();
+				for (var i = cities.length - 1; i >= 0; i--) {
+					$('#city_selector').append(
+						'<option value="' + cities[i]._id + '" >' + cities[i].name + '</option>'
+						);
+				}
+			},
+			error 		: function(jqXHR, textStatus, errorThrown ){
+					console.log('AJAX cities - ' + textStatus + ' - ' + errorThrown);
+				}
+		});
 	});
 
 
